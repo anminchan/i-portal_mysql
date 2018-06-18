@@ -1,0 +1,102 @@
+P {
+	FONT-SIZE: 9pt; FONT-FAMILY: ±¼¸²,serif
+}
+LI {
+	FONT-SIZE: 9pt; FONT-FAMILY: ±¼¸²,serif
+}
+PRE {
+	PADDING-RIGHT: 5pt; MARGIN-TOP: 0px; PADDING-LEFT: 5pt; FONT-SIZE: 10pt; MARGIN-BOTTOM: 0px; PADDING-BOTTOM: 5pt; MARGIN-LEFT: 0px; PADDING-TOP: 5pt; FONT-FAMILY: 'courier new',courier,serif,±¼¸²; BACKGROUND-COLOR: rgb(238,238,238)
+}
+DD {
+	MARGIN-TOP: 0px; FONT-SIZE: 10pt; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 25px; LINE-HEIGHT: 150%; FONT-FAMILY: ±¼¸²,serif
+}
+.dscrpt {
+	MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 25px; LINE-HEIGHT: 150%; FONT-FAMILY: ±¼¸²,sans-serif;
+}
+.para {
+	MARGIN-TOP: 0px; FONT-SIZE: 10pt; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 25px; COLOR: blue; LINE-HEIGHT: 150%; FONT-STYLE: italic; FONT-FAMILY: 'courier new',sans-serif
+}
+.paradsc {
+	MARGIN-TOP: 0px; FONT-SIZE: 10pt; MARGIN-BOTTOM: 5px; MARGIN-LEFT: 75px; LINE-HEIGHT: 150%; FONT-FAMILY: ±¼¸²,sans-serif
+}
+.paradsc2 {
+	MARGIN-TOP: 0px; FONT-SIZE: 10pt; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 75px; LINE-HEIGHT: 120%; FONT-FAMILY: ±¼¸²,sans-serif;
+} 
+.paraname {
+	COLOR: blue; FONT-STYLE: italic; FONT-FAMILY: 'courier new',sans-serif
+}
+.fname {
+	FONT-WEIGHT: bold; COLOR: blue
+}
+.scode {
+	MARGIN-TOP: 0px; FONT-SIZE: 9pt; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 35px; COLOR: blue; LINE-HEIGHT: 150%; FONT-FAMILY: ±¼¸²,serif
+}
+.scodedsc {
+	MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 35px; LINE-HEIGHT: 150%
+}
+.scodecmt {
+	FONT-SIZE: 9pt; COLOR: rgb(51,153,0); FONT-FAMILY: ±¼¸²
+}
+H1 {
+	FONT-SIZE: 16pt; MARGIN-BOTTOM: 30px; COLOR: rgb(72,82,133); FONT-FAMILY: ±¼¸², Verdana
+}
+H2 {
+	MARGIN-TOP: 5px; FONT-SIZE: 12pt; MARGIN-BOTTOM: 10px; FONT-FAMILY: Verdana
+}
+H3 {
+	MARGIN-TOP: 40pt; FONT-SIZE: 12pt; MARGIN-LEFT: 30pt; COLOR: rgb(70,115,160); FONT-FAMILY: ±¼¸²
+}
+H4 {
+	MARGIN-TOP: 5px; FONT-SIZE: 11pt; MARGIN-BOTTOM: 10px; COLOR: rgb(51,51,153); FONT-FAMILY: Verdana,serif
+}
+H5 {
+	FONT-SIZE: 10pt; MARGIN-LEFT: 30pt; COLOR: #000066; FONT-FAMILY: µ¸¿ò
+}
+H2 SUB {
+	FONT-SIZE: 10pt; MARGIN-LEFT: 25px; COLOR: #999999; FONT-FAMILY: Verdana
+}
+.mtext {
+	MARGIN-TOP: 0pt; FONT-SIZE: 9pt; MARGIN-BOTTOM: 5pt; MARGIN-LEFT: 30pt; LINE-HEIGHT: 150%; FONT-FAMILY: ±¼¸²
+}
+.ini_title {
+	FONT-WEIGHT: bold; FONT-SIZE: 12pt; MARGIN-LEFT: 30pt
+}
+.ini_syntax {
+	FONT-WEIGHT: bold; FONT-SIZE: 10pt; MARGIN-BOTTOM: 0pt; MARGIN-LEFT: 30pt; COLOR: rgb(72,82,133)
+}
+.ini_text {
+	MARGIN-TOP: 0pt; FONT-SIZE: 10pt; MARGIN-BOTTOM: 0pt; MARGIN-LEFT: 50pt; LINE-HEIGHT: 150%
+}
+.ini_example {
+	FONT-SIZE: 10pt; COLOR: #000066
+}
+.ini_italic {
+	FONT-WEIGHT: normal; FONT-SIZE: 10pt; FONT-STYLE: italic
+}
+.ctbic {
+	FONT-WEIGHT: bold; FONT-SIZE: 10pt; FONT-FAMILY: ±¼¸²,serif
+}
+.ctmid {
+	MARGIN-TOP: 15pt; FONT-WEIGHT: bold; FONT-SIZE: 9pt; MARGIN-BOTTOM: 3pt; COLOR: rgb(72,82,133); FONT-FAMILY: ±¼¸²,serif
+}
+.ctsmall {
+	MARGIN-TOP: 0pt; FONT-SIZE: 9pt; MARGIN-BOTTOM: 3pt; MARGIN-LEFT: 11pt; FONT-FAMILY: µ¸¿ò
+}
+.pme {
+	FONT-SIZE: 8pt; COLOR: #999999; FONT-FAMILY: Verdana
+}
+.menu {
+	FONT-SIZE: 9pt; COLOR: rgb(0,102,153); FONT-FAMILY: µ¸¿ò
+}
+.order {
+	FONT-SIZE: 10pt; COLOR: rgb(153,153,153); FONT-FAMILY: 'Arial Black'
+}
+
+body{ 
+ 		scrollbar-3dlight-color:9B9B9B;
+		scrollbar-arrow-color:ffffff;
+		scrollbar-base-color:E2E2E2;
+		scrollbar-darkshadow-color:FFFFFF;
+		scrollbar-face-color:E2E2E2;
+		scrollbar-highlight-color:FFFFF;
+		scrollbar-shadow-color:9B9B9B}

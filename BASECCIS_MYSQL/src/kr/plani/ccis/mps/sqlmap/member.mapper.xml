@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.plani.ccis.mps.mapper.MemberMapper">
+
+	<!-- 개인회원 정보 -->
+	<resultMap type="personUser" id="PSERSONUSER_OUT" />
+	
+	<!-- 기업회원 정보 -->
+	<resultMap type="companyUser" id="COMPANYUSER_OUT" />
+	   
+	<!-- 개인회원 추가/수정/삭제 -->
+	<select id="personAction" parameterType="personUser" resultMap="PSERSONUSER_OUT" statementType="CALLABLE">
+	     { call PKGDMLSERVER.Main
+	         (
+	              #{ inWorkName,               mode=IN,        jdbcType=VARCHAR },
+	              #{ inCondition,              mode=IN,        jdbcType=VARCHAR },
+	              #{ inDMLData,                mode=IN,        jdbcType=VARCHAR },
+	              #{ inCLOBData1,              mode=IN,        jdbcType=VARCHAR },
+	              #{ inCLOBData2,              mode=IN,        jdbcType=VARCHAR },
+	              #{ inExecMenuId,             mode=IN,        jdbcType=VARCHAR },
+	              #{ inBeforeData,             mode=IN,        jdbcType=VARCHAR },
+	              #{ inAfterData,              mode=IN,        jdbcType=VARCHAR },
+	              #{ inTerminal,               mode=IN,        jdbcType=VARCHAR },
+	              #{ inOsUser,                 mode=IN,        jdbcType=VARCHAR },
+	              #{ inModule,                 mode=IN,        jdbcType=VARCHAR },
+	              #{ inDMLUserId,              mode=IN,        jdbcType=VARCHAR },
+	              #{ inDMLIp,                  mode=IN,        jdbcType=VARCHAR },
+	              
+	              #{ outObjectName,            mode=OUT,       jdbcType=VARCHAR },
+	              #{ outResult,                mode=OUT,       jdbcType=VARCHAR },
+	              #{ outRowCount,              mode=OUT,       jdbcType=INTEGER },
+	              #{ outNotice,                mode=OUT,       jdbcType=VARCHAR }
+	         )
+	     }
+	</select>
+	
+	 <!-- 기업회원 추가/수정/삭제 -->
+	<select id="companyAction" parameterType="companyUser" resultMap="COMPANYUSER_OUT" statementType="CALLABLE">
+	    { call PKGDMLSERVER.Main
+	        (
+	             #{ inWorkName,               mode=IN,        jdbcType=VARCHAR },
+	             #{ inCondition,              mode=IN,        jdbcType=VARCHAR },
+	             #{ inDMLData,                mode=IN,        jdbcType=VARCHAR },
+	             #{ inCLOBData1,              mode=IN,        jdbcType=VARCHAR },
+	             #{ inCLOBData2,              mode=IN,        jdbcType=VARCHAR },
+	             #{ inExecMenuId,             mode=IN,        jdbcType=VARCHAR },
+	             #{ inBeforeData,             mode=IN,        jdbcType=VARCHAR },
+	             #{ inAfterData,              mode=IN,        jdbcType=VARCHAR },
+	             #{ inTerminal,               mode=IN,        jdbcType=VARCHAR },
+	             #{ inOsUser,                 mode=IN,        jdbcType=VARCHAR },
+	             #{ inModule,                 mode=IN,        jdbcType=VARCHAR },
+	             #{ inDMLUserId,              mode=IN,        jdbcType=VARCHAR },
+	             #{ inDMLIp,                  mode=IN,        jdbcType=VARCHAR },
+	                
+	             #{ outObjectName,            mode=OUT,       jdbcType=VARCHAR },
+	             #{ outResult,                mode=OUT,       jdbcType=VARCHAR },
+	             #{ outRowCount,              mode=OUT,       jdbcType=INTEGER },
+	             #{ outNotice,                mode=OUT,       jdbcType=VARCHAR }
+	        )
+	    }
+	</select>
+
+	<select id="viewPerson" parameterType="memberInfo" resultType="memberInfo" >
+		SELECT A.USERID AS USERID,
+			A.CERTIFICATION AS CERTIFICATION,
+			A.PASSWORD AS PASSWORD,
+			A.KEY1 AS KEY1,
+			A.KEY2 AS KEY2,
+			A.KEY3 AS KEY3,
+			A.DKEY AS DKEY,
+			TO_CHAR(A.PASSWORDTIME,'yyyyMMddHHmmss') AS PASSWORDTIME,
+			TO_CHAR(A.WITHDRAWTIME,'yyyyMMddHHmmss') AS WITHDRAWTIME,
+			A.JOINSITEID AS JOINSITEID,
+			A.JOINDATE AS JOINDATE,
+			A.OUTDATE AS OUTDATE,
+			A.KIND AS KIND,
+			A.KNAME AS KNAME,
+			B.CELLPHONE AS CELLPHONE,
+			B.MAILING AS MAILING,
+			B.EMAIL AS EMAIL,
+			B.GENDER AS GENDERPERSON,
+			B.BIRTHDATE AS BIRTHDATE,
+			B.BIOCOREUSEYN AS BIOCOREUSEYN,
+			B.ZEUSCERTIYN AS ZEUSCERTIYN
+		FROM T_USER A, T_PERSONUSER B
+		WHERE A.USERID = B.USERID
+		AND A.STATE = 'T'
+		AND A.USERID = #{myId} 
+	</select>
+  
+	<select id="viewCompany" parameterType="memberInfo" resultType="memberInfo" >
+		SELECT A.USERID AS USERID,
+			A.CERTIFICATION AS CERTIFICATION,
+			A.PASSWORD AS PASSWORD,
+			A.KEY1 AS KEY1,
+			A.KEY2 AS KEY2,
+			A.KEY3 AS KEY3,
+			A.DKEY AS DKEY,
+			TO_CHAR(A.PASSWORDTIME,'yyyyMMddHHmmss') AS PASSWORDTIME,
+			TO_CHAR(A.WITHDRAWTIME,'yyyyMMddHHmmss') AS WITHDRAWTIME,
+			A.JOINSITEID AS JOINSITEID,
+			A.JOINDATE AS JOINDATE,
+			A.OUTDATE AS OUTDATE,
+			A.KIND AS KIND,
+			A.KNAME AS KNAME,
+			C.CORPREGNO AS CORPREGNO,
+			C.CSCHOOL AS SCHOOL,
+			D.KNAME AS SCHOOLNM,
+			C.CDEPARTMENT AS DEPARTMENT,
+			E.KNAME AS DEPARTMENTNM,
+			C.CORPPHONE AS CORPPHONE,
+			C.CORPFAX AS CORPFAX,
+			C.CORPEMAIL AS CORPEMAIL,
+			C.CORPZIPCODE AS CORPZIPCODE,
+			C.CORPADDRESS1 AS CORPADDRESS1,
+			C.CORPADDRESS2 AS CORPADDRESS2,
+			C.CHARGENAME AS CHARGENAME,
+			C.CHARGEPHONE AS CHARGEPHONE,
+			C.CHARGEPOSITION AS CHARGEPOSITION,
+			F.KNAME AS CHARGEPOSITIONNM
+		FROM T_USER A, T_COMPANYUSER C, (SELECT * from T_CODE WHERE highercode =
+		'005000')D,
+		(SELECT * from T_CODE WHERE highercode = 'Department') E, (SELECT * from
+		T_CODE WHERE highercode = '011000') F
+		WHERE A.USERID = C.USERID
+		AND A.STATE = 'T'
+		AND C.CSCHOOL = D.CODE(+)
+		AND C.CDEPARTMENT = E.CODE(+)
+		AND C.CHARGEPOSITION = F.CODE(+)
+		AND A.USERID = #{myId} 
+	</select>
+  
+	<select id="getUserKind" parameterType="memberInfo" resultType="java.lang.String">
+		SELECT KIND AS USERKIND
+		FROM T_USER  
+	 	WHERE USERID = #{myId} 
+	</select>
+ 
+	<select id="getAdmCheckYn" parameterType="memberInfo" resultType="java.lang.String">
+		SELECT MAILCERTIYN AS MAILCERTIYN
+		FROM T_USER  
+	 	WHERE USERID = #{myId} 
+	</select>
+ 
+ 
+	<select id="passwordCheck" parameterType="memberInfo" resultType="int" >
+		SELECT COUNT(*) 
+		FROM T_USER  A
+		WHERE USERID = #{myId} 
+		AND PASSWORD = #{prePassword}
+	</select>
+ 
+ 
+	<select id="corpRegnoCheck" parameterType="memberInfo" resultType="java.util.HashMap" >
+		SELECT 
+	    	B.MAILCERTIYN AS MAILCERTIYN,
+	    	B.KNAME AS KNAME,
+	    	B.USERID AS USERID
+		FROM T_COMPANYUSER  A, T_USER B
+	 	WHERE 
+	 		A.USERID = B.USERID 
+	    	AND A.CORPREGNO = #{corpRegno}  
+	 	ORDER BY B.MAILCERTIYN ASC
+	</select>
+ 
+ 
+	<update id="updatepw" parameterType="memberInfo" >
+		UPDATE T_USER
+		SET PASSWORD = #{password}, PASSWORDTIME = SYSDATE, DMLLOG = '-'
+		WHERE USERID = #{myId} AND PASSWORD = #{prePassword}
+	</update>
+ 
+ <select id="getAgreementDate" parameterType="memberInfo" resultType="java.lang.String">
+ 
+ <![CDATA[ 
+	SELECT 
+	TO_CHAR(B.WITHDRAWDATE,'yyyy')||'년'||TO_CHAR(B.WITHDRAWDATE,'MM')||'월'||TO_CHAR(B.WITHDRAWDATE,'dd')||'일'||'-'||
+	TO_CHAR(B.ADDWITHDRAWDATE,'yyyy')||'년'||TO_CHAR(B.ADDWITHDRAWDATE,'MM')||'월'||TO_CHAR(B.ADDWITHDRAWDATE,'dd')||'일' AS WITHDRAWDATE  
+	FROM
+	(
+	SELECT 
+	ADD_MONTHS(A.WITHDRAWTIME,24) AS WITHDRAWDATE,
+	ADD_MONTHS(A.WITHDRAWTIME  + 1 ,24) AS ADDWITHDRAWDATE
+	FROM T_USER A where A.USERID = #{myId}
+	) B
+ ]]>
+ 
+ </select>
+ 
+ <update id="udateAgreement" parameterType="memberInfo" >
+
+ 	UPDATE T_USER 
+  	SET WITHDRAWTIME = SYSDATE
+	WHERE            
+	USERID = #{myId}
+ 
+ </update>
+
+	<select id="getWithDrawPwChageYn" parameterType="java.lang.String" resultType="java.util.HashMap">
+	<![CDATA[
+	SELECT TO_CHAR(ADD_MONTHS(WITHDRAWTIME,24),'yyyy.mm.dd') AS WITHDRAWTIME, 
+	       		CASE  WHEN ADD_MONTHS(WITHDRAWTIME,24) <  SYSDATE + 30  THEN 'Y' ELSE 'N'  END AS WITHDRAWTIMEFLAG, 
+	            CASE  WHEN ADD_MONTHS(PASSWORDTIME,3) <  SYSDATE  THEN 'Y' ELSE 'N'  END AS PASSWORDTIMEFLAG,
+	            CASE  WHEN DMLLOG = 'IMSI'  THEN 'Y' ELSE 'N'  END AS PASSWORDIMSIFLAG
+	       FROM T_USER WHERE USERID = #{userId}
+	        ]]>
+	</select>
+ 
+	<select id="getPwChangeYn" parameterType="java.lang.String" resultType="java.util.HashMap">
+	<![CDATA[
+	SELECT 
+	        TO_CHAR(PASSWORDTIME,'yyyyMMdd') AS PASSWORDTIME,
+	        CASE  WHEN  TO_CHAR(PASSWORDTIME,'yyyyMMdd') >  '20160430'  THEN 'Y' ELSE 'N'  END AS PASSWORDCHANGEFLAG
+	       FROM T_USER WHERE USERID = #{userId}
+ 	 ]]>
+	</select>
+
+	<delete id="deleteUser" parameterType="memberInfo">
+		DELETE FROM T_USER WHERE USERID = #{userId}
+	</delete>
+	
+	<delete id="deleteUserGroup" parameterType="memberInfo">
+		DELETE FROM T_USERGROUP  WHERE USERID = #{userId}
+	</delete>
+	
+	<delete id="deletePersonUser" parameterType="memberInfo">
+		DELETE FROM T_PERSONUSER WHERE USERID = #{userId}
+	</delete>
+	 
+	<delete id="deleteCompanyUser" parameterType="memberInfo">
+		DELETE FROM T_COMPANYUSER  WHERE USERID = #{userId}
+	</delete>  
+
+	<!-- 사용자 ID 검색 -->
+    <select id="view" parameterType="user" statementType="CALLABLE">
+        { call PKGQUERYSERVER.ReadUserIdSearch
+           (
+                #{ userId,         			mode=IN,        jdbcType=VARCHAR },
+                #{ dkey,          			mode=IN,        jdbcType=VARCHAR },
+                #{ kind,                    mode=IN,        jdbcType=VARCHAR },
+                #{ kName,          			mode=IN,        jdbcType=VARCHAR },
+                #{ corpRegNo,            	mode=IN,        jdbcType=VARCHAR },
+                #{ schType,        			mode=IN,        jdbcType=VARCHAR },
+                
+                #{ inExecMenuId,            mode=IN,        jdbcType=VARCHAR },
+                #{ inBeforeData,            mode=IN,        jdbcType=VARCHAR },
+                #{ inAfterData,             mode=IN,        jdbcType=VARCHAR },
+                #{ inTerminal,              mode=IN,        jdbcType=VARCHAR },
+                #{ inOsUser,                mode=IN,        jdbcType=VARCHAR },
+                #{ inModule,                mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLUserId,             mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLIp,                 mode=IN,        jdbcType=VARCHAR },
+                
+                #{ outObjectName,           mode=OUT,       jdbcType=VARCHAR },
+                #{ outResult,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outRowCount,             mode=OUT,       jdbcType=INTEGER },
+                #{ outNotice,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outCursor,               mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=USER_OUT }
+           )
+        }
+    </select>
+    
+    <!-- 임시비밀번호 발급 저장 -->	 
+	 <select id="insert" parameterType="user" statementType="CALLABLE">
+	   { call PkgDMLServer.Main
+	       (
+               #{ inWorkName,		mode=IN,	jdbcType=VARCHAR },
+               #{ inCondition,		mode=IN,	jdbcType=VARCHAR },
+               #{ inDMLData,		mode=IN,	jdbcType=VARCHAR },
+               #{ inCLOBData1,		mode=IN,	jdbcType=VARCHAR },
+               #{ inCLOBData2,		mode=IN,	jdbcType=VARCHAR },
+               #{ inExecMenuId,		mode=IN,	jdbcType=VARCHAR },
+               #{ inBeforeData,		mode=IN,	jdbcType=VARCHAR },
+               #{ inAfterData,		mode=IN,	jdbcType=VARCHAR },
+               #{ inTerminal,		mode=IN,	jdbcType=VARCHAR },
+               #{ inOsUser,			mode=IN,	jdbcType=VARCHAR },
+               #{ inModule,			mode=IN,	jdbcType=VARCHAR },
+               #{ inDMLUserId,		mode=IN,	jdbcType=VARCHAR },
+               #{ inDMLIp,			mode=IN,	jdbcType=VARCHAR },
+               #{ outObjectName,	mode=OUT,	jdbcType=VARCHAR },
+               #{ outResult,		mode=OUT,	jdbcType=VARCHAR },
+               #{ outRowCount,		mode=OUT,	jdbcType=INTEGER },  
+               #{ outNotice,		mode=OUT,	jdbcType=VARCHAR }	           
+	       )
+	   }
+	 </select>
+	 
+	<select id="idSearchCompany" parameterType="memberInfo" resultType="java.util.HashMap" >
+		
+		 SELECT A.USERID, A.PASSWORD, A.KNAME, A.MAILCERTIYN, A.STATE, A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG
+              FROM (SELECT * FROM T_USER WHERE STATE = 'T' AND KIND = #{kind} ) A,
+                   (SELECT * FROM T_COMPANYUSER 
+                    WHERE STATE = 'T' AND REPLACE(CORPREGNO, '-', '') = #{corpRegno}
+                     AND CSCHOOL = #{cSchool} AND CDEPARTMENT = #{cDepartment} AND CORPPHONE = #{corpPhone}
+                    ) B
+             WHERE A.USERID = B.USERID
+             ORDER BY A.MAILCERTIYN
+		
+	</select>
+	
+	<select id="pwSearchCompany" parameterType="memberInfo" resultType="java.util.HashMap" >
+		
+		 SELECT A.PASSWORD, A.KNAME, B.CORPEMAIL AS EMAIL, A.MAILCERTIYN, A.STATE, A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG
+              FROM (SELECT * FROM T_USER WHERE STATE = 'T' AND USERID =#{userId} AND KIND = #{kind} ) A,
+                   (SELECT * FROM T_COMPANYUSER 
+                    WHERE STATE = 'T' AND REPLACE(CORPREGNO, '-', '') = #{corpRegno}
+                     AND CSCHOOL = #{cSchool} AND CDEPARTMENT = #{cDepartment} AND CORPPHONE = #{corpPhone}
+                    ) B
+             WHERE A.USERID = B.USERID
+             ORDER BY A.MAILCERTIYN
+		
+	</select>
+ 
+</mapper>

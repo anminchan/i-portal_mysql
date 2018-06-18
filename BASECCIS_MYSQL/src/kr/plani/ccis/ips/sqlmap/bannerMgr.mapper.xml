@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.plani.ccis.ips.mapper.site.BannerMgrMapper">
+	
+	<!-- 베너설정 정보 -->
+	<resultMap id="BANNER_OUT" type="banner"/>
+	
+	<!-- 베너 리스트 -->
+	<select id="list" parameterType="banner" resultMap="BANNER_OUT">
+		<![CDATA[
+		SELECT A.RNUM2 AS NO1, A.SITEID, B.KNAME AS SITE_NAME, A.BANNERID, A.KNAME, A.KDESC, A.IMAGEFILENAME, A.IMAGESFILENAME,
+             A.FILEPATH, A.LINKURL, A.SORT, CONCAT(A.SORT)AS CSORT, A.STARTTIME, 
+             DATE_FORMAT(A.STARTTIME, '%Y-%m-%d')AS CSTARTTIME, A.ENDTIME, 
+             DATE_FORMAT(A.ENDTIME, '%Y-%m-%d')AS CENDTIME, A.NEWWINDOWYN, 
+             (CASE WHEN A.EndTime < NOW() THEN 'N' ELSE A.STATE END) AS STATE, 
+             IF(A.STATE = 'T', '사용', '사용안함')AS STATE_KANME, 
+             A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG]]>
+        FROM (
+        	 <include refid="common.pageHeader"/>
+				SELECT A.*
+				FROM (SELECT *
+						FROM T_BANNER
+						<where>
+						<if test="siteId != null and siteId != ''">
+							SiteID LIKE CONCAT('%', #{siteId}, '%')
+						</if>
+						<if test="KName != null and KName != ''">
+							AND KName LIKE CONCAT('%', #{KName}, '%')
+						</if>
+						<if test="state == null and state == ''">
+							AND State LIKE CONCAT('%', #{state}, '%')
+						</if>
+						<if test='state == "Y"'>
+							AND State LIKE CONCAT('%', #{state}, '%')
+						    <![CDATA[AND ENDTIME >= NOW()]]>
+						</if>
+						<if test='state == "N"'>
+					    	<![CDATA[AND ENDTIME < NOW()]]>
+						</if>
+						</where>
+						ORDER BY SiteID, Sort DESC) A
+              <include refid="common.pageFooter"/>
+              ) A
+         LEFT JOIN (SELECT * FROM T_SITE WHERE State = 'T') B
+     	 ON A.SITEID = B.SITEID
+	</select>
+	
+	<select id="listCnt" parameterType="banner" resultType="int">
+		SELECT COUNT(*) 
+		FROM T_BANNER 
+		WHERE SiteID LIKE CONCAT('%', #{siteId}, '%')
+       	AND KName LIKE CONCAT('%', #{KName}, '%')
+        <if test="state == null and state == ''">
+        	<![CDATA[AND State LIKE CONCAT('%', #{state}, '%')
+        </if>
+        <if test='state == "Y"'>
+        	AND State LIKE CONCAT('%', #{state}, '%')
+       		<![CDATA[AND ENDTIME >= NOW()]]>
+        </if>
+        <if test='state == "N"'>
+       		<![CDATA[AND ENDTIME < NOW()]]>
+        </if>
+	</select>
+	
+	<!-- 베너 상세 -->
+	<select id="view" parameterType="banner" resultMap="BANNER_OUT">
+		SELECT A.SITEID, A.BANNERID, A.KNAME, A.KDESC, B.KNAME AS SITE_NAME, A.IMAGEFILENAME, A.IMAGESFILENAME,
+	           A.FILEPATH, A.LINKURL, A.SORT, DATE_FORMAT(A.STARTTIME, '%Y%m%d%H') AS STARTTIME, DATE_FORMAT(A.ENDTIME, '%Y%m%d%H') AS ENDTIME, A.NEWWINDOWYN,
+	           A.STATE, A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG
+	    FROM (SELECT * FROM T_BANNER WHERE bannerID = #{bannerId}) A
+        LEFT JOIN(SELECT * FROM T_SITE WHERE SiteID = #{siteId}) B
+        ON A.SiteID = B.SiteID
+	</select>
+	
+	<!-- 베너 추가/수정/삭제 -->	 
+	<insert id="insert" parameterType="banner">
+		<if test='inCondition == "입력"'>
+		  	INSERT INTO T_BANNER(SiteID, bannerID,
+                               KName, KDesc, ImageFileName, ImageSFileName,
+                               FilePath, LinkURL, Sort, StartTime, EndTime, NewWindowYN,
+                               State, INSUserID, INSIP, INSTime, DMLUserID, DMLIP, DMLTime, DMLLog)
+            VALUES (#{siteId}, NEXTVAL('SEQT_BANNERBANNERID'),
+                    #{KName}, #{inCLOBData1}, #{imageFileName}, #{imageSFileName},
+                    #{filePath}, #{linkURL}, #{sort}, NOW(), DATE_ADD(NOW(), INTERVAL +10 YEAR), #{newWindowYn},
+                    #{state}, #{inDMLUserId}, #{inDMLIp}, NOW(), #{inDMLUserId}, #{inDMLIp}, NOW(), '-')
+		</if>
+		<if test='inCondition == "수정"'>
+			UPDATE T_BANNER
+            SET SiteId = #{siteId}, KName=#{KName},KDesc=#{inCLOBData1}, ImageFileName=#{imageFileName}, ImageSFileName=#{imageSFileName},
+                FilePath=#{filePath}, LinkURL=#{linkURL}, Sort=#{sort}, NewWindowYN=#{newWindowYn},
+                State=#{state}, DMLUserID=#{inDMLUserId}, DMLIP=#{inDMLIp}, DMLTime=NOW()
+            WHERE bannerID = #{bannerId}
+		</if>
+		<if test='inCondition == "삭제"'>
+			DELETE FROM T_BANNER WHERE bannerID = #{bannerId}
+		</if>
+	</insert>
+</mapper>

@@ -1,0 +1,611 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="author" content="Namo Interactive, Inc.">
+<link href="../common.css" rel="stylesheet" type="text/css" />
+<title>나모 크로스에디터 도움말</title>
+</head>
+<body>
+
+<table style="line-height:120%; margin-right:20;" border="0" cellpadding="0" width="94%" align="center">
+    <tr>
+        <td width="919">
+            <h1>삽입 메뉴</h1>
+            <p class="mtext">하이퍼링크, 수평선, 그림, 특수 기호 등을 넣거나 표를 삽입하고 편집할 수 있는 아이콘을 모아 놓았습니다.</p>
+            <!-- <p class="mtext">여기에서는 삽입 관련 도구 아이콘의 각 기능에 대하여 안내합니다.</p> -->
+            <ul>
+                <li class="ctsmall2"><a href="#hype">하이퍼링크</a></li>
+                <li class="ctsmall2"><a href="#insert_hr">수평선넣기</a>, <a href="#picture">그림넣기</a>, <a href="#file"> 파일넣기</a></li>
+				<li class="ctsmall2"><a href="#bgpicture">배경그림</a>, <a href="#video"> 동영상</a>, <a href="#photo">나모 포토에디터</a></li>
+                <li class="ctsmall2"><a href="#insert_symbol">특수기호</a>, <a href="#imoticon">이모티콘</a></li>
+                <li class="ctsmall2"><a href="#blockquote">인용구문</a></li>
+                <li class="ctsmall2"><a href="#layer">레이어넣기</a>
+                <li class="ctsmall2"><a href="#table_new">표 만들기</a>, <a href="#table_drag">표 그리기</a></li>
+                <li class="ctsmall2"><a href="#insert_row">행 추가</a>, <a href="#delete_row">행 삭제</a>, <a href="#insert_column">열 추가</a>, <a href="#delete_column">열 삭제</a></li>
+                <li class="ctsmall2"><a href="#merge_cell">셀 병합</a>, <a href="#split_cell">셀 나누기</a></li>
+                <li class="ctsmall2"><a href="#cell_dlg">셀 속성</a></li>
+				<li class="ctsmall2"><a href="#layout">레이아웃</a></li>
+				<li class="ctsmall2"><a href="#bookmark">책갈피</a></li>
+                <li class="ctsmall2"><a href="#template">템플릿</a></li>
+            </ul>
+
+			<a name="hype"></a>
+			<table border="0" class="mtitle_table">
+				<tr>
+					<td width="285" valign="top">
+						<p class="mtitle" style="line-height:2;">하이퍼링크</p>
+					</td>
+					<td width="285">
+						<p><img src="images/icon.insert.hype.gif" style="vertical-align:middle;" />&lt;Ctrl+L&gt;</p>
+					</td>
+				</tr>
+			</table>
+			<p class="mtext">다른 웹사이트 문서로 이동하는 하이퍼링크를 만듭니다. 하이퍼링크는 단어나 문장, 그림, 기타 다른 문서의 요소에 적용되는 태그입니다. 하이퍼링크는 같은 문서 내의 다른 위치나 같은 웹 사이트 내에 저장된 문서, 다른 웹 사이트에 있는 문서, 그림이나 멀티미디어 파일, 다운로드할 수 있는 프로그램 파일 등을 연결할 수 있습니다. </p>
+			<p class="mtext"><span class="menu">하이퍼링크</span> <img src="images/icon.insert.hype.gif" style="vertical-align:middle;" /> 도구 단추를 이용하여 하이퍼링크가 적용된 텍스트를 삽입할 수도 있으며, 기존의 텍스트나 그림에 하이퍼링크를 적용할 수도 있습니다.</p>
+			<p class="mtext">편집 창에서 어떤 것도 선택하지 않은 상태에서 <span class="menu">하이퍼링크</span> <img src="images/icon.insert.hype.gif" style="vertical-align:middle;" /> 도구 단추를 클릭하면 다음과 같은 하이퍼링크 입력 상자가 나타납니다. </p>
+				<p class="mtext"><img src="images/minsert_hype.gif" /> &nbsp;&nbsp;<img src="images/minsert_hype.2.png" /></p>
+			<p class="mlabel1">링크 종류</p>
+			<p class="mlabeltext">하이퍼링크로 연결할 링크의 종류를 선택합니다.</p>
+			<P class="mlabeltext"><span class="mlabel2">URL</span>: 하이퍼링크로 연결할 위치를 주소(URL)로 지정합니다.</P>
+			<P class="mlabeltext"> </P>
+			<P class="mlabeltext"><span class="mlabel2">책갈피</span>: 책갈피가 지정된 위치를 하이퍼링크로 지정합니다. 링크 종류를 책갈피로 지정하려면 문서 내에 책갈피가 먼저 지정되어 있어야 합니다.</P>
+			<p class="mlabel1">주소(URL)</p>
+			<p class="mlabeltext">하이퍼링크로 연결하려는 위치의 주소(URL)를 입력합니다.</p>
+			<p class="mlabel1">텍스트</p>
+			<p class="mlabeltext">하이퍼링크가 적용될 텍스트를 넣습니다. '확인' 단추를 누르면 입력된 텍스트가 편집 창에 자동으로 입력되어 나타납니다.</p>
+			<p class="mlabel1">제목</p>
+			<p class="mlabeltext">하이퍼링크로 연결할 위치의 제목을 입력합니다.</p>
+			<p class="mlabel1">대상 프레임</p>
+			<p class="mlabeltext">하이퍼링크로 연결한 문서를 어떤 프레임에서 보여줄 것인지 지정합니다. 프레임 이름을 직접 입력하거나 제시된 내용 중에서 선택할 수 있습니다. </p>
+			<table class="mlabeltext" cellspacing="0" width="550"  bordercolorlight="#999999" style="border-collapse:collapse;">
+				<tr>
+					<td width="70" bgcolor="#FFFFCC" style="border-width:1; border-color:rgb(153,153,153); border-style:solid;">
+						<p>_blank</p>
+					</td>
+					<td width="464" style="border-width:1; border-color:rgb(153,153,153); border-style:solid;">
+						<p>링크된 내용을 새로운 웹 브라우저를 하나 더 열어서 보여줍니다.</p>
+					</td>
+				</tr>
+				<tr>
+					<td width="70" bgcolor="#FFFFCC" style="border-width:1; border-color:rgb(153,153,153); border-style:solid;">
+						<p>_parent</p>
+					</td>
+					<td width="464" style="border-width:1; border-color:rgb(153,153,153); border-style:solid;">
+						<p>링크된 내용을 현재 프레임을 호출한 상위 프레임에 보여줍니다.</p>
+					</td>
+				</tr>
+				<tr>
+					<td width="70" bgcolor="#FFFFCC" style="border-width:1; border-color:rgb(153,153,153); border-style:solid;">
+						<p>_self</p>
+					</td>
+					<td width="464" style="border-width:1; border-color:rgb(153,153,153); border-style:solid;">
+						<p>링크된 내용을 현재 프레임에 보여줍니다. </p>
+					</td>
+				</tr>
+				<tr>
+					<td width="70" bgcolor="#FFFFCC" style="border-width:1; border-color:rgb(153,153,153); border-style:solid;">
+						<p>_top</p>
+					</td>
+					<td width="464" style="border-width:1; border-color:rgb(153,153,153); border-style:solid;">
+						<p>링크된 내용을 프레임을 모두 없애고 웹 브라우저의 화면 전체에 보여줍니다.</p>
+					</td>
+				</tr>
+			</table>
+			<p class="mlabel1">책갈피 이름</p>
+			<p class="mlabeltext"><span class="menu">링크 종류</span>를 <span class="menu">책갈피</span>로 선택한 경우, 하이퍼링크로 연결할 책갈피 이름을 선택합니다.</p>
+			<p class="mtext"><img src="images/icon-notice.gif" style="vertical-align:middle;" /> 편집 창에 하이퍼링크를 적용할 텍스트나 그림을 선택한 후 하이퍼링크 <img src="images/icon.insert.hype.gif" style="vertical-align:middle;" /> 도구 단추를 누르면, 하이퍼링크 입력 상자의 <span class="menu">텍스트</span>는 비활성화됩니다.</p>
+			
+			<a name="insert_hr"></a>
+			<table border="0" class="mtitle_table">
+				<tr>
+					<td width="285" valign="top">
+						<p class="mtitle" style="line-height:2;">수평선넣기</p>
+					</td>
+					<td width="285">
+						<p><img src="images/icon.insert.line.gif" style="vertical-align:middle; width:16px;" /></p>
+					</td>
+				</tr>
+			</table>
+			<p class="mtext">커서가 위치한 곳에 수평선을 삽입합니다. 수평선의 너비는 창의 너비에 맞추어 나타납니다.</p>
+			<p class="mtext">수평선은 문서의 내용을 구분하기 위해서 사용할 수 있습니다.</p>
+			
+			<a name="picture"></a>
+			<table border="0" class="mtitle_table">
+				<tr>
+					<td width="285" valign="top">
+						<p class="mtitle" style="line-height:2;">그림넣기</p>
+					</td>
+					<td width="285">
+						<p><img src="images/icon.insert.image.gif" style="vertical-align:middle;" /></p>
+					</td>
+				</tr>
+			</table>
+			<p class="mtext">문서에 그림을 삽입하거나 그림의 크기와 위치, 정렬과 같은 그림의 속성을 지정할 수 있습니다. 크로스에디터는 웹 문서에서 일반적으로 많이 사용하는 GIF나 JPG, JPEG, PNG, BMP와 같은 그림 파일 형식을 지원하고 있습니다.</p>
+			<p class="mtext"><img src="images/minsert_image.jpg" /></p>
+			<P class="mlabel1">그림 경로</P>
+			<P class="mlabeltext">그림의 경로를 입력합니다. <span class="menu">파일찾기</span> 단추를 누른 다음 <span class="menu">파일 선택</span> 대화 상자에서 그림 파일을 선택하면 쉽게 지정할 수 있습니다. </P>
+			<P class="mlabel1">그림 제목</P>
+			<P class="mlabeltext">그림의 제목을 입력합니다. <span class="menu">그림 제목</span>에 입력한 내용은 웹 브라우저에서 해당 그림에 마우스를 위치하였을 때 나타나게 됩니다. </P>
+			<P class="mlabel1">그림 설명</P>
+			<P class="mlabeltext">그림의 대체문구가 될 수 있는 간단한 의미나 용도를 입력합니다. 이미지가 보이지 않을 때 이미지를 대체하여 보여지는 텍스트입니다.</P>
+			<P class="mlabeltext"><img src="images/icon-note.gif" style="vertical-align:middle;" /> 관리자가 <a href="../dev/admin.htm#accessibility">웹 접근성 강화 옵션</a>에서 '1단계'나 '2단계'로 지정해 둔 경우, '그림 설명'을 입력해야 그림을 삽입할 수 있습니다.</P>
+			<P class="mlabel1">너비, 높이</P>
+			<P class="mlabeltext">그림의 너비와 높이를 픽셀 단위로 지정합니다.</P>
+			<P class="mlabeltext"><IMG src="images/icon-note.gif" style="vertical-align:middle;" /> 마우스 드래그를 이용하여 삽입한 그림의 크기를 자유롭게 조정할 수 있습니다.<BR>다만 마우스 드래그를 이용한 그림 크기 조절은 브라우저 특성상 인터넷 익스플로러와 파이어폭스에서만 가능합니다.</P>
+			<P class="mlabel1">정렬</P>
+			<P class="mlabeltext">그림과 글자의 정렬 관계를 지정합니다. 그림과 글자를 자연스럽게 배치하거나 원하는 레이아웃을 맞추기 위해 사용할 수 있습니다. 각 정렬 값에 대한 결과는 다음과 같습니다.</P>
+			<TABLE class="mlabeltext" cellSpacing=0 borderColorDark=white width="86%" borderColorLight=#999999 height="290" style="border-collapse:collapse;">
+				<TBODY>
+				<TR>
+					<TD width=172 bgColor=#ffffcc height="26" style="border-width:1; border-color:rgb(153,153,153); border-style:solid;">
+						<P>기본 </P>
+					</TD>
+					<TD width=172 bgColor=#ffffcc height="26" style="border-width:1; border-color:rgb(153,153,153); border-style:solid;">
+						<P>위</P>
+					</TD>
+					<TD width=172 bgColor=#ffffcc height="26" style="border-width:1; border-color:rgb(153,153,153); border-style:solid;">
+						<P>중간</P>
+					</TD>
+				</TR>
+				<TR>
+					<TD width=172 height="111" style="border-width:1; border-color:rgb(153,153,153); border-style:solid;">
+						<P><img src="images/minsert_image_align.gif" align="baseline" /> 그림의 아래 부분에 글자의 기준선을 맞춥니다.</P>
+					</TD>
+					<TD width=172 height="111" style="border-width:1; border-color:rgb(153,153,153); border-style:solid;">
+						<P><IMG src="images/minsert_image_align.gif" align="top" /> 그림의 맨 위쪽에 글자의 맨 위쪽을 맞추어 정렬합니다. </P>
+					</TD>
+					<TD width=172 height="111" style="border-width:1; border-color:rgb(153,153,153); border-style:solid;">
+						<P><IMG src="images/minsert_image_align.gif" align="middle" /> 그림의 중앙에 글자의 아래 부분을 맞추어 정렬합니다.</P>
+					</TD>
+				</TR>
+				<TR>
+					<TD width=172 bgColor=#ffffcc height=18 style="border-width:1; border-color:rgb(153,153,153); border-style:solid;">
+						<P>아래</P>
+					</TD>
+					<TD width=172 bgColor=#ffffcc height=18 style="border-width:1; border-color:rgb(153,153,153); border-style:solid;">
+						<p>왼쪽</p>
+					</TD>
+					<TD width=172 bgColor=#ffffcc height=18 style="border-width:1; border-color:rgb(153,153,153); border-style:solid;">
+						<p>오른쪽</p>
+					</TD>
+				</TR>
+				<TR>
+					<TD width=172 height="126" style="border-width:1; border-color:rgb(153,153,153); border-style:solid;">
+						<P><IMG src="images/minsert_image_align.gif" align="bottom" /> 그림의 아래 부분에 글자의 아래 부분을 맞추어 정렬합니다.</P>
+					</TD>
+					<TD width=172 height="126" style="border-width:1; border-color:rgb(153,153,153); border-style:solid;">
+						<P><IMG src="images/minsert_image_align.gif" align="bottom" /> 그림을 왼쪽으로 맞추고, 글자는 그림의 오른쪽에 표시합니다.</P>
+					</TD>
+					<TD width=172 height="126" style="border-width:1; border-color:rgb(153,153,153); border-style:solid;">
+						<P><IMG src="images/minsert_image_align.gif" align="bottom" /> 그림을 오른쪽으로 맞추고, 글자는 그림의 왼쪽에 표시합니다.</P>
+					</TD>
+				</TR>
+		   
+				<TR>
+					<TD width=172 bgColor=#ffffcc height=18 style="border-width:1; border-color:rgb(153,153,153); border-style:solid;">
+						<P>글자 위</P>
+					</TD>
+					<TD width=172 bgColor=#ffffcc height=18 style="border-width:1; border-color:rgb(153,153,153); border-style:solid;">
+						<P>글자 아래</P>
+					</TD>
+					<TD width=172 bgColor=#ffffcc height=18 style="border-width:1; border-color:rgb(153,153,153); border-style:solid;">&nbsp;</TD>
+				</TR>
+				<TR>
+					<TD width=172 height="126" style="border-width:1; border-color:rgb(153,153,153); border-style:solid;">
+						<P><IMG src="images/minsert_image_align.gif" align="texttop" /> 글자의 위쪽에 그림의 맨 위쪽을 맞추어 정렬합니다. </P>
+					</TD>
+					<TD width=172 height="126" style="border-width:1; border-color:rgb(153,153,153); border-style:solid;">
+						<P><IMG src="images/minsert_image_align.gif" align="absbottom" /> 글자의 맨 아래에 그림의 밑부분을 맞추어 정렬합니다.</P>
+					</TD>
+					<TD width=172 height="126" style="border-width:1; border-color:rgb(153,153,153); border-style:solid;">&nbsp;</TD>
+				</TR>
+			</TABLE>
+			<P class="mlabel1">좌여백, 우여백, 상여백, 하여백</P>
+			<P class="mlabeltext">그림의 왼쪽, 오른쪽, 위쪽, 아래쪽 여백을 설정합니다. 그림의 여백은 그림을 둘러싼 공간을 의미합니다.</P>
+			<P class="mlabel1">테두리 두께</P>
+			<P class="mlabeltext">그림의 테두리 선 두께를 지정합니다. </P>
+			
+			<a name="file"></a>
+			<table border="0" class="mtitle_table">
+				<tr>
+					<td width="285" valign="top">
+						<p class="mtitle" style="line-height:2;">파일넣기</p>
+					</td>
+					<td width="285">
+						<p><img src="images/icon.insert.file.gif" style="vertical-align:middle;" /></p>
+					</td>
+				</tr>
+			</table>
+			<p class="mtext">문서에 사진이나 html 문서는 물론 모든 형식의 파일을 삽입할 수 있습니다.</p>
+			<p class="mtext"><img src="images/minsert_file.gif" /></p>
+			<P class="mlabel1">파일 경로</P>
+			<P class="mlabeltext">파일의 경로를 입력합니다. <span class="menu">파일찾기</span> 단추를 누른 다음 <span class="menu">파일 선택</span> 대화 상자에서 파일을 선택하면 문서에 삽입할 수 있습니다.</P>
+			<P class="mlabel1">파일 설명</P>
+			<P class="mlabeltext">삽입할 파일에 대한 설명을 입력합니다.</P>
+			<p class="mtext">파일을 삽입한 위치에는 다음과 같이 표시됩니다.</p>
+			<p class="mtext"><img src="images/minsert_insertfile.gif" /></p>
+			
+			<a name="bgpicture"></a>
+			<table border="0" class="mtitle_table">
+				<tr>
+					<td width="285" valign="top">
+						<p class="mtitle" style="line-height:2;">배경그림</p>
+					</td>
+					<td width="285">
+						<p><img src="images/icon.insert.bg.gif" style="vertical-align:middle;" /></p>
+					</td>
+				</tr>
+			</table>
+			<p class="mtext">문서의 내용 아래에 나타나는 배경 그림을 넣을 수 있습니다. 배경 그림이 문서의 배경을 반복하여 채우도록 설정하면, 배경 그림은 문서가 열리는 창의 크기와 상관없이 그림이 반복되면서 문서의 배경을 채웁니다.</p>
+			<p class="mtext"><img src="images/minsert_bgimage.gif" /></p>
+			<P class="mlabel1">그림 경로</P>
+			<P class="mlabeltext">배경 그림의 경로를 입력합니다. <span class="menu">파일찾기</span> 단추를 누른 다음 <span class="menu">파일 선택</span> 대화 상자에서 그림 파일을 선택하면 쉽게 지정할 수 있습니다. </P>
+			<P class="mlabel1">반복</P>
+			<P class="mlabeltext">배경 그림의 반복을 여부를 설정합니다.</P>
+			<P class="mlabeltext"><span class="mlabel2">반복</span>: 그림을 타일 형식으로 보여줍니다.</P>
+			<P class="mlabeltext">- <span class="mlabel2">가로 방향으로 반복</span>: 가로 방향으로만 그림을 반복하여 보여줍니다. </P>
+			<P class="mlabeltext">- <span class="mlabel2">세로 방향으로 반복</span>: 세로 방향으로만 그림을 반복하여 보여줍니다. </P>
+			<P class="mlabeltext">- <span class="mlabel2">반복하지 않음</span>: 그림을 반복하지 않습니다. </P>
+			<P class="mlabel1">등록배경</P>
+			<P class="mlabeltext">이 전에 사용한 배경 그림이 있는 경우 이전에 사용한 배경 그림이 나타납니다. x표를 눌러 삭제할 수 있습니다. </P>
+		
+			<a name="video"></a>
+			<table border="0" class="mtitle_table">
+				<tr>
+					<td width="285" valign="top">
+						<p class="mtitle" style="line-height:2;">동영상 (3.0 버전 이상)</p>
+					</td>
+					<td width="285">
+						<p><img src="images/icon.insert.video.gif" style="vertical-align:middle;" /></p>
+					</td>
+				</tr>
+			</table>
+		
+			<p class="mtext">직접 만든 동영상이나 인터넷에서 다운로드 받아 하드디스크에 저장해 놓은 동영상, 그리고 인터넷에 업로드 되어 있는 동영상 등을 문서에 삽입할 수 있습니다. 동영상을 삽입했을 때 편집 탭에서는 동영상임을 나타내는 이미지로 표시됩니다.</p>
+			<p class="mtext"><img src="images/minsert_video.png" /></p>
+			<P class="mlabel1">파일 등록</P>
+			<P class="mlabeltext">동영상의 경로를 입력합니다. <span class="menu">파일찾기</span> 단추를 누른 다음 <span class="menu">파일 선택</span> 대화 상자에서 동영상 파일을 선택하면 쉽게 지정할 수 있습니다. </P>
+			<P class="mlabel1">URL입력</P>
+			<P class="mlabeltext">인터넷에 업로드 되어 있는 동영상의 주소(URL)를 입력합니다.</P>
+			<P class="mlabel1">스트리밍</P>
+			<P class="mlabeltext">URL입력으로 동영상을 삽입할 때, URL에 확장자가 포함되어 있지 않은 경우에 동영상의 스트리밍 Type을 지정합니다.</P>
+			<P class="mlabel1">너비, 높이</P>
+			<P class="mlabeltext">동영상이 재생될 화면의 너비와 높이를 픽셀 단위로 지정합니다.</P>
+			<P class="mtext"><IMG src="images/icon-note.gif" style="vertical-align:middle;" /> 인터넷에 업로드 되어 있는 동영상의 주소를 입력하여 삽입할 경우에는, 삽입할 동영상의 확장자가 URL에 포함되어 있는지 확인해야 합니다. URL에 확장자가 포함되어 있지 않은 경우에는 <span class="menu">스트리밍</span> 체크 상자를 선택하여 반드시 스트리밍 Type을 지정해야 합니다.<BR></P>
+			<P class="mtext"><IMG src="images/icon-note.gif" style="vertical-align:middle;" /> 마우스  드래그를 이용하여 동영상이 실행될 화면의 크기를 자유롭게 조정할 수 있습니다. <BR />다만 마우스 드래그를 이용한 크기 조절은 브라우저 특성상 인터넷 익스플로러와 파이어폭스에서만 가능합니다.</P>
+			<P class="mtext"><IMG src="images/icon-note.gif" style="vertical-align:middle;" /> 동영상 파일은 크로스 브라우징이 가능하도록 하기 위해 HTML 코드 상에서 &lt;embed&gt; 태그로 삽입됩니다.</P>
+
+			<a name="photo"></a>
+			<table border="0" class="mtitle_table">
+				<tr>
+					<td width="285" valign="top">
+						<p class="mtitle" style="line-height:2;">나모 포토에디터</p>
+					</td>
+					<td width="285">
+						<p><img src="images/icon.insert.photo.gif" style="vertical-align:middle;" /></p>
+					</td>
+				</tr>
+			</table>
+			<p class="mtext">나모 포토에디터를 실행합니다.</p>
+			<p class="mtext">아래의 링크로 연결된 나모 포토에디터 상세 도움말 참고해 주십시오.</p>
+			<p class="mtext"><a href="photo_intro.htm">나모 포토에디터 편집 환경</a></p>
+			<p class="mtext"><a href="photo_basic.htm">나모 포토에디터 기본 기능</a></p>
+			<p class="mtext"><a href="photo_editing.htm">나모 포토에디터  세부 편집 기능</a></p>
+			<p class="mtext"><a href="photo_slideshow.htm">나모 포토에디터 슬라이드쇼</a></p>
+			
+			<a name="insert_symbol"></a>
+			<table border="0" class="mtitle_table">
+				<tr>
+					<td width="285" valign="top">
+						<p class="mtitle" style="line-height:2;">특수기호</p>
+					</td>
+					<td width="285">
+						<p><img src="images/icon.insert.symbol.gif" style="vertical-align:middle;" /></p>
+					</td>
+				</tr>
+			</table>
+			<p class="mtext">키보드 일반 글자판으로는 입력할 수 없는 특수 문자나 기호를 입력할 수 있도록 합니다. </p>
+			<p class="mtext">선택한 기호가 <span class="mlabel2">입력창</span> 상자에 나타납니다.</p>
+			<p class="mtext"><img src="images/minsert_symbol.gif" /></p>
+			
+			<a name="imoticon"></a>
+			<table border="0" class="mtitle_table">
+				<tr>
+					<td width="285" valign="top">
+						<p class="mtitle" style="line-height:2;">이모티콘</p>
+					</td>
+					<td width="285">
+						<p><img src="images/icon.insert.imoticon.gif" style="vertical-align:middle;" /></p>
+					</td>
+				</tr>
+			</table>
+			<p class="mtext">크로스에디터는 다양한 이모티콘을 제공합니다.</p>
+			<p class="mtext">이모티콘 아이콘을 누르면 크로스에디터가 제공하는 다양한 이모티콘이 나타납니다. 원하는 이모티콘을 누르면 작성 중인 문서에 이모티콘이 삽입됩니다.</p>
+			<p class="mtext"><img src="images/fbasic.imoticon.jpg" /></p>
+			
+			<a name="blockquote"></a>
+			<table border="0" class="mtitle_table">
+				<tr>
+					<td width="285" valign="top">
+						<p class="mtitle" style="line-height:2;">인용구문</p>
+					</td>
+					<td width="285">
+						<p><img src="images/icon.insert.blockquote.gif" style="vertical-align:middle;" /></p>
+					</td>
+				</tr>
+			</table>
+			<p class="mtext">문서에서 사용하는 인용 구문을 구분하기 쉽도록 크로스에디터에서 제공하는 형태로 삽입합니다. '인용'은 남의 말이나 글을 자신의 문서에 넣어 쓰는 것을 의미합니다.</p>
+			<p class="mtext">인용 구문을 삽입할 위치에 커서를 두고 <span class="menu">인용 구문</span> <span class="mtitle"><img src="images/icon.insert.blockquote.gif" style="vertical-align:middle;" /></span> 도구 단추를 누른 다음 인용 구문 형태를 선택합니다.</p>
+			<p class="mtext">인용 구문으로 삽입할 글을 입력합니다.</p>
+			<p class="mtext"><img src="images/minsert_blockquote.gif" /></p>
+			<P class="mtext"><img src="images/icon-note.gif" style="vertical-align:middle;" /> 문서에 작성한 내용 중 인용 구문으로 지정할 위치에 커서를 두고 <span class="menu">인용 구문</span> <img src="images/icon.insert.blockquote.gif" style="vertical-align:middle;" /> 도구 단추를 누른 뒤 인용 구문 형태를 선택하면, 커서가 위치한 곳의 글이 인용 구문 형태로 변경됩니다.</P>
+			
+			<a name="layer"></a>
+			<table border="0" class="mtitle_table">
+				<tr>
+					<td width="285" valign="top">
+						<p class="mtitle" style="line-height:2;">레이어넣기</p>
+					</td>
+					<td width="285">
+						<p><img src="images/icon.insert.layer.gif" style="vertical-align:middle;" /></p>
+					</td>
+				</tr>
+			</table>
+			<p class="mtext">레이어를 이용하여 문서에서 특정 위치에 텍스트를 입력하거나 이미지와 같은 개체를 삽입할 수도 있습니다.</p>
+			<P class="mlabel1">너비, 높이</P>
+			<P class="mlabeltext">레이어의 너비와 높이를 픽셀 단위로 지정합니다.</P>
+			<P class="mlabel1">위치 상태</P>
+			<P class="mlabeltext">레이어의 위치 상태를 지정합니다.</P>
+			<P class="mlabeltext">- <span class="mlabel2">absolute</span>: 문서에서 레이어를 절대 위치에 둡니다. 문서 내의 텍스트나 다른 개체의 위치에 상관 없이 레이어의 위치를 지정할 수 있습니다.</P>
+			<P class="mlabeltext">- <span class="mlabel2">relative</span>: 문서에서 레이어를 상대 위치에 둡니다. 문서 내의 텍스트나 다른 개체의 위치에 따라 레이어의 위치가 상대적으로 달라집니다.</P>
+			
+			<a name="table_new"></a>
+            <table border="0" class="mtitle_table">
+                <tr>
+                    <td width="285" valign="top">
+                        <p class="mtitle" style="line-height:2;">표 만들기</p>
+                    </td>
+                    <td width="285">
+                        <p><img src="images/icon.table.new.gif" style="vertical-align:middle;" /></p>
+                    </td>
+                </tr>
+            </table>
+            <p class="mtext">표를 만들 때 표의 속성을 지정하거나 이미 만든 표의 속성을 수정할 수 있습니다.</p>
+            <p class="mtext">&nbsp;<img src="images/ftable.new.1.gif" /></p>
+            <P class="mlabel1">행</P>
+            <P class="mlabeltext">표에 들어갈 행(줄)의 개수를 지정합니다.</P>
+            <P class="mlabel1">열</P>
+            <P class="mlabeltext">표에 들어갈 열(칸)의 개수를 지정합니다.</P>
+            <P class="mlabel1">너비/높이</P>
+            <P class="mlabeltext">표의 크기(너비와 높이)를 지정합니다. 표의 너비와 높이는 픽셀 수로 지정됩니다. 크기가 고정된 표를 만들기 위해서는 픽셀 단위로 크기를 정하는 절대크기 지정 방식을 이용해야 합니다.</P>
+            <P class="mlabel1">테두리 두께</P>
+            <P class="mlabeltext">표의 테두리 선 두께를 지정합니다. 초기값은 '1'이며 높은 수를 입력할수록 테두리의 두께가 두꺼워집니다.</P>
+            <P class="mlabel1">테두리 색상</P>
+            <P class="mlabeltext">표의 테두리 색깔을 색깔 팔레트에서 선택하여 지정합니다. </P>
+            <P class="mlabeltext"><span class="mlabel2">더보기</span>를 선택하면 16 진수 상자와 색깔 스펙트럼이 나타납니다. </P>
+            <P class="mlabeltext">16 진수 상자에서 16 진수 색깔 코드를 입력하고 <span class="mlabel2">입력</span>을 누르면 테두리 색상이 지정됩니다. 16 진수 색깔 코드는 16 진수(0~F)로 6개의 숫자를 표시하여 색깔을 표시하는 것을 말합니다. 예를 들어 'FFFFFF'는 흰색(White), '0000FF'는 파란색(Blue)에 해당됩니다.</P>
+            <P class="mlabeltext"><img src="images/mtable_color1.gif" /></P>
+            <P class="mlabeltext">색깔 스펙트럼은 16 진수 상자에 입력한 16 진수 색깔 코드와 동일한 색상을 빨강과 녹색, 파랑, 채도 및 명도 값을 달리하여 다양하게 보여줍니다. 색깔 스펙트럼에 마우스를 올려놓으면 마우스 포인터가 십자 모양으로 변경됩니다. 마우스로 원하는 색깔을 선택하면 16 진수 상자 옆의 색깔 미리보기 상자에 선택한 색깔이 바로 나타납니다.</P>
+            <P class="mlabeltext"><img src="images/mtable_color2.png" /></P>
+            <P class="mlabel1">들여쓰기</P>
+            <P class="mlabeltext">표의 들여쓰기 값을 지정합니다.</P>
+            <P class="mlabel1">표 배경색</P>
+            <P class="mlabeltext">표의 배경색을 색깔 팔레트에서 선택하여 지정합니다. </P>
+            <P class="mlabel1">표 정렬</P>
+            <P class="mlabeltext">표의 내용을 정렬합니다. '없음' '왼쪽' '가운데' '오른쪽' 옵션 중 하나를 선택할 수 있습니다.</P>
+            <P class="mlabel1">표 제목</P>
+            <P class="mlabeltext">표의 제목을 입력합니다. 입력한 표 제목은 표 상단에 위치합니다.</P>
+            <P class="mlabeltext">표 제목은 표 전체 내용을 한 눈에 확인할 수 있으므로 여러 개의 표가 삽입된 문서를 좀 더 쉽게 관리할 수 있습니다. </P>
+            <P class="mlabeltext"><span class="mlabel2">출력 </span>체크 상자를 선택하면 표 제목이 편집 창과 미리보기 모드에 나타납니다. <span class="mlabel2">출력</span>을 선택하지 않으면 표 제목 정보는 HTML 소스 코드에만 입력됩니다.</P>
+            <P class="mlabeltext"><img src="images/icon-note.gif" style="vertical-align:middle;" /> 관리자가 <a href="../dev/admin.htm#accessibility">웹 접근성 강화 옵션</a>에서 '1단계'나 '2단계'로 지정해 둔 경우, '표 제목'은 필수 입력 사항입니다.</P>
+            <P class="mlabel1">요약 정보</P>
+            <P class="mlabeltext">표에 대한 간략한 정보를 입력합니다. </P>
+            <P class="mlabeltext"><span class="mlabel2">요약정보</span>에 입력한 내용은 크로스에디터 편집 창이나 미리보기 모드에 나타나지 않고, HTML 소스 코드에만 입력됩니다. 음성이나 점자 도구 사용자들에게 표에 대한 간략한 설명을 제공하는 기능을 합니다.</P>
+            <P class="mlabeltext"><img src="images/icon-note.gif" style="vertical-align:middle;" /> 관리자가 <a href="../dev/admin.htm#accessibility">웹 접근성 강화 옵션</a>에서 '1단계'나 '2단계'로 지정해 둔 경우, '요약 정보'는 필수 입력 사항입니다.</P>
+            <P class="mlabel1">표 헤더</P>
+            <P class="mlabeltext">표 헤더의 위치를 지정합니다.</P>
+			
+			<a name="table_drag"></a>
+            <table border="0" class="mtitle_table">
+                <tr>
+                    <td width="285" valign="top">
+                        <p class="mtitle" style="line-height:2;">표 그리기</p>
+                    </td>
+                    <td width="285">
+                        <p><img src="images/icon.insert.tabledrag.gif" style="vertical-align:middle;" /></p>
+                    </td>
+                </tr>
+            </table>
+            <p class="mtext">표의 행과 열의 개수를 마우스로 드래그하여 표를 삽입합니다.</p>
+            <dl>
+                <p class="mtext"><span class="menu">표 그리기</span> <img src="images/icon.insert.tabledrag.gif" style="vertical-align:middle;" /> 도구 버튼을 눌러 표 그리기 속성 창에서 마우스로 드래그하여 행과 열의 개수를 지정합니다. 마우스 왼쪽 버튼을 누르면 지정한 크기의 표가 삽입됩니다.</p>
+            </dl>
+            <p class="mtext"><img src="images/mtable_drag.gif" /></p>
+            <p class="mtext"><img src="images/icon-note.gif" style="vertical-align:middle;" /> 웹 접근성 1단계 이상 설정하는 경우 표 그리기 속성은 비활성화 됩니다.</P>
+            
+			<a name="insert_row"></a>
+			<table border="0" class="mtitle_table">
+                <tr>
+                    <td width="285" valign="top">
+                        <p class="mtitle" style="line-height:2;">행 추가</p>
+                    </td>
+                    <td width="285">
+                        <p><img src="images/icon.table.row.1.gif" style="vertical-align:middle;" /></p>
+                    </td>
+                </tr>
+            </table>
+            <p class="mtext">작성한 표에 행을 삽입합니다. 현재 커서가 놓여 있는 셀의 위나 아래에 행을 삽입할 수 있습니다. </p>
+            <p class="mtext"><img src="images/mtable_row.1.gif" /></p>
+            <P class="mlabel1">위에 행 추가/ 아래에 행 추가</p>
+
+            <P class="mlabeltext">현재 커서가 놓여 있는 셀 위에 행을 추가하려면 <span class="mlabel2">위에 행 추가</span>를 셀 아래에 행을 추가하려면 <span class="mlabel2">아래에 행 추가</span>를 선택합니다.</p>
+            <P class="mlabel1">개수</p>
+            <P class="mlabeltext">추가할 가로줄의 개수를 입력합니다. 마우스로 클릭하여 선택하거나 직접 입력합니다.</p>
+          
+		  <a name="delete_row"></a>
+            <table border="0" class="mtitle_table">
+                <tr>
+                    <td width="285">
+                        <p class="mtitle" style="line-height:2;">행 삭제</p>
+                    </td>
+                    <td width="285">
+                        <p><img src="images/icon.table.row.2.gif" style="vertical-align:middle;" /></p>
+                    </td>
+                </tr>
+            </table>
+            <p class="mtext">도구 모음에서 <span class="mlabel2">행 삭제 </span>단추를 누르면 현재 커서가 놓여 있는 가로줄이 삭제됩니다.</p>
+			
+			<a name="insert_column"></a>
+            <table border="0" class="mtitle_table">
+                <tr>
+                    <td width="285" valign="top">
+                        <p class="mtitle" style="line-height:2;">열 추가</p>
+                    </td>
+                    <td width="285">
+                        <p><img src="images/icon.table.column.1.gif" style="vertical-align:middle;" /></p>
+                    </td>
+                </tr>
+            </table>
+            <p class="mtext">작성한 표에 열을 삽입합니다. 현재 커서가 놓여 있는 셀의 왼쪽이나 오른쪽에 열을 삽입할 수 있습니다. </p>
+            <p class="mtext"><img src="images/mtable_column.gif" /></p>
+            <P class="mlabel1">왼쪽에 열 추가/ 오른쪽에 열 추가</p>
+            <P class="mlabeltext">현재 커서가 놓여 있는 셀 왼쪽에 열을 추가하려면 <span class="mlabel2">왼쪽에 열 추가</span>를, 셀 오른쪽에 열을 추가하려면 <span class="mlabel2">오른쪽에 열 추가</span>를 선택합니다.</p>
+            <P class="mlabel1">개수</p>
+            <P class="mlabeltext">추가할 세로줄의 개수를 입력합니다. 마우스로 클릭하여 선택하거나 직접 입력합니다.</p>
+            
+			<a name="delete_column"></a>
+			<table border="0" class="mtitle_table">
+                <tr>
+                    <td width="285" valign="top">
+                        <p class="mtitle" style="line-height:2;">열 삭제</p>
+                    </td>
+                    <td width="285">
+                        <p><img src="images/icon.table.column.2.gif" style="vertical-align:middle;" /></p>
+                    </td>
+                </tr>
+            </table>
+            <p>&nbsp;</p>
+            <p class="mtext">도구 모음에서 <span class="mlabel2">열 삭제</span> 단추를 누르면 현재 커서가 놓여 있는 세로줄이 삭제됩니다.</p>
+			
+			<a name="merge_cell"></a>
+            <table border="0" class="mtitle_table">
+                <tr>
+                    <td width="285" valign="top">
+                        <p class="mtitle" style="line-height:2;">셀 병합</p>
+                    </td>
+                    <td width="285">
+                        <p><img src="images/icon.table.merge.1.gif" style="vertical-align:middle;" /></p>
+                    </td>
+                </tr>
+            </table>
+            <p class="mtext">두 개 이상의 셀을 하나로 합칩니다.</p>
+            <p class="mtext">셀 합치기를 하려면 합치려는 행이나 열을 선택한 뒤 도구 모음 막대에서 <img src="images/icon.table.merge.1.gif" style="vertical-align:middle;" />를 선택합니다.</p>
+            
+			<a name="split_cell"></a>
+			<table border="0" class="mtitle_table">
+                <tr>
+                    <td width="285" valign="top">
+                        <p class="mtitle" style="line-height:2;">셀 나누기</p>
+                    </td>
+                    <td width="285">
+                        <p><img src="images/icon.table.merge.2.gif" style="vertical-align:middle;" /></p>
+                    </td>
+                </tr>
+            </table>
+            <p class="mtext">하나의 셀을 여러 개로 분할하거나 선택한 셀들을 각각 여러 개로 분할합니다.</p>
+            <p class="mtext">셀 나누기를 하려면 나누려는 셀을 선택하거나 커서를 셀 안에 놓은 뒤 <img src="images/icon.table.merge.2.gif" style="vertical-align:middle;" />를 선택합니다.셀 나누기 대화 상자에서 나눌 행과 열의 수를 지정하면 됩니다.</p>
+            <p class="mtext"><img src="images/mtable_split.gif" /></p>
+            <P class="mlabel1">가로줄로 나누기</p>            
+            <P class="mlabeltext">선택한 셀을 가로줄로 나눕니다. 원하는 가로줄 수를 입력합니다.</p>
+            <P class="mlabel1">세로줄로 나누기</p>
+            <P class="mlabeltext">선택한 셀을 세로줄로 나눕니다. 원하는 세로줄 수를 입력합니다.</p>
+            <P class="mlabel1">모두 나누기</p>
+            <P class="mlabeltext">선택한 셀을 가로줄과 세로줄로 한꺼번에 나눕니다. <span class="mlabel2">가로</span> 상자에 원하는 가로줄 수를, <span class="mlabel2">세로</span> 상자에 원하는 세로줄 수를 마우스로 클릭하여 선택하거나 직접 입력합니다.</p>
+            
+			<a name="cell_dlg"></a>
+			<table border="0" class="mtitle_table">
+                <tr>
+                    <td width="285" valign="top">
+                        <p class="mtitle" style="line-height:2;">셀 속성</p>
+                    </td>
+                    <td width="285">
+                        <p><img src="images/icon.table.cell.gif" style="vertical-align:middle;" /></p>
+                    </td>
+                </tr>
+            </table>
+            <p class="mtext">셀의 크기, 배경색 등의 속성을 지정하거나 변경합니다.</p>
+            <p class="mtext"><img src="images/mtable_cell_properties.gif" /></p>
+            <P class="mlabel1">셀 배경색</P>
+            <P class="mlabeltext">셀의 배경색을 색깔 팔레트에서 선택하여 지정합니다. </P>
+            <P class="mlabel1">셀 종류</P>
+            <P class="mlabeltext">셀의 종류를 지정합니다. 일반 셀이면 'DATA(TD)'를 선택하고 헤더로 사용할 셀이면 'Header(TH)'를 선택합니다.</P>
+            <p class="mlabel1">테두리 형태</p>
+            <p class="mlabeltext">셀의 테두리 선을 지정합니다. <span class="mlabel2">실선</span>, <span class="mlabel2">이중선</span>, <span class="mlabel2">파선</span>, <span class="mlabel2">점선</span> 중 하나를 선택합니다. 테두리를 지정하지 않으려면 '없음'을 선택합니다.</p>
+            <P class="mlabeltext"><img src="images/icon-notice.gif" style="vertical-align:middle;" /> 테두리 형태를 이중선으로 선택하면, 화면에 이중선으로 나타내기 위해 테두리 두께가 '3'으로 설정됩니다.</P>
+            <p class="mlabel1">테두리 두께</p>
+            <p class="mlabeltext">셀의 테두리 선 두께를 지정합니다. 초기값은 '1'이며 높은 수를 입력할수록 테두리의 두께가 두꺼워집니다.</p>
+            <p class="mlabel1">테두리 색상</p>
+            <p class="mlabeltext">셀 테두리의 색상을 지정합니다. 색상 상자를 누르면 팔레트가 나타납니다.</p>
+            <p class="mlabel1">테두리 선택</p>
+            <p class="mlabeltext">셀의 테두리 경계선을 지정합니다.</p>
+			
+			<a name="layout"></a>
+			<table border="0" class="mtitle_table">
+				<tr>
+					<td width="285" valign="top">
+						<p class="mtitle" style="line-height:2;">레이아웃</p>
+					</td>
+					<td width="285">
+						<p><img src="images/icon.insert.layout.gif" style="vertical-align:middle;" /></p>
+					</td>
+				</tr>
+			</table>
+			<p class="mtext">크로스에디터는 다양한 문서 레이아웃을 제공합니다. 레이아웃은 문서의 글, 그림 등의 배치를 </p>
+			<p class="mtext">원하는 문서 레이아웃을 선택하여 편리하게 문서를 작성할 수 있습니다.</p>
+			<p class="mtext"><img src="images/minsert_layout.gif" /></p>
+			
+			<a name="bookmark"></a>
+			<table border="0" class="mtitle_table">
+				<tr>
+					<td width="285" valign="top">
+						<p class="mtitle" style="line-height:2;">책갈피</p>
+					</td>
+					<td width="285">
+						<p><img src="images/icon.insert.bookmark.gif" style="vertical-align:middle;" /></p>
+					</td>
+				</tr>
+			</table>
+			<p class="mtext"><span class="menu">책갈피</span>는 문서에서 원하는 위치로 이동하기 위해 특정 위치에 표시를 해 두는 것입니다. 책갈피를 지정하면 내용이 긴 문서에서 책갈피가 지정된 부분을 쉽게 찾을 수 있습니다. 지정된 책갈피는 하이퍼링크로 연결할 수도 있습니다.</p>
+			<p class="mtext"><span class="menu">책갈피</span>를 지정할 위치에 커서를 두고 <span class="menu">책갈피</span> <img src="images/icon.insert.bookmark.gif" style="vertical-align:middle;" /> 도구 단추를 눌러 책갈피 이름을 입력합니다.</p>
+			<p class="mtext"><img src="images/minsert_bookmark.jpg" /></p>
+			<p class="mtext"><span class="menu">책갈피</span>가 지정된 위치에는 다음과 같이 책갈피 기호가 표시됩니다.</p>
+			<p class="mtext"><img src="images/minsert_bookmark.2.jpg" /></p>
+			<P class="mtext"><IMG src="images/icon-note.gif" style="vertical-align:middle;" /> 책갈피를 삽입한 후 책갈피가 지정된 위치를 하이퍼링크로 연결하려면, 하이퍼링크 도구 버튼<span class="mtitle"><img src="images/icon.insert.hype.gif" style="vertical-align:middle;" /></span>을 누릅니다. <span class="menu">하이퍼링크</span> 입력 상자에서 <span class="menu">링크 종류</span>를 <span class="menu">책갈피</span>로 선택하고, 지정할 책갈피 이름을 선택합니다.</P>
+			
+			<a name="template"></a>
+			<table border="0" class="mtitle_table">
+				<tr>
+					<td width="285" valign="top">
+						<p class="mtitle" style="line-height:2;">템플릿</p>
+					</td>
+					<td width="285">
+						<p><img src="images/select.template.gif" style="vertical-align:middle;" /></p>
+					</td>
+				</tr>
+			</table>
+			<p class="mtext">지정된 문서 템플릿을 선택하여 형식에 맞는 문서를 작성할 수 있습니다.</p>
+			<p class="mtext"><img src="images/select.template.gif" style="vertical-align:middle;" />을 누른 뒤 템플릿 종류를 선택한 다음 <span class="menu">확인</span> 단추를 누릅니다.</p>
+
+            <p>&nbsp;</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+        <hr />
+        <P align="center">Copyright ⓒ 2014. Namo Interactive, Inc. All rights reserved.</P>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

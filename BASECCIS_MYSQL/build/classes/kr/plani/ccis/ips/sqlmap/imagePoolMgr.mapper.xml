@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.plani.ccis.ips.mapper.site.ImagePoolMgrMapper">
+	
+	<!-- 이미지풀설정 정보 -->
+	<resultMap id="IMAGEPOOL_OUT" type="imagePool"/>
+	
+	<!-- 이미지풀 리스트 -->
+	<select id="list" parameterType="imagePool" statementType="CALLABLE">
+		{ call PkgQueryServer.ListImagePool
+			( 
+       			#{ inRowsPerPage,			mode=IN,		jdbcType=INTEGER },
+				#{ inTargetPage,			mode=IN,		jdbcType=INTEGER },
+				#{ schType,					mode=IN,		jdbcType=INTEGER },
+    			#{ schText,					mode=IN,		jdbcType=VARCHAR },
+    			
+				#{ inExecMenuId,			mode=IN,		jdbcType=VARCHAR },
+				#{ inBeforeData,			mode=IN,		jdbcType=VARCHAR },
+				#{ inAfterData,				mode=IN,		jdbcType=VARCHAR },
+				#{ inTerminal,				mode=IN,		jdbcType=VARCHAR },
+				#{ inOsUser,				mode=IN,		jdbcType=VARCHAR },
+				#{ inModule,				mode=IN,		jdbcType=VARCHAR },
+				#{ inDMLUserId,				mode=IN,		jdbcType=VARCHAR },
+				#{ inDMLIp,					mode=IN,		jdbcType=VARCHAR },
+				
+				#{ outObjectName,			mode=OUT,		jdbcType=VARCHAR },
+				#{ outResult,				mode=OUT,		jdbcType=VARCHAR },
+				#{ outRowCount,				mode=OUT,		jdbcType=INTEGER },
+				#{ outNotice,				mode=OUT,		jdbcType=VARCHAR },
+				#{ outMaxRow,				mode=OUT,		jdbcType=INTEGER },
+				#{ outMaxPage,				mode=OUT,		jdbcType=INTEGER },
+				#{ outCursor,				mode=OUT,		jdbcType=CURSOR,		javaType=ResultSet,		resultMap=IMAGEPOOL_OUT }
+				
+			)
+		}
+	</select>
+	
+	<!-- 이미지풀 상세 -->
+	<select id="view" parameterType="imagePool" statementType="CALLABLE">
+		{ call PkgQueryServer.ReadImagePool
+			(
+				#{ imagePoolId,				mode=IN,		jdbcType=VARCHAR },
+				
+				#{ inExecMenuId,			mode=IN,		jdbcType=VARCHAR },
+				#{ inBeforeData,			mode=IN,		jdbcType=VARCHAR },
+				#{ inAfterData,				mode=IN,		jdbcType=VARCHAR },
+				#{ inTerminal,				mode=IN,		jdbcType=VARCHAR },
+				#{ inOsUser,				mode=IN,		jdbcType=VARCHAR },
+				#{ inModule,				mode=IN,		jdbcType=VARCHAR },
+				#{ inDMLUserId,				mode=IN,		jdbcType=VARCHAR },
+				#{ inDMLIp,					mode=IN,		jdbcType=VARCHAR },
+				
+				#{ outObjectName,			mode=OUT,		jdbcType=VARCHAR },
+				#{ outResult,				mode=OUT,		jdbcType=VARCHAR },
+				#{ outRowCount,				mode=OUT,		jdbcType=INTEGER },
+				#{ outNotice,				mode=OUT,		jdbcType=VARCHAR },
+				#{ outCursor,				mode=OUT,		jdbcType=CURSOR,		javaType=ResultSet,		resultMap=IMAGEPOOL_OUT }
+
+			)
+		}
+	</select>
+	<!-- 이미지풀 추가/수정/삭제 -->	 
+	<select id="insert" parameterType="imagePool" statementType="CALLABLE">
+		{ call PkgDMLServer.Main
+	    	(
+               #{ inWorkName,		mode=IN,	jdbcType=VARCHAR },
+               #{ inCondition,		mode=IN,	jdbcType=VARCHAR },
+               #{ inDMLData,		mode=IN,	jdbcType=VARCHAR },
+               #{ inCLOBData1,		mode=IN,	jdbcType=VARCHAR },
+               #{ inCLOBData2,		mode=IN,	jdbcType=VARCHAR },
+               #{ inExecMenuId,		mode=IN,	jdbcType=VARCHAR },
+               #{ inBeforeData,		mode=IN,	jdbcType=VARCHAR },
+               #{ inAfterData,		mode=IN,	jdbcType=VARCHAR },
+               #{ inTerminal,		mode=IN,	jdbcType=VARCHAR },
+               #{ inOsUser,			mode=IN,	jdbcType=VARCHAR },
+               #{ inModule,			mode=IN,	jdbcType=VARCHAR },
+               #{ inDMLUserId,		mode=IN,	jdbcType=VARCHAR },
+               #{ inDMLIp,			mode=IN,	jdbcType=VARCHAR },
+               #{ outObjectName,	mode=OUT,	jdbcType=VARCHAR },
+               #{ outResult,		mode=OUT,	jdbcType=VARCHAR },
+               #{ outRowCount,		mode=OUT,	jdbcType=INTEGER },  
+               #{ outNotice,		mode=OUT,	jdbcType=VARCHAR }	           
+	    	)
+		}
+	</select>
+</mapper>

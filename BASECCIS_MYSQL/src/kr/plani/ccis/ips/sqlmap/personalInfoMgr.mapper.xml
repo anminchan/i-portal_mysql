@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.plani.ccis.ips.mapper.site.PersonalInfoMgrMapper">
+	
+	<!-- 개인정보처리방침설정 정보 -->
+	<resultMap id="PERSONALINFO_OUT" type="personalInfo"/>
+	
+	<!-- 개인정보처리방침 리스트 -->
+	<select id="list" parameterType="personalInfo" resultType="personalInfo">
+		<![CDATA[
+		SELECT A.RNUM2 AS NO1, A.PERSONALINFOID, A.KNAME, A.KDESC,
+            
+             A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG]]>
+        FROM (
+        	 <include refid="common.pageHeader"/>
+                      SELECT A.*
+                      FROM (SELECT * FROM T_PERSONALINFO WHERE KNAME LIKE '%' || #{KName} || '%'
+                	  ORDER BY PERSONALINFOID DESC) A
+              <include refid="common.pageFooter"/>
+              ) A
+	</select>
+	
+	<select id="list2" parameterType="personalInfo" resultType="personalInfo">
+		<![CDATA[
+			SELECT KNAME, PERSONALINFOID
+	        FROM T_PERSONALINFO
+	        WHERE PERSONALINFOID NOT IN (#{personalInfoId})
+	        ORDER BY PERSONALINFOID DESC    
+        ]]>
+	</select>
+	
+	<select id="listCnt" parameterType="personalInfo" resultType="int">
+		SELECT COUNT(*) 
+		FROM T_PERSONALINFO 
+		WHERE KNAME LIKE '%' || #{KName} || '%'
+	</select>
+	
+	<select id="maxId" resultType="String">
+		SELECT MAX(PERSONALINFOID) PERSONALINFOID
+		FROM T_PERSONALINFO 
+	</select>
+	
+	<!-- 개인정보처리방침 상세 -->
+	<select id="view" parameterType="personalInfo" resultType="personalInfo">
+		
+		SELECT KDESC, KNAME, PERSONALINFOID
+	    FROM T_PERSONALINFO 
+	    WHERE PERSONALINFOID = #{personalInfoId}
+	</select>
+	
+	<!-- 개인정보처리방침 추가/수정/삭제 -->	 
+	<insert id="insert" parameterType="personalInfo">
+		<selectKey keyProperty="personalInfoId" resultType="java.lang.String" order="BEFORE">
+			SELECT NVL(MAX(PERSONALINFOID), 0) + 1 FROM T_PERSONALINFO
+		</selectKey>
+	
+		INSERT INTO T_PERSONALINFO(PERSONALINFOID, KNAME, KDESC, INSUSERID, INSIP, INSTIME, DMLUSERID, DMLIP, DMLTIME, DMLLOG)
+            VALUES (${personalInfoId}, #{KName}, #{inCLOBData1}, #{inDMLUserId}, #{inDMLIp}, SYSDATE, #{inDMLUserId}, #{inDMLIp}, SYSDATE, '-')
+	</insert>
+	
+	<update id="update" parameterType="personalInfo">
+		UPDATE T_PERSONALINFO
+            SET KNAME=#{KName},KDESC=#{inCLOBData1}, DMLUSERID=#{inDMLUserId}, DMLIP=#{inDMLIp}, DMLTIME=SYSDATE
+            WHERE PERSONALINFOID = #{personalInfoId}
+	</update>
+	
+	<delete id="delete" parameterType="personalInfo">
+		DELETE FROM T_PERSONALINFO WHERE PERSONALINFOID = #{personalInfoId}
+	</delete>
+</mapper>

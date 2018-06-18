@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
+  <display-name>BASE CCIS</display-name>
+  <description>BASE Framework</description>
+  <servlet>
+    <servlet-name>dispatcherServlet</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:applicationContext.xml</param-value>
+    </init-param>
+    <init-param>
+      <param-name>throwExceptionIfNoHandlerFound</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>dispatcherServlet</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+  <session-config>
+  	<session-timeout>15</session-timeout>
+  </session-config>
+<mime-mapping>
+<extension>zip</extension>
+<mime-type>application/zip</mime-type>
+</mime-mapping>
+<mime-mapping>
+<extension>doc</extension>
+<mime-type>application/msword</mime-type>
+</mime-mapping>
+<mime-mapping>
+<extension>jar</extension>
+<mime-type>application/java-archive</mime-type>
+</mime-mapping>
+<mime-mapping>
+<extension>gz</extension>
+<mime-type>application/x-gzip</mime-type>
+</mime-mapping>
+<mime-mapping>
+<extension>pdf</extension>
+<mime-type>application/pdf</mime-type>
+</mime-mapping>
+<mime-mapping>
+<extension>pps</extension>
+<mime-type>application/vnd.ms-powerpoint</mime-type>
+</mime-mapping>
+<mime-mapping>
+<extension>ppt</extension>
+<mime-type>application/vnd.ms-powerpoint</mime-type>
+</mime-mapping>
+<mime-mapping>
+<extension>pptx</extension>
+<mime-type>application/vnd.ms-powerpoint</mime-type>
+</mime-mapping>
+<mime-mapping>
+<extension>xls</extension>
+<mime-type>application/vnd.ms-excel</mime-type>
+</mime-mapping>
+<mime-mapping>
+<extension>xlsx</extension>
+<mime-type>application/vnd.ms-excel</mime-type>
+</mime-mapping>
+<mime-mapping>
+<extension>xsl</extension>
+<mime-type>application/xml</mime-type>
+</mime-mapping>
+<mime-mapping>
+<extension>Z</extension>
+<mime-type>application/x-compress</mime-type>
+</mime-mapping>
+<mime-mapping>
+<extension>z</extension>
+<mime-type>application/x-compress</mime-type>
+</mime-mapping>
+<mime-mapping>
+<extension>hwp</extension>
+<mime-type>application/x-hwp</mime-type>
+</mime-mapping>
+    <mime-mapping>
+        <extension>avi</extension>
+        <mime-type>video/x-msvideo</mime-type>
+    </mime-mapping>
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:applicationContext.xml</param-value>
+  </context-param>
+  <listener>
+    <display-name>ContextLoader</display-name>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+
+  <listener>
+      <listener-class>ch.qos.logback.ext.spring.web.LogbackConfigListener</listener-class>
+  </listener>
+  <context-param>
+      <param-name>logbackConfigLocation</param-name>
+      <param-value>classpath:logback.xml</param-value>
+  </context-param>
+  
+  <context-param>
+    <param-name>javax.servlet.jsp.jstl.fmt.locale</param-name>
+    <param-value>ko_KR</param-value>
+  </context-param>
+  <filter>
+    <filter-name>encodingFilter</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>utf-8</param-value>
+    </init-param>
+    <init-param>
+      <param-name>forceEncoding</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>encodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <!-- <filter>
+    <filter-name>multipartFilter</filter-name>
+    <filter-class>org.springframework.web.multipart.support.MultipartFilter</filter-class>
+    <init-param>
+      <param-name>multipartResolverBeanName</param-name>
+      <param-value>multipartResolver</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>multipartFilter</filter-name>
+    <servlet-name>dispatcherServlet</servlet-name>
+  </filter-mapping> -->
+  <filter>
+    <filter-name>multipartFilter</filter-name>
+    <filter-class>org.springframework.web.multipart.support.MultipartFilter</filter-class>
+    <init-param>
+      <param-name>multipartResolverBeanName</param-name>
+      <param-value>baseMultipartResolver</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>multipartFilter</filter-name>
+    <url-pattern>/multiPartFileUpload</url-pattern>
+    <url-pattern>/mgr/contentMgr/actNoticeBoard</url-pattern>
+    <url-pattern>/mgr/contentMgr/actFreeBoard</url-pattern>
+    <url-pattern>/mgr/contentMgr/actLinkBoard</url-pattern>
+    <url-pattern>/mgr/contentMgr/actClippingBoard</url-pattern>
+    <url-pattern>/mgr/contentMgr/actThumbnailBoard</url-pattern>
+    <url-pattern>/mgr/contentMgr/actVodBoard</url-pattern>
+    <url-pattern>/mgr/contentMgr/actCardBoard</url-pattern>
+    <url-pattern>/mgr/contentMgr/actAppealBoard</url-pattern>
+    <url-pattern>/mgr/contentMgr/actReplyBoard</url-pattern>
+    <url-pattern>/mgr/attachFileMgr/act</url-pattern>
+    <url-pattern>/mgr/bannerMgr/act</url-pattern>
+    <url-pattern>/mgr/popupWindowMgr/act</url-pattern>
+    <url-pattern>/mgr/popupZoneMgr/act</url-pattern>
+    <url-pattern>/mgr/visualZoneMgr/act</url-pattern>
+    <url-pattern>/mgr/sampleMgr/act</url-pattern>
+    <url-pattern>/board/actBoard</url-pattern>
+  </filter-mapping>
+
+  <filter>
+    <filter-name>hiddenHttpMethodFilter</filter-name>
+    <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>hiddenHttpMethodFilter</filter-name>
+    <servlet-name>dispatcherServlet</servlet-name>
+  </filter-mapping>
+  <filter>
+    <filter-name>httpPutFormContentFilter</filter-name>
+    <filter-class>org.springframework.web.filter.HttpPutFormContentFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>httpPutFormContentFilter</filter-name>
+    <servlet-name>dispatcherServlet</servlet-name>
+  </filter-mapping>
+  
+  <listener>
+    <listener-class>org.apache.commons.fileupload.servlet.FileCleanerCleanup</listener-class>
+  </listener>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  
+  <!-- <listener>
+  	<listener-class>kr.plani.ccis.common.util.VisitSessionListener</listener-class>
+  </listener> -->
+    
+	<error-page>
+		<error-code>404</error-code>
+    	<location>/WEB-INF/jsp/exception/runtimeException.jsp</location>
+	</error-page>
+	<error-page>
+    	<error-code>500</error-code>
+    	<location>/WEB-INF/jsp/exception/runtimeException.jsp</location>
+	</error-page>
+</web-app>

@@ -1,0 +1,386 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="author" content="Namo Interactive, Inc.">
+<link href="../common.css" rel="stylesheet" type="text/css" />
+<title>나모 크로스에디터 도움말</title>
+</head>
+
+<body>
+<table style="line-height:120%; margin-right:20;" border="0" cellpadding="0" width="94%" align="center">
+    <tr>
+        <td width="919">
+            <h1>표준 메뉴</h1>
+            <p class="mtext">새로운 편집 창을 열어 새 문서를 작성하거나 문서 편집을 위한 기본적인 기능 아이콘을 모아 놓았습니다.</p>
+			
+            <ul>
+				<li class="ctsmall2"><a href="#file_new">새 문서</a>, <a href="#file_save">저장하기</a>, <a href="#print">인쇄하기</a></li>
+                <li class="ctsmall2"><a href="#undo">돌이킴</a>, <a href="#redo">되돌이킴</a></li>
+                <li class="ctsmall2"><a href="#cut">자르기</a>, <a href="#copy">복사하기</a>, <a href="#paste">붙여넣기</a>, <a href="#pastetext">텍스트로 붙여넣기</a></li>
+                <li class="ctsmall2"><a href="#find">찾기</a>, <a href="#replace">바꾸기</a></li>
+                <li class="ctsmall2"><a href="#select_all">전체선택</a></li>
+                <li class="ctsmall2"><a href="#spellchecker">맞춤법 검사(IE 전용)</a></li>
+                <li class="ctsmall2"><a href="#full">전체화면</a></li>
+                <li class="ctsmall2"><a href="#help">도움말</a>, <a href="#product">버전정보</a></li>
+            </ul>
+
+			<a name="file_new"></a>
+            <table border="0" class="mtitle_table">
+                <tr>
+                    <td width="285" valign="top">
+                        <p class="mtitle" style="line-height:2;">새 문서</p>
+                    </td>
+                    <td width="285">
+                        <p><img src="images/icon.file.new.gif" style="vertical-align:middle;" /></p>
+                    </td>
+                </tr>
+            </table>
+            <p class="mtext">새로운 편집 창을 열어 새 글을 작성할 수 있도록 해줍니다.</p>
+			
+            <a name="file_save"></a>
+			<table border="0" class="mtitle_table">
+                <tr>
+                    <td width="285" valign="top">
+                        <p class="mtitle" style="line-height:2;">저장하기</p>
+                    </td>
+                    <td width="285">
+                        <p><img src="images/icon.file.save.gif" style="vertical-align:middle;" />&lt;Ctrl+S&gt;</p>
+                    </td>
+                </tr>
+            </table>
+            <p class="mtext">작업 중인 문서를 저장합니다. 문서는 HTML 형식이나 텍스트 파일 형식으로 저장할 수 있습니다.</p>
+            <p class="mtext"><img src="images/mfile_save.gif" /></p>
+            <h5 class="mtext">파일 이름</h5>
+            <p class="mtext">저장할 파일의 이름을 지정합니다.</p>
+            <h5 class="mtext">파일 형식</h5>
+            <p class="mtext">저장할 파일의 형식을 지정합니다. HTML 파일이나 텍스트 파일(*.txt)형식 중 하나를 선택합니다.</p>
+            <h5 class="mtext">언어</h5>
+            <p class="mtext">저장할 파일에 적용할 인코딩 방식을 지정합니다. 언어 목록을 누르면 선택할 수 있는 인코딩 언어 종류를 볼 수 있습니다. </p>
+			
+			<a name="print"></a>
+            <table border="0" class="mtitle_table">
+                <tr>
+                    <td width="285" valign="top">
+                        <p class="mtitle" style="line-height:2;">인쇄하기</p>
+                    </td>
+                    <td width="285">
+                        <p><img src="images/icon.file.print.gif" style="vertical-align:middle;" /></p>
+                    </td>
+                </tr>
+            </table>
+            <p class="mtext">편집 창에 표시되어 있는 내용을 프린터로 출력합니다. </p>
+            <p class="mtext">웹 문서는 웹 브라우저를 통해 보여질 목적으로 만들어집니다. 그러나 필요에따라 종이로 인쇄하여 사용할 수도 있습니다. 크로스에디터로 작업한 문서를 종이로 인쇄하고자 하는 경우 유용한 도구단추입니다.</p>
+			
+			<a name="undo"></a>
+			<table border="0" class="mtitle_table">
+				<tr>
+					<td width="285" valign="top">
+						<p class="mtitle" style="line-height:2;">돌이킴</p>
+					</td>
+					<td width="285">
+						<p><img src="images/icon.edit.undo.gif" style="vertical-align:middle;" />&lt;Ctrl+Z&gt;</p>
+					</td>
+				</tr>
+			</table>
+            <p class="mtext">편집 작업을 취소하거나 취소했던 작업을 다시 원래대로 실행합니다.</p>
+            <p class="mtext">가장 최근에 한 작업을 취소하고 이전의 상태로 되돌립니다. 선택할 때마다 가장 최근에 한 작업이 한 단계씩 취소됩니다. 더 이상 취소할 작업이 없다면 아무런 일도 일어나지 않습니다. 문서를 열고 아무런 작업도 하지 않았거나 진행한 작업을 모두 돌이킨 후에는 돌이킴을 할 수 없습니다.</p>
+
+			<a name="redo"></a>
+			<table border="0" class="mtitle_table">
+				<tr>
+					<td width="285" valign="top">
+						<p class="mtitle" style="line-height:2;">되돌이킴</p>
+					</td>
+					<td width="285">
+						<p><img src="images/icon.edit.redo.gif" style="vertical-align:middle;" />&lt;Ctrl+Y&gt;</p>
+					</td>
+				</tr>
+			</table>
+			<p class="mtext">취소했던 편집 작업을 다시 원래대로 실행합니다. 가장 최근에 돌이켰던 작업이 한 단계씩 실행됩니다. 더 이상 취소할 돌이킴 작업이 없다면 아무런 일도 일어나지 않습니다.</p>
+
+			<a name="cut"></a>
+			<table border="0" class="mtitle_table">
+				<tr>
+					<td width="285" valign="top">
+						<p class="mtitle" style="line-height:2;">자르기</p>
+					</td>
+					<td width="285">
+						<p><img src="images/icon.edit.cut.gif" style="vertical-align:middle;" />&lt;Ctrl+X&gt;</p>
+					</td>
+				</tr>
+			</table>
+            <p class="mtext">블록으로 선택되어 있는 부분이 클립보드로 복사되고, 문서에서는 삭제됩니다. 잘라낸 부분은 클립보드에 보관되어 있으므로 다른 곳에 붙여 넣을 수 있습니다.</p>
+			
+			<a name="copy"></a>
+			<table border="0" class="mtitle_table">
+				<tr>
+					<td width="285" valign="top">
+						<p class="mtitle" style="line-height:2;">복사하기</p>
+					</td>
+					<td width="285">
+						<p><img src="images/icon.edit.copy.gif" style="vertical-align:middle;" />&lt;Ctrl+C&gt;</p>
+					</td>
+				</tr>
+			</table>
+            <p class="mtext">블록으로 선택되어 있는 부분이 클립보드로 복사되고, 문서에도 그대로 남아있습니다. 복사한 부분은 클립보드에 보관되어 있으므로 다른 곳에 붙여 넣을 수 있습니다.</p>
+            <p class="mtext">클립보드에 새로운 내용을 복사하면 이전에 보관되어 있던 내용은 사라집니다.</p>
+			 <p class="mtext">크로스에디터 3.5.0.01버전 이상에서는 MS Office 문서의 이미지를 선택하여 복사하기가 가능합니다.<br />
+			 단, Internet Explorer 11 이상, Chrome, Firefox, Opera 브라우저에서 가능하며 MS Office 2007 이상 호환 가능합니다.</p>
+
+			
+			<a name="paste"></a>
+			<table border="0" class="mtitle_table">
+				<tr>
+					<td width="285" valign="top">
+						<p class="mtitle" style="line-height:2;">붙여넣기</p>
+					</td>
+					<td width="285">
+						<p><img src="images/icon.edit.paste.gif" style="vertical-align:middle;" />&lt;Ctrl+V&gt;</p>
+					</td>
+				</tr>
+			</table>
+            <p class="mtext">클립보드에 보관되어 있는 내용을 커서가 있는 위치에 삽입합니다.</p>
+            <p class="mtext"><img src="images/icon-notice.gif" style="vertical-align:middle;" /> <span class="menu">붙여넣기</span>를 하려면 먼저 <span class="menu">자르기</span>나 <span class="menu">복사하기</span>를 해야 합니다.</p>
+			<p class="mtext">크로스에디터 3.5.0.01버전 이상에서는 MS Office 문서에서 복사한 이미지의 붙여넣기가 가능합니다.<br />
+			단, Internet Explorer 11 이상, Chrome, Firefox, Opera 브라우저에서 가능하며 MS Office 2007 이상 호환 가능합니다.</p>
+
+
+			<a name="pastetext"></a>
+			<table border="0" class="mtitle_table">
+				<tr>
+					<td width="285" valign="top">
+						<p class="mtitle" style="line-height:2;">텍스트로 붙여넣기</p>
+					</td>
+					<td width="285">
+						<p><img src="images/icon.edit.pastetext.gif" style="vertical-align:middle;" /></p>
+					</td>
+				</tr>
+			</table>
+            <p class="mtext">클립보드에 보관되어 있는 내용 중 텍스트 형식 데이터를 커서가 있는 위치에 삽입합니다.</p>
+            <p class="mtext"><img src="images/icon-notice.gif" style="vertical-align:middle;" /> <span class="menu">붙여넣기</span>를 하려면 먼저 <span class="menu">자르기</span>나 <span class="menu">복사하기</span>를 해야 합니다.</p>
+
+			<a name="find"></a>
+			<table border="0" class="mtitle_table">
+				<tr>
+					<td width="285" valign="top">
+						<p class="mtitle" style="line-height:2;">찾기</p>
+					</td>
+					<td width="285">
+						<p><img src="images/icon.edit.find.gif" style="vertical-align:middle;" />&lt;Ctrl+F&gt;</p>
+					</td>
+				</tr>
+			</table>
+            <p class="mtext">작업 중인 문서에서 특정 낱말을 찾거나, 특정 낱말을 찾아 다른 낱말로 바꿉니다.</p>
+            <p class="mtext"><img src="images/medit_find.gif" /></p>
+            <p class="mlabel1">찾을 내용 </p>
+            <p class="mlabeltext">찾을 내용을 입력 상자에 입력합니다.</p>
+            <p class="mlabel1">찾기</p>
+            <p class="mlabeltext"><span class="mlabel2">찾을 내용</span>에 입력한 내용을 하나씩 찾습니다.</p>
+            <p class="mlabel1">검색옵션</p>
+            <p class="mlabeltext"><span class="mlabel2">대소문자 구분</span>: 대문자와 소문자를 구별하면서 낱말을 찾습니다. 'bori'를 찾는 경우 'Bori'나 'BORI'는 찾지 않습니다.</p>
+            <p class="mlabeltext"><span class="mlabel2">문서 끝에서 되돌리기</span>: 현재 커서의 위치에서 문서의 아래쪽으로 입력한 내용을 찾은 후 문서의 처음부터 입력한 내용을 찾습니다.</p>
+            <p class="mlabel1">검색방향</p>
+            <p class="mlabeltext"><span class="mlabel2">위로</span>: 현재 커서 위치에서 위쪽에 있는 문서에서 입력한 내용을 찾습니다.</p>
+            <p class="mlabeltext"><span class="mlabel2">아래로</span>: 현재 커서 위치에서 아래쪽에 있는 문서에서 입력한 내용을 찾습니다. </p>
+			
+			<a name="replace"></a>
+			<table border="0" class="mtitle_table">
+				<tr>
+					<td width="285" valign="top">
+						<p class="mtitle" style="line-height:2;">바꾸기</p>
+					</td>
+					<td width="285">
+						<p><img src="images/icon.edit.replace.gif" style="vertical-align:middle;" />&lt;Ctrl+R&gt;</p>
+					</td>
+				</tr>
+			</table>
+            <p class="mtext">작업 중인 문서에서 특정 낱말을 찾거나, 특정 낱말을 찾아 다른 낱말로 바꿉니다.</p>
+            <p class="mtext"><img src="images/medit_replace.gif" /></p>
+            <p class="mlabel1">찾을 내용 </p>
+            <p class="mlabeltext">찾을 내용을 입력 상자에 입력합니다.</p>
+            <p class="mlabel1">바꿀 내용</p>
+            <p class="mlabeltext"><span class="mlabel2">바꿀 내용</span>을 선택한 다음  입력 상자에 바꿀 내용을 입력합니다.</p>
+            <p class="mlabel1">찾기</p>
+            <p class="mlabeltext"><span class="mlabel2">찾을 내용</span>에 입력한 내용을 하나씩 찾습니다.</p>
+            <p class="mlabel1">바꾸기</p>
+            <p class="mlabeltext"><span class="mlabel2">찾을 내용</span>에 입력한 내용을 모두 찾아 <span class="mlabel2">바꿀 내용</span>에 입력한 내용으로 하나씩 바꿉니다.</p>
+            <p class="mlabel1">모두 바꾸기</p>
+            <p class="mlabeltext"><span class="mlabel2">찾을 내용</span>에 입력한 내용을 모두 찾아 <span class="mlabel2">바꿀 내용</span>에 입력한 내용으로 모두 바꿉니다.</p>
+            <p class="mlabel1">검색 옵션</p>
+            <p class="mlabeltext"><span class="mlabel2">대소문자 구분</span>: 대문자와 소문자를 구별하면서 낱말을 찾습니다. 'bori'를 찾는 경우 'Bori'나 'BORI'는 찾지 않습니다.</p>
+            <p class="mlabeltext"><span class="mlabel2">문서 끝에서 되돌리기</span>: 현재 커서의 위치에서 문서의 아래쪽으로 입력한 내용을 찾은 후 문서의 처음부터 입력한 내용을 찾습니다.</p>
+            <p class="mlabel1">검색 방향</p>
+            <p class="mlabeltext"><span class="mlabel2">위로</span>: 현재 커서 위치에서 위쪽에 있는 문서에서 입력한 내용을 찾습니다.</p>
+            <p class="mlabeltext"><span class="mlabel2">아래로</span>: 현재 커서 위치에서 아래쪽에 있는 문서에서 입력한 내용을 찾습니다. </p>			
+			
+			<a name="select_all"></a>
+			<table border="0" class="mtitle_table">
+				<tr>
+					<td width="285" valign="top">
+						<p class="mtitle" style="line-height:2;">전체선택</p>
+					</td>
+					<td width="285">
+						<p><img src="images/icon.edit.selectall.gif" style="vertical-align:middle;" />&lt;Ctrl+A&gt;</p>
+					</td>
+				</tr>
+			</table>
+            <p class="mtext">커서 위치에 상관없이 현재 편집 중인 문서의 모든 내용이 블록으로 선택됩니다. 이 상태에서 <span class="menu">복사하기</span>, <span class="menu">자르기</span>, <span class="menu">지우기</span>, <span class="menu">붙이기</span> 등의 편집 작업을 할 수 있습니다.</p>
+			
+			<a name="spellchecker"></a>
+            <table border="0" class="mtitle_table">
+                <tr>
+                    <td width="285" valign="top">
+                        <p class="mtitle" style="line-height:2;">맞춤법 검사</p>
+                    </td>
+                    <td width="285">
+                        <p><img src="images/icon.tool.spellchecker.gif" style="vertical-align:middle;" /></p>
+                    </td>
+                </tr>
+            </table>
+            <p class="mtext">입력한 글의 맞춤법 검사를 실행합니다.</p>
+            <p class="mtext">에디터에 글을 입력하고 맞춤법 검사 도구 아이콘을 클릭하면 문서의 처음부터 끝 방향으로 맞춤법 검사를 실행하며, 맞춤법 사전에 없는 낱말이 검색되면 대치할 수 있는 말을 추천해 줍니다. 사용자는 제시된 낱말을 선택하여 잘못된 낱말을 바꿀 수 있습니다.</p>
+            <p class="mtext"><img src="images/mtool_spellchecker.gif" /></p>
+            <P class="mlabel1">잘못된 낱말</P>
+            <P class="mlabeltext"><span class="mlabel2">잘못된 낱말</span>을 찾아서 보여줍니다.</P>
+            <P class="mlabel1">바꿀 낱말</P>
+            <P class="mlabeltext"><span class="mlabel2">잘못된 낱말</span>을 대치할 수 있는 낱말을 보여주며 <span class="mlabel2">바꿀 낱말</span>을 직접 입력할 수 있습니다.</P>
+            <P class="mlabel1">추천 낱말</P>
+            <P class="mlabeltext">맞춤법 사전에서 추천하는 낱말을 찾아서 보여줍니다.</P>
+            <P class="mlabel1">바꾸기</P>
+            <P class="mlabeltext"><span class="mlabel2">잘못된 낱말</span>을 <span class="mlabel2">바꿀 낱말</span>로 바꿉니다.</P>
+            <P class="mlabel1">지나감</P>
+            <P class="mlabeltext"><span class="mlabel2">잘못된 낱말</span>에 보여주는 낱말을 바꾸지 않고 다음 맞춤법 검사 위치로 이동합니다. </P>
+            <P class="mlabel1">문서 처음</P>
+            <P class="mlabeltext">맞춤법 검사를 문서의 처음부터 다시 시작합니다.</P>
+            <P class="mlabel1">모두 지나감</P>
+            <P class="mlabeltext"><span class="mlabel2">잘못된 낱말</span>에 보여주는 낱말을 모두 바꾸지 않고 지나갑니다.</P>
+            <p class="mtext">아래와 같은 메시지가 나타나는 경우에는 <span class="mlabel2">예</span>를 눌러 <span class="mlabel2">허용</span>해야만 사용이 가능합니다.</p>
+            <p class="mtext"><img src="images/mtool_activex.png" /></p>
+
+            <p class="mtext">아래와 같은 메시지가 나타나는 경우에는 웹 브라우저의 보안 설정을 다음과 같이 해야합니다.</p>
+            <p class="mtext"><img src="images/mtool_spellchecker.security1.png" /></p>
+
+			<div align="right">
+                <table border="0" cellpadding="2" cellspacing="2" width="95%">
+                    <tr>
+                        <td width="22" valign="top">
+                            <div align="right">
+                                <p class="order">1</p>
+                            </div>
+                        </td>
+                        <td width="1152">
+                            <p>웹 브라우저의 메뉴에서 <span class="mlabel2">도구</span> &gt; <span class="mlabel2">인터넷 옵션</span>을 선택한 뒤, <span class="mlabel2">보안</span> 탭을 선택합니다.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="22" valign="top">
+                            <div align="right">
+                                <p class="order">2</p>
+                            </div>
+                        </td>
+                        <td width="1152">
+                            <p>보안 설정 영역에서 <span class="mlabel2">신뢰할 수 있는 사이트</span>를 선택한 뒤, 해당 사이트를 등록합니다.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="22" valign="top">
+                            <div align="right">
+                                <p class="order">3</p>
+                            </div>
+                        </td>
+                        <td width="1152">
+                            <p><span class="mlabel2">이 영역에 적용할 보안 수준</span>에서 <span class="mlabel2">사용자 지정 수준</span>을 선택합니다.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="22" valign="top">
+                            <p>&nbsp;</p>
+                        </td>
+                        <td width="1152">
+                            <p><img src="images/mtool_spellchecker.security2.png" /></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="22" valign="top">
+                            <div align="right">
+                                <p class="order">4</p>
+                            </div>
+                        </td>
+                        <td width="1152">
+                            <p><span class="mlabel2">스크립팅하기 안전하기 않은 것으로 표시된 ActiveX 컨트롤 초기화 및 스크립팅</span>을 <span class="mlabel2">확인</span>으로 설정합니다.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="22" valign="top">
+                            <p>&nbsp;</p>
+                        </td>
+                        <td width="1152">
+                            <p><img src="images/mtool_spellchecker.security3.png" /></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="22" valign="top">
+                            <div align="right">
+                                <p class="order">5</p>
+                            </div>
+                        </td>
+                        <td width="1152">
+                            <p>보안 설정의 <span class="mlabel2">확인</span> 버튼을 클릭합니다.</p>
+                        </td>
+                    </tr>
+                </table>
+			</div>
+			<p class="mtext"><img src="images/icon-notice.gif" style="vertical-align:middle;" /> 맞춤법 검사는 사용자 PC에 MS-Word가 설치되어야 사용이 가능합니다.</p>
+			<P class="mtext"><IMG src="images/icon-note.gif" style="vertical-align:middle;" /> 맞춤법 검사를 실행했을 때 맞춤법 오류가 발견되지 않을 경우에는 '맞춤법 검사가 완료되었습니다.'라는 메시지 상자가 나타납니다. 확인을 누르면 메시지 상자가 닫힙니다.</P>
+			
+			<a name="full"></a>
+            <table border="0" class="mtitle_table">
+                <tr>
+                    <td width="285" valign="top">
+                        <p class="mtitle" style="line-height:2;">전체화면</p>
+                    </td>
+                    <td width="285">
+                        <p><img src="images/icon.help.fullscreen.gif" style="vertical-align:middle;" /></p>
+                    </td>
+                </tr>
+            </table>
+            <p class="mtext">크로스에디터를 브라우저 전체화면으로 보여줍니다.</p>
+			
+			<a name="help"></a>
+            <table border="0" class="mtitle_table">
+                <tr>
+                    <td width="285" valign="top">
+                        <p class="mtitle" style="line-height:2;">도움말</p>
+                    </td>
+                    <td width="285">
+                        <p><img src="images/icon.help.help.gif" style="vertical-align:middle;" /></p>
+                    </td>
+                </tr>
+            </table>
+            <p class="mtext">크로스에디터는 사용자가 설치한 제품 버전에 맞는 온라인 도움말을 웹을 통해 제공하고 있습니다.</p>
+			
+			<a name="product"></a>
+            <table border="0" class="mtitle_table">
+                <tr>
+                    <td width="285" valign="top">
+                        <p class="mtitle" style="line-height:2;">버전정보</p>
+                    </td>
+                    <td width="285">
+                        <p><img src="images/icon.help.about.gif" style="vertical-align:middle;" /></p>
+                    </td>
+                </tr>
+            </table>
+            <p class="mtext"></p>
+            <p class="mtext">크로스에디터의 등록 정보를 확인합니다.</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+        <hr />
+        <p align="center">Copyright ⓒ 2014. Namo Interactive, Inc. All rights reserved.</p>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

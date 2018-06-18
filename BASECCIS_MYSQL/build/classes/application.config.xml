@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+
+	<comment>Application Configuration</comment>
+	<!-- 윈도우계열 -->
+	<!-- <entry key="upload.dir">C:\project\2017\workspace\BASECCIS\UploadFiles</entry>
+	<entry key="upload.dir">D:\project\2017\workspace\BASECCIS\UploadFiles</entry> -->
+	<entry key="upload.dir">E:\project\2017\workspace\BASECCIS\UploadFiles</entry>
+	<entry key="project.dir">E:\project\2017\workspace\BASECCIS</entry>
+	
+	<!-- 리눅스계열 예시 -->
+	<!-- <entry key="upload.dir">/webdata/roject/BASECCIS/UploadFiles</entry>
+	<entry key="project.dir">/webdata/project/BASECCIS</entry> -->
+</properties>

@@ -1,0 +1,24 @@
+1. DB설정정보 >> jdbc.xml
+
+2. 관리자URL >> 로컬path/i-portal
+
+3. 관리자 로그인 아이디/패스워드 >> ccisadmin / vmffosdkdl(플랜아이)
+
+
+########################세팅순서#####################################
+1. 소스 checkout -> Find/Check out As(체크아웃시 폴더명 변경)
+2. Build path 설정
+3. 서버 등록
+4. 시작 확인(127.0.0.1/i-portal)
+5. SVN Disconnet (team -> Disconnet -> svn 제거 체크 후 완료)
+6. 테스트 DB를 통해 동작 확인이 되었다면 실제 프로젝트 DB세팅을 시작합니다.
+7. DB계정생성(WebContent > manual > DB생성정보 > 계정생성에서 내용 변경 후 실행)
+8. DB테이블생성(WebContent > manual > DB생성정보 > 테이블생성에서 내용 변경 후 실행)
+9. DB시퀀스함수생성(WebContent > manual > DB생성정보 > 시퀀스함수생성 실행)
+10. DB초기데이터생성(WebContent > manual > DB생성정보 > 초기데이터생성 실행)
+11. DB패키지생성(WebContent > manual > DB생성정보 > 패키지 > 순서대로 실행)
+11. jdbc.xml 정보 변경
+12. application.config.xml pc환경에 맞게 정보 변경
+13. SVN에 프로젝트 등록을 할 때 주소는  [svn://114.108.177.205/iportalproject] 를 사용해주시기 바랍니다.
+14. 무료에디터 or 상용에디터 사용 시 : includes > taglib.jsp > c:set editor 값 변경
+15. 나모에디터 or html input file 사용 시 : kr.plani.ccis.ips.domain > DefaultDomain.java > String fileFormType = "" 값 변경(* multipart/form 사용 시 web.xml에 multipartFilter 추가하여 사용)

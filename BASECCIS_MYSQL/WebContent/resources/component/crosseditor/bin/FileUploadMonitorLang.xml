@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<mlsp>
+<languages>
+<language>ko</language>
+<language>en</language>
+</languages>
+<items>
+
+<!-- file upload monitor -->
+<item>
+<id>UPLOAD_MONITOR_START_UPLOAD_TRANSFER</id>
+<ko>전송</ko>
+<en>Transfer</en>
+</item>
+<item>
+<id>UPLOAD_MONITOR_START_UPLOAD_CANCEL</id>
+<ko>취소</ko>
+<en>Cancel</en>
+</item>
+<item>
+<id>UPLOAD_MONITOR_CLOSE_WINDOW</id>
+<ko>닫기</ko>
+<en>Close</en>
+</item>
+<item>
+<id>UPLOAD_MONITOR_REMAINING_TIME</id>
+<ko>초 남음</ko>
+<en>Sec Remaining</en>
+</item>
+<item>
+<id>UPLOAD_MONITOR_UPLOAD_EXP_INIT</id>
+<ko>파일 업로드</ko>
+<en>File Upload</en>
+</item>
+<item>
+<id>UPLOAD_MONITOR_UPLOAD_EXP_TRANFERRING</id>
+<ko>%s개의 파일 중 %s번째 파일을 업로드하고 있습니다.</ko>
+<en>Total %s, Transferring %s</en>
+</item>
+<item>
+<id>UPLOAD_MONITOR_CLOSE_MONITOR_ATC</id>
+<ko>전송이 완료되면 창을 종료합니다.</ko>
+<en>Close the window after complete.</en>
+</item>
+<!-- upload manager resource id와 공용으로 사용 -->
+<item>
+<id>UPLOAD_MANAGER_GRID_HEADER_FILENAME</id>
+<ko>파일 이름</ko>
+<en>Name</en>
+</item>
+<item>
+<id>UPLOAD_MANAGER_GRID_HEADER_FILESIZE</id>
+<ko>크기</ko>
+<en>Size</en>
+</item>
+<item>
+<id>UPLOAD_MANAGER_GRID_HEADER_FILESTATUS</id>
+<ko>상태</ko>
+<en>Status</en>
+</item>
+<item>
+<id>UPLOAD_MANAGER_GRID_WAIT</id>
+<ko>대기</ko>
+<en>Wait</en>
+</item>
+<item>
+<id>UPLOAD_MANAGER_GRID_COMPLETE</id>
+<ko>완료</ko>
+<en>Complete</en>
+</item>
+<item>
+<id>UPLOAD_MANAGER_GRID_FAILURE</id>
+<ko>실패</ko>
+<en>Failure</en>
+</item>
+
+</items>
+</mlsp>

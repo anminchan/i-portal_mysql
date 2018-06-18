@@ -1,0 +1,82 @@
+<html>
+
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>GetDocumentSize</title>
+<meta name="author" content="Namo Interactive, Inc.">
+<link rel="stylesheet" href="../images/linkstyle.css">
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="purple" alink="red">
+
+<table border="0" width="640">
+    <tr>
+        <td width="10%" bgcolor="#EEEEEE" bordercolor="#999999">
+            <p align="center" class="pme">Param</p>
+        </td>
+        <td width="10%" bgcolor="#5A7FC1" bordercolor="#999999">
+            <p align="center" class="pme"><font color="white">Method</font></p>
+        </td>
+        <td width="10%" bgcolor="#EEEEEE" bordercolor="#999999">
+            <p align="center" class="pme">Event</p>
+        </td>
+        <td width="10%">
+            <p align="center" class="pme">&nbsp;</p>
+        </td>
+        <td width="50%">
+            <p align="center" class="pme">&nbsp;</p>
+        </td>
+    </tr>
+</table>
+<table width="640">
+    <tr>
+        <td>
+            <h2>GetDocumentSize<sub>v1.1 or higher</sub></h2>
+            <p class="dscrpt">현재 작성 중인 문서의 크기를 구하여 byte 단위로 반환합니다. 이 때 현재 문서에 포함된 이미지와 flash 파일의 크기 까지 합산 됩니다. </p>
+            <p class="dscrpt">&nbsp;</p>
+            <h4>Syntax</h4>
+            <ul>
+                <pre>HRESULT<span class="fname"> GetDocumentSize</span>();</pre>
+
+            </ul>
+            <h4>Parameters</h4>
+            <p class="dscrpt">없음</p>
+
+            <p class="dscrpt">&nbsp;</p>
+            <h4>Return Values</h4>
+            <TABLE class="paradsc2" cellSpacing="0" borderColorDark="white" width="375" borderColorLight="#999999" border="1">
+                <TR>
+                    <TD width="180" bgColor="#eeeeee">
+                        <P align="center">현재 작성 중인 문서의 크기</P>
+                    </TD>
+                    <TD width="185">
+                        <P>정상적으로 실행한 경우</P>
+                    </TD>
+                </TR>
+                <TR>
+                    <TD width="180" bgColor="#eeeeee">
+                        <P align="center">0</P>
+                    </TD>
+                    <TD width="185">
+                        <P>정상적으로 실행되지 않은 경우</P>
+                    </TD>
+                </TR>
+            </TABLE>
+            <p class="dscrpt">&nbsp;</p>
+            <H4>Remarks</H4>
+            <P class="dscrpt">메소드는 Main class 호출 후 에디터가 로드된 다음 실행해야 정상적으로 실행됩니다. </P>
+            <p class="dscrpt">&nbsp;</p>
+			
+            <h4>Sample Codes</h4>
+            <P class="scode">JavaScript</P>
+            <PRE class="scodedsc">var object = new NamoSE(&quot;test&quot;);
+object.editorStart();
+var returnValue = object.<b>GetDocumentSize</b>();
+alert(returnValue);</PRE>
+            <p class="dscrpt">&nbsp;</p>
+        </td>
+    </tr>
+</table>
+</body>
+
+</html>

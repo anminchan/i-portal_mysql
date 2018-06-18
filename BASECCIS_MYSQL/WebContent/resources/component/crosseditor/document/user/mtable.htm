@@ -1,0 +1,229 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="generator" content="Namo WebEditor">
+<link rel="stylesheet" href="../common.css">
+<meta name="author" content="Namo Interactive, Inc.">
+<title>나모 크로스에디터 도움말</title>
+</head>
+
+<body>
+<table style="line-height:120%; margin-right:20;" border="0" cellpadding="0" width="94%" align="center">
+    <tr>
+        <td width="919">
+            <h1>표</h1>
+            <p class="mtext">표 메뉴를 통해서는 표 삽입과 표 그리기, 캡션, 테두리, 정렬, 표/셀 속성, 표/셀 잠그기 등의 다양한 기능을 사용하여 표를 손쉽게 만들고 편집할 수 있습니다.</p>
+            <p class="mtext">여기에서는 표의 다양한 기능에 대하여 안내합니다.</p>
+            <ul>
+                <li class="ctsmall2"><a href="mtable.htm#table_new">표 만들기</a>, <a href="mtable.htm#table_drag">표 그리기</a></li>
+                <li class="ctsmall2"><a href="mtable.htm#insert_row">행 추가</a>, <a href="mtable.htm#delete_row">행 삭제</a></li>
+                <li class="ctsmall2"><a href="mtable.htm#insert_column">열 추가</a>, <a href="mtable.htm#delete_column">열 삭제</a></li>
+                <li class="ctsmall2"><a href="mtable.htm#merge_cell">셀 병합</a>, <a href="mtable.htm#split_cell">셀 나누기</a></li>
+                <li class="ctsmall2"><a href="mtable.htm#cell_dlg">셀 속성</a></li>
+            </ul>
+            <table border="0" class="mtitle_table">
+                <tr>
+                    <td width="285" valign="top">
+                        <p class="mtitle"><a name="table_new">표 만들기</a></p>
+                    </td>
+                    <td width="285">
+                        <p class="menu"><img src="images/icon.table.new.gif" align="absmiddle" border="0"></p>
+                    </td>
+                </tr>
+            </table>
+            <p class="mtext">표를 만들 때 표의 속성을 지정하거나 이미 만든 표의 속성을 수정할 수 있습니다.</p>
+            <p class="mtext">&nbsp;<img src="images/ftable.new.1.gif" border="0"></p>
+            <P class="mlabel1">행</P>
+            <P class="mlabeltext">표에 들어갈 행(줄)의 개수를 지정합니다.</P>
+            <P class="mlabel1">열</P>
+            <P class="mlabeltext">표에 들어갈 열(칸)의 개수를 지정합니다.</P>
+            <P class="mlabel1">너비/높이</P>
+            <P class="mlabeltext">표의 크기(너비와 높이)를 지정합니다. 표의 너비와 높이는 픽셀 수로 지정됩니다. 크기가 고정된 표를 만들기 위해서는 픽셀 단위로 크기를 정하는 절대크기 지정 방식을 이용해야 합니다.</P>
+            <P class="mlabel1">테두리 두께</P>
+            <P class="mlabeltext">표의 테두리 선 두께를 지정합니다. 초기값은 '1'이며 높은 수를 입력할수록 테두리의 두께가 두꺼워집니다.</P>
+            <P class="mlabel1">테두리 색상</P>
+            <P class="mlabeltext">표의 테두리 색깔을 색깔 팔레트에서 선택하여 지정합니다. </P>
+            <P class="mlabeltext"><span class="mlabel2">더보기</span>를 선택하면 16 진수 상자와 색깔 스펙트럼이 나타납니다. </P>
+            <P class="mlabeltext">16 진수 상자에서 16 진수 색깔 코드를 입력하고 <span class="mlabel2">입력</span>을 누르면 테두리 색상이 지정됩니다. 16 진수 색깔 코드는 16 진수(0~F)로 6개의 숫자를 표시하여 색깔을 표시하는 것을 말합니다. 예를 들어 'FFFFFF'는 흰색(White), '0000FF'는 파란색(Blue)에 해당됩니다.</P>
+            <P class="mlabeltext"><img src="images/mtable_color1.gif" border="1"></P>
+            <P class="mlabeltext">색깔 스펙트럼은 16 진수 상자에 입력한 16 진수 색깔 코드와 동일한 색상을 빨강과 녹색, 파랑, 채도 및 명도 값을 달리하여 다양하게 보여줍니다. 색깔 스펙트럼에 마우스를 올려놓으면 마우스 포인터가 십자 모양으로 변경됩니다. 마우스로 원하는 색깔을 선택하면 16 진수 상자 옆의 색깔 미리보기 상자에 선택한 색깔이 바로 나타납니다.</P>
+            <P class="mlabeltext"><img src="images/mtable_color2.png" border="0"></P>
+            <P class="mlabel1">들여쓰기</P>
+            <P class="mlabeltext">표의 들여쓰기 값을 지정합니다.</P>
+            <P class="mlabel1">표 배경색</P>
+            <P class="mlabeltext">표의 배경색을 색깔 팔레트에서 선택하여 지정합니다. </P>
+            <P class="mlabel1">표 정렬</P>
+            <P class="mlabeltext">표의 내용을 정렬합니다. '없음' '왼쪽' '가운데' '오른쪽' 옵션 중 하나를 선택할 수 있습니다.</P>
+            <P class="mlabel1">표 제목</P>
+            <P class="mlabeltext">표의 제목을 입력합니다. 입력한 표 제목은 표 상단에 위치합니다.</P>
+            <P class="mlabeltext">표 제목은 표 전체 내용을 한 눈에 확인할 수 있으므로 여러 개의 표가 삽입된 문서를 좀 더 쉽게 관리할 수 있습니다. </P>
+            <P class="mlabeltext"><span class="mlabel2">출력 </span>체크 상자를 선택하면 표 제목이 편집 창과 미리보기 모드에 나타납니다. <span class="mlabel2">출력</span>을 선택하지 않으면 표 제목 정보는 HTML 소스 코드에만 입력됩니다.</P>
+            <P class="mlabeltext"><img src="images/icon-note.gif" border="0" align="absmiddle">관리자가 <a href="../dev/admin.htm#accessibility">웹 접근성 강화 옵션</a>에서 '1단계'나 '2단계'로 지정해 둔 경우, '표 제목'은 필수 입력 사항입니다.</P>
+            <P class="mlabel1>요약 정보</P>
+            <P class="mlabeltext">표에 대한 간략한 정보를 입력합니다. </P>
+            <P class="mlabeltext"><span class="mlabel2">요약정보</span>에 입력한 내용은 크로스에디터 편집 창이나 미리보기 모드에 나타나지 않고, HTML 소스 코드에만 입력됩니다. 음성이나 점자 도구 사용자들에게 표에 대한 간략한 설명을 제공하는 기능을 합니다.</P>
+            <P class="mlabeltext"><img src="images/icon-note.gif" border="0" align="absmiddle">관리자가 <a href="../dev/admin.htm#accessibility">웹 접근성 강화 옵션</a>에서 '1단계'나 '2단계'로 지정해 둔 경우, '요약 정보'는 필수 입력 사항입니다.</P>
+            <P class="mlabel1">표 헤더</P>
+            <P class="mlabeltext">표 헤더의 위치를 지정합니다.</P>
+            <table border="0" class="mtitle_table">
+                <tr>
+                    <td width="285" valign="top">
+                        <p class="mtitle"><a name="table_drag">표 그리기</a></p>
+                    </td>
+                    <td width="285">
+                        <p class="menu"><img src="images/icon.insert.tabledrag.gif" align="absmiddle" border="0">
+                        </p>
+                    </td>
+                </tr>
+            </table>
+            <p class="mtext">표의 행과 열의 개수를 마우스로 드래그하여 표를 삽입합니다.</p>
+            <dl>
+                <p class="mtext">표 그리기 도구 버튼 <a name="hyperlink"><span class="mtitle"><img src="images/icon.insert.tabledrag.gif" border="0" align="absmiddle"></span></a>을 눌러 표 그리기 속성 창에서 마우스로 드래그하여 행과 열의 개수를 지정합니다. 마우스 왼쪽 버튼을 누르면 지정한 크기의 표가 삽입됩니다.</p>
+            </dl>
+            <p class="mtext"><img src="images/mtable_drag.gif" border="0"></p>
+            <p class="mtext"><img src="images/icon-note.gif" border="0" align="absmiddle">웹 접근성 1단계 이상 설정하는 경우 표 그리기 속성은 비활성화 됩니다.</P>
+            <table border="0" class="mtitle_table">
+                <tr>
+                    <td width="285" valign="top">
+                        <p class="mtitle"><a name="insert_row"></a>행 추가</p>
+                    </td>
+                    <td width="285">
+                        <p class="menu"><img src="images/icon.table.row.1.gif" align="absmiddle" border="0">
+                        </p>
+                    </td>
+                </tr>
+            </table>
+            <p class="mtext">작성한 표에 행을 삽입합니다. 현재 커서가 놓여 있는 셀의 위나 아래에 행을 삽입할 수 있습니다. </p>
+            <p class="mtext"><img src="images/mtable_row.1.gif" border="0"></p>
+            <P class="mlabel1">위에 행 추가/ 아래에 행 추가
+            
+            
+            
+            
+            <P class="mlabeltext">현재 커서가 놓여 있는 셀 위에 행을 추가하려면 <span class="mlabel2">위에 행 추가</span>를 셀 아래에 행을 추가하려면 <span class="mlabel2">아래에 행 추가</span>를 선택합니다.</p>
+            <P class="mlabel1">개수 
+            
+            
+            
+            
+            <P class="mlabeltext">추가할 가로줄의 개수를 입력합니다. 마우스로 클릭하여 선택하거나 직접 입력합니다.</p>
+          
+            <table border="0" class="mtitle_table">
+                <tr>
+                    <td width="285">
+                        <p class="mtitle"><a name="delete_row"></a>행 삭제</p>
+                    </td>
+                    <td width="285">
+                        <p class="menu"><img src="images/icon.table.row.2.gif" align="absmiddle" border="0">
+                        </p>
+                    </td>
+                </tr>
+            </table>
+            <p class="mtext">도구 모음에서 <span class="mlabel2">행 삭제 </span>단추를 누르면 현재 커서가 놓여 있는 가로줄이 삭제됩니다.</p>
+            <table border="0" class="mtitle_table">
+                <tr>
+                    <td width="285" valign="top">
+                        <p class="mtitle"><a name="insert_column"></a>열 추가</p>
+                    </td>
+                    <td width="285">
+                        <p class="menu"><img src="images/icon.table.column.1.gif" align="absmiddle" border="0">
+                        </p>
+                    </td>
+                </tr>
+            </table>
+            <p class="mtext">작성한 표에 열을 삽입합니다. 현재 커서가 놓여 있는 셀의 왼쪽이나 오른쪽에 열을 삽입할 수 있습니다. </p>
+            <p class="mtext"><img src="images/mtable_column.gif" border="0"></p>
+            <P class="mlabel1">왼쪽에 열 추가/ 오른쪽에 열 추가</p>
+            <P class="mlabeltext">현재 커서가 놓여 있는 셀 왼쪽에 열을 추가하려면 <span class="mlabel2">왼쪽에 열 추가</span>를, 셀 오른쪽에 열을 추가하려면 <span class="mlabel2">오른쪽에 열 추가</span>를 선택합니다.</p>
+            <P class="mlabel1">개수</p>
+            <P class="mlabeltext">추가할 세로줄의 개수를 입력합니다. 마우스로 클릭하여 선택하거나 직접 입력합니다.</p>
+            <table border="0" class="mtitle_table">
+                <tr>
+                    <td width="285" valign="top">
+                        <p class="mtitle"><a name="delete_column"></a>열 삭제</p>
+                    </td>
+                    <td width="285">
+                        <p class="menu"><img src="images/icon.table.column.2.gif" align="absmiddle" border="0">
+                        </p>
+                    </td>
+                </tr>
+            </table>
+            <p>&nbsp;</p>
+            <p class="mtext">도구 모음에서 <span class="mlabel2">열 삭제</span> 단추를 누르면 현재 커서가 놓여 있는 세로줄이 삭제됩니다.</p>
+            <table border="0" class="mtitle_table">
+                <tr>
+                    <td width="285" valign="top">
+                        <p class="mtitle"><a name="merge_cell">셀 병합</a></p>
+                    </td>
+                    <td width="285">
+                        <p class="menu"><img src="images/icon.table.merge.1.gif" align="absmiddle" border="0">
+                        </p>
+                    </td>
+                </tr>
+            </table>
+            <p class="mtext">두 개 이상의 셀을 하나로 합칩니다.</p>
+            <p class="mtext">셀 합치기를 하려면 합치려는 행이나 열을 선택한 뒤 도구 모음 막대에서 <img src="images/icon.table.merge.1.gif" align="absmiddle" border="0">를 선택합니다.</p>
+            <table border="0" class="mtitle_table">
+                <tr>
+                    <td width="285" valign="top">
+                        <p class="mtitle"><a name="split_cell">셀 나누기</a></p>
+                    </td>
+                    <td width="285">
+                        <p class="menu"><img src="images/icon.table.merge.2.gif" align="absmiddle" border="0"></p>
+                    </td>
+                </tr>
+            </table>
+            <p class="mtext">하나의 셀을 여러 개로 분할하거나 선택한 셀들을 각각 여러 개로 분할합니다.</p>
+            <p class="mtext">셀 나누기를 하려면 나누려는 셀을 선택하거나 커서를 셀 안에 놓은 뒤 <img src="images/icon.table.merge.2.gif" align="absmiddle" border="0">를 선택합니다.셀 나누기 대화 상자에서 나눌 행과 열의 수를 지정하면 됩니다.</p>
+            <p class="mtext"><img src="images/mtable_split.gif" border="0"></p>
+            <P class="mlabel1">가로줄로 나누기
+            
+            
+            
+            
+            <P class="mlabeltext">선택한 셀을 가로줄로 나눕니다. 원하는 가로줄 수를 입력합니다.</p>
+            <P class="mlabel1">세로줄로 나누기
+            
+            
+            
+            
+            <P class="mlabeltext">선택한 셀을 세로줄로 나눕니다. 원하는 세로줄 수를 입력합니다.</p>
+            <P class="mlabel1">모두 나누기 
+            
+            
+            
+            
+            <P class="mlabeltext">선택한 셀을 가로줄과 세로줄로 한꺼번에 나눕니다. <span class="mlabel2">가로</span> 상자에 원하는 가로줄 수를, <span class="mlabel2">세로</span> 상자에 원하는 세로줄 수를 마우스로 클릭하여 선택하거나 직접 입력합니다.</p>
+            <table border="0" class="mtitle_table">
+                <tr>
+                    <td width="285" valign="top">
+                        <p class="mtitle"><a name="cell_dlg">셀 속성</a></p>
+                    </td>
+                    <td width="285">
+                        <p class="menu"><img src="images/icon.table.cell.gif" align="absmiddle" border="0">
+                        </p>
+                    </td>
+                </tr>
+            </table>
+            <p class="mtext">셀의 크기, 배경색 등의 속성을 지정하거나 변경합니다.</p>
+            <p class="mtext"><img src="images/mtable_cell_properties.gif" border="0" alt="셀 속성 대화 상자"></p>
+            <P class="mlabel1">셀 배경색</P>
+            <P class="mlabeltext">셀의 배경색을 색깔 팔레트에서 선택하여 지정합니다. </P>
+            <P class="mlabel1">셀 종류</P>
+            <P class="mlabeltext">셀의 종류를 지정합니다. 일반 셀이면 'DATA(TD)'를 선택하고 헤더로 사용할 셀이면 'Header(TH)'를 선택합니다.</P>
+            <p class="mlabel1">테두리 형태</p>
+            <p class="mlabeltext">셀의 테두리 선을 지정합니다. <span class="mlabel2">실선</span>, <span class="mlabel2">이중선</span>, <span class="mlabel2">파선</span>, <span class="mlabel2">점선</span> 중 하나를 선택합니다. 테두리를 지정하지 않으려면 '없음'을 선택합니다.</p>
+            <P class="mlabeltext"><IMG border=0 style="vertical-align:middle" src="images/icon-notice.gif">테두리 형태를 이중선으로 선택하면, 화면에 이중선으로 나타내기 위해 테두리 두께가 '3'으로 설정됩니다.</P>
+            <p class="mlabel1">테두리 두께</p>
+            <p class="mlabeltext">셀의 테두리 선 두께를 지정합니다. 초기값은 '1'이며 높은 수를 입력할수록 테두리의 두께가 두꺼워집니다.</p>
+            <p class="mlabel1">테두리 색상</p>
+            <p class="mlabeltext">셀 테두리의 색상을 지정합니다. 색상 상자를 누르면 팔레트가 나타납니다.</p>
+            <p class="mlabel1">테두리 선택</p>
+            <p class="mlabeltext">셀의 테두리 경계선을 지정합니다.</p>
+        </td>
+    </tr>
+</table>
+<p>&nbsp;</p>
+</body>
+
+</html>

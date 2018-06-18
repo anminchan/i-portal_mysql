@@ -1,0 +1,106 @@
+<html>
+
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>UploadFileNameType</title>
+<meta name="author" content="Namo Interactive, Inc.">
+<link rel="stylesheet" href="../images/linkstyle.css">
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="purple" alink="red">
+
+<table border="0" width="640">
+    <tr>
+        <td width="10%" bgcolor="#5A7FC1" bordercolor="#999999">
+            <p align="center" class="pme"><font color="white">Param</font></p>
+        </td>
+        <td width="10%" bgcolor="#EEEEEE" bordercolor="#999999">
+            <p align="center" class="pme">Method</p>
+        </td>
+        <td width="10%" bgcolor="#EEEEEE" bordercolor="#999999">
+            <p align="center" class="pme">Event</p>
+        </td>
+        <td width="10%">
+            <p align="center" class="pme">&nbsp;</p>
+        </td>
+        <td width="50%">
+            <p align="center" class="pme">&nbsp;</p>
+        </td>
+    </tr>
+</table>
+<table border="0" width="640" height="1106">
+    <tr>
+        <td height="1084">
+            <H2>UploadFileNameType<sub>v1.1 or higher</sub></H2>
+            <P class="dscrpt">파일 업로드 시 파일명 저장 형식을 설정합니다.</P>
+            <p class="dscrpt">&nbsp;</p>
+            <h4>Syntax</h4>
+            <UL>
+                <PRE>[get] HRESULT <SPAN class="fname">UploadFileNameType</SPAN> (<BR>      BSTR* <SPAN class="paraname">type</SPAN><BR>);</PRE>
+            </UL>
+            <UL>
+                <PRE>[put] HRESULT <SPAN class="fname">UploadFileNameType</SPAN> (<BR>      BSTR <SPAN class="paraname">type</SPAN><BR>);</PRE>
+            </UL>
+            <h4>Parameters</h4>
+            <p class="dscrpt">[get] <SPAN class="para">t</SPAN><SPAN class="paraname">ype</SPAN></p>
+            <P class="paradsc">[out, retval] 설정된 저장 형식을 반환 합니다.</P>
+            <p class="dscrpt">[put] <SPAN class="para">t</SPAN><SPAN class="paraname">ype</SPAN></p>
+            <P class="paradsc">[in] 저장 형식을 입력합니다.</P>
+            <table class="paradsc2" border="1" cellspacing="0" width="346" bordercolordark="white" bordercolorlight="#999999">
+                <tr>
+                    <td width="90" bgcolor="#EEEEEE">            
+                        <p align="center">real</p>
+                    </td>
+                    <td width="246">
+                        <p>원본 파일의 파일명으로 저장</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="90" bgcolor="#EEEEEE">            
+                        <p align="center">trans</p>
+                    </td>
+                    <td width="246">
+                        <p>원본 파일의 파일명을 변환하여 저장(Base64)</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="90" bgcolor="#EEEEEE">
+                        <p align="center">random<br>(1.5버전 이상)</p>
+                    </td>
+                    <td width="246">
+                        <p>원본 파일의 파일명을 변환하여 저장(yyyyMMddHHmmssfff_Random문자 8자리)</p>
+                    </td>
+                </tr>
+            </table>
+            <p class="dscrpt">&nbsp;</p>
+            <h4>Return Values</h4>
+            <p class="dscrpt">현재 설정된 값을 돌려줍니다.</p>
+            <p class="dscrpt">&nbsp;</p>
+            <h4>Remarks</h4>
+            <p class="dscrpt">UploadFileNameType 값을 설정하기 위해서는 에디터의 MainClass가 호출된 후, 에디터가 로드되기 전에 적용 시켜 주어야 합니다. 호출은 생성된 MainClass 객체의 &quot;params&quot;을 통하여 할 수 있습니다.</p>
+            <p class="dscrpt">'WebLanguage' param의 값이 &quot;php&quot;일 때 UploadFileNameType의 값을 'real'로 입력 시 크로스에디터가 설치된 서버의 인코딩 type을 입력해 주어야 합니다.</p>
+            <p class="dscrpt">&nbsp;</p>
+            <h4>Sample Codes</h4>
+            <P class="scodecmt">&lt;ASP, JSP, ASP.NET&gt;</P>
+            <P class="scode">JavaScript [get]</P>
+            <pre class="scodedsc">var object = new NamoSE(&quot;test&quot;);
+var edit = object.params.<b>UploadFileNameType</b>;</pre>
+            <br>
+            <P class="scode">JavaScript [put]</P>
+            <pre class="scodedsc">var object = new NamoSE(&quot;test&quot;);
+object.params.<b>UploadFileNameType</b> = &quot;real&quot;;
+object.editorStart();    </pre>
+            <P class="scodecmt">&lt;PHP&gt;</P>
+            <P class="scode">JavaScript [get]</P>
+            <pre class="scodedsc">var object = new NamoSE(&quot;test&quot;);
+var edit = object.params.<b>UploadFileNameType</b>;</pre>
+            <p class="dscrpt">&nbsp;</p>
+            <P class="scode">JavaScript [put]</P>
+            <pre class="scodedsc">var object = new NamoSE(&quot;test&quot;);
+object.params.<b>UploadFileNameType</b> = &quot;real,euc-kr&quot;;
+object.editorStart();</pre>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

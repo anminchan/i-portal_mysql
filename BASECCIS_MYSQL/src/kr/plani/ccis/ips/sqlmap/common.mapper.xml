@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.plani.ccis.ips.mapper.common.CommonMapper">
+    <resultMap type="hashmap" id="MAP_OUT" />
+    <resultMap type="category" id="CATEGORY_OUT" />
+    <resultMap type="user" id="USER_OUT" />
+    
+    <!-- 사이트 이름 -->
+    <select id="getSiteName" parameterType="defaultDomain" resultType="java.lang.String">
+		SELECT KNAME 
+	    FROM T_SITE 
+	    WHERE SITEID = #{siteId}
+    </select>
+    
+    <!-- 그룹 리스트 -->
+	<select id="listGroup" parameterType="group" resultType="java.util.HashMap">
+		<include refid="common.pageHeader"/>
+		<choose>
+			<when test="inSearchText == '' or inSearchText == null">
+				<choose>
+					<when test="inGroupType == '' or inGroupType == null">
+			            SELECT A.GROUPID, A.KNAME, A.GROUPTYPE, B.KNAME AS GROUPTYPE_NAME,
+							A.DEPTH, A.HIGHERID, A.SORT, A.CNT,
+			                A.STATE, A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG
+			            FROM
+			            (
+		                	SELECT A.*, IFNULL(B.CNT, 0) AS CNT
+		                    FROM 
+		                    (
+		                    	SELECT * 
+		                    	FROM T_GROUP 
+		                    	WHERE STATE = 'T' 
+		                    	ORDER BY GROUPID
+		                    ) A 
+		                    LEFT JOIN (SELECT GROUPID, COUNT(*) AS CNT FROM T_USERGROUP WHERE STATE = 'T' GROUP BY GROUPID) B
+		                    ON A.GROUPID = B.GROUPID
+		                    GROUP BY A.GROUPID
+			            ) A
+			            LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'GroupType') B
+			            ON A.GROUPTYPE = B.CODE
+			            ORDER BY A.GROUPID
+					</when>
+					<otherwise>
+						SELECT A.GROUPID, A.KNAME, A.GROUPTYPE, B.KNAME AS GROUPTYPE_NAME,
+		                   	A.DEPTH, A.HIGHERID, A.SORT, A.CNT,
+		                   	A.STATE, A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG
+			            FROM
+			            (
+		                	SELECT A.*, IFNULL(B.CNT, 0) AS CNT
+		                    FROM
+		                    (
+		                    	SELECT * 
+		                    	FROM T_GROUP 
+		                    	WHERE STATE = 'T' 
+		                    	AND GROUPTYPE = #{inGroupType} 
+		                    	ORDER BY GROUPID
+		                    ) A 
+			                LEFT JOIN (SELECT GROUPID, COUNT(*) AS CNT FROM T_USERGROUP WHERE STATE = 'T' GROUP BY GROUPID) B
+			                ON A.GROUPID = B.GROUPID
+			                GROUP BY A.GROUPID
+						) A
+			            LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'GroupType') B
+			            ON A.GROUPTYPE = B.CODE
+			            ORDER BY A.GROUPID
+					</otherwise>
+				</choose>
+			</when>
+			<otherwise>
+				<choose>
+					<when test="inSearchType == 0">
+						<choose>
+							<when test="inGroupType == '' or inGroupType == null">
+								SELECT A.GROUPID, A.KNAME, A.GROUPTYPE, B.KNAME AS GROUPTYPE_NAME,
+				                   	A.DEPTH, A.HIGHERID, A.SORT, A.CNT,
+				                   	A.STATE, A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG
+					            FROM
+					            (
+				                	SELECT A.*, IFNULL(B.CNT, 0) AS CNT
+				                    FROM
+				                    (
+				                    	SELECT * 
+				                    	FROM T_GROUP 
+				                    	WHERE STATE = 'T' 
+				                    	AND (KNAME LIKE CONCAT('%',IFNULL(#{inSearchText}, ''),'%') OR GROUPID LIKE CONCAT('%',IFNULL(#{inSearchText}, ''),'%')) 
+				                    	ORDER BY GROUPID
+				                    ) A 
+					                LEFT JOIN (SELECT GROUPID, COUNT(*) AS CNT FROM T_USERGROUP WHERE STATE = 'T' GROUP BY GROUPID) B
+					                ON A.GROUPID = B.GROUPID
+					                GROUP BY A.GROUPID
+								) A
+					            LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'GroupType') B
+					            ON A.GROUPTYPE = B.CODE
+					            ORDER BY A.GROUPID
+							</when>
+							<otherwise>
+								SELECT A.GROUPID, A.KNAME, A.GROUPTYPE, B.KNAME AS GROUPTYPE_NAME,
+				                   	A.DEPTH, A.HIGHERID, A.SORT, A.CNT,
+				                   	A.STATE, A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG
+					            FROM
+					            (
+				                	SELECT A.*, IFNULL(B.CNT, 0) AS CNT
+				                    FROM
+				                    (
+				                    	SELECT * 
+				                    	FROM T_GROUP 
+				                    	WHERE STATE = 'T' 
+				                    	AND GROUPTYPE = #{inGroupType} 
+				                    	AND (KNAME LIKE CONCAT('%',IFNULL(#{inSearchText}, ''),'%') OR GROUPID LIKE CONCAT('%',IFNULL(#{inSearchText}, ''),'%')) 
+				                    	ORDER BY GROUPID
+				                    ) A 
+					                LEFT JOIN (SELECT GROUPID, COUNT(*) AS CNT FROM T_USERGROUP WHERE STATE = 'T' GROUP BY GROUPID) B
+					                ON A.GROUPID = B.GROUPID
+					                GROUP BY A.GROUPID
+								) A
+					            LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'GroupType') B
+					            ON A.GROUPTYPE = B.CODE
+					            ORDER BY A.GROUPID
+							</otherwise>
+						</choose>
+					</when>
+					<otherwise>
+						<choose>
+							<when test='inGroupType == "" or inGroupType == null'>
+								SELECT A.GROUPID, A.KNAME, A.GROUPTYPE, B.KNAME AS GROUPTYPE_NAME,
+				                   	A.DEPTH, A.HIGHERID, A.SORT, A.CNT,
+				                   	A.STATE, A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG
+					            FROM
+					            (
+				                	SELECT A.*, IFNULL(B.CNT, 0) AS CNT
+				                    FROM
+				                    (
+				                    	SELECT * 
+				                    	FROM T_GROUP 
+				                    	WHERE STATE = 'T'
+					                    AND	(KNAME LIKE CONCAT('%',IFNULL(#{inSearchText}, ''),'%') OR GROUPID LIKE CONCAT('%',IFNULL(#{inSearchText}, ''),'%'))
+				                    	ORDER BY GROUPID
+				                    ) A 
+					                LEFT JOIN (SELECT GROUPID, COUNT(*) AS CNT FROM T_USERGROUP WHERE STATE = 'T' GROUP BY GROUPID) B
+					                ON A.GROUPID = B.GROUPID
+								) A
+					            LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'GroupType') B
+					            ON A.GROUPTYPE = B.CODE
+					            ORDER BY A.GROUPID
+							</when>
+							<otherwise>
+								SELECT A.GROUPID, A.KNAME, A.GROUPTYPE, B.KNAME AS GROUPTYPE_NAME,
+				                   	A.DEPTH, A.HIGHERID, A.SORT, A.CNT,
+				                   	A.STATE, A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG
+					            FROM
+					            (
+				                	SELECT A.*, IFNULL(B.CNT, 0) AS CNT
+				                    FROM
+				                    (
+				                    	SELECT * 
+				                    	FROM T_GROUP 
+				                    	WHERE STATE = 'T' 
+				                    	AND GROUPTYPE = #{inGroupType} 
+				                    	AND GROUPID LIKE CONCAT('%',IFNULL(#{inSearchText}, ''),'%') 
+				                    	AND KNAME LIKE CONCAT('%',IFNULL(#{inSearchText}, ''),'%') 
+				                    	ORDER BY GROUPID
+				                    ) A 
+					                LEFT JOIN (SELECT GROUPID, COUNT(*) AS CNT FROM T_USERGROUP WHERE STATE = 'T' GROUP BY GROUPID) B
+					                ON A.GROUPID = B.GROUPID
+					                GROUP BY A.GROUPID
+								) A
+					            LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'GroupType') B
+					            ON A.GROUPTYPE = B.CODE
+					            ORDER BY A.GROUPID
+							</otherwise>
+						</choose>
+					</otherwise>
+				</choose>
+			</otherwise>
+		</choose>
+		<include refid="common.pageFooter"/>
+	</select>
+	
+	<!-- 관리자 로그인체크 -->
+	<select id="getLoginIdCheck" parameterType="user" resultType="int">
+   		SELECT COUNT(*) AS IDCNT
+          FROM T_USER
+         WHERE UserID = #{userId}
+           AND STATE = 'T'
+    </select>
+	
+    <select id="getLogin" parameterType="user" resultType="user">
+        <!-- { call PKGSSOSERVER.Login
+           (
+                #{ userId,          		mode=IN,        jdbcType=VARCHAR },
+                #{ password,            	mode=IN,        jdbcType=VARCHAR },
+                
+                #{ inExecMenuId,            mode=IN,        jdbcType=VARCHAR },
+                #{ inBeforeData,            mode=IN,        jdbcType=VARCHAR },
+                #{ inAfterData,             mode=IN,        jdbcType=VARCHAR },
+                #{ inTerminal,              mode=IN,        jdbcType=VARCHAR },
+                #{ inOsUser,                mode=IN,        jdbcType=VARCHAR },
+                #{ inModule,                mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLUserId,             mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLIp,                 mode=IN,        jdbcType=VARCHAR },
+                
+                #{ outObjectName,           mode=OUT,       jdbcType=VARCHAR },
+                #{ outResult,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outRowCount,             mode=OUT,       jdbcType=INTEGER },
+                #{ outNotice,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outCursor,               mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=USER_OUT }
+           )
+        } -->
+        SELECT A.USERID, A.PASSWORD, A.CERTIFICATION, A.KEY1, A.KEY2, A.KEY3, A.DKEY, A.KNAME, A.KIND, H.KNAME AS KINDNAME,
+	           A.PASSWORDTIME, A.WITHDRAWTIME, A.JOINSITEID, A.JOINDATE, A.OUTDATE, A.STATE, 
+	           B.MAILING, I.KNAME AS MAILINGNAME,
+	           B.CELLPHONE, B.HOMEPHONE, B.HOMEZIPCODE, B.HOMEADDRESS1, B.HOMEADDRESS2, 
+	           C.CORPREGNO, C.CEONAME, C.BUSINESS, L.KNAME AS BUSINESSNAME, C.BUSINESSDESC, C.CHARGENAME, C.CHARGEPHONE,
+	           C.MAILING, M.KNAME AS MAINLINGNAME, C.BUSINESS,
+	           C.CORPPHONE, C.CORPFAX, C.HOMEPAGE, C.CORPZIPCODE, C.CORPADDRESS1, C.CORPADDRESS2, D.DEPTID, D.DEPTSEQ, G.KNAME AS DEPTNAME,
+	           D.DUTYID, E.KNAME AS DUTYNAME, D.POSITIONID, F.KNAME AS POSITIONNAME, D.PHONE, D.FAX,
+	          (SELECT IF(COUNT(*) = 0, 'N' , 'Y')
+	              FROM T_GROUP A, T_USERGROUP B
+	             WHERE A.GROUPID = B.GROUPID
+	               AND B.USERID = #{userId}
+	               AND A.GROUPTYPE = 'T'
+	          ) TOTALAUTH
+	    FROM (SELECT * FROM T_USER WHERE USERID = #{userId} AND PASSWORD = #{password}) A 
+	    	 LEFT JOIN T_PERSONUSER B
+	    	 ON A.USERID = B.USERID
+	    	 LEFT JOIN T_COMPANYUSER C
+	    	 ON A.USERID = C.USERID
+	    	 LEFT JOIN (SELECT * FROM T_TEAM WHERE DEPTSEQ = (SELECT MAX(DEPTSEQ) FROM T_TEAM)) D
+	    	 ON A.USERID = D.USERID
+	    	 LEFT JOIN T_DUTY E
+	    	 ON D.DUTYID = E.DUTYID
+	    	 LEFT JOIN T_POSITION F
+	    	 ON D.POSITIONID = F.POSITIONID
+	    	 LEFT JOIN T_DEPARTMENT G
+	    	 ON D.DEPTID = G.DEPTID
+	    	 AND D.DEPTSEQ = G.DEPTSEQ
+	         LEFT JOIN (SELECT * FROM T_CODE WHERE HIGHERCODE = 'UserKind') H
+	    	 ON A.KIND = H.CODE
+	         LEFT JOIN (SELECT * FROM T_CODE WHERE HIGHERCODE = 'Mailing') I
+	    	 ON B.MAILING = I.CODE
+	         LEFT JOIN (SELECT * FROM T_CODE WHERE HIGHERCODE = 'Business') L
+	    	 ON C.BUSINESS = L.CODE
+	         LEFT JOIN (SELECT * FROM T_CODE WHERE HIGHERCODE = 'Mailing') M
+	         ON C.MAILING = M.CODE
+    </select>
+	
+    <!-- <select id="getSSOLogin" parameterType="user" statementType="CALLABLE">
+        { call PKGSSOSERVER.SSOLogin
+           (
+                #{ userId,          		mode=IN,        jdbcType=VARCHAR },
+                
+                #{ inExecMenuId,            mode=IN,        jdbcType=VARCHAR },
+                #{ inBeforeData,            mode=IN,        jdbcType=VARCHAR },
+                #{ inAfterData,             mode=IN,        jdbcType=VARCHAR },
+                #{ inTerminal,              mode=IN,        jdbcType=VARCHAR },
+                #{ inOsUser,                mode=IN,        jdbcType=VARCHAR },
+                #{ inModule,                mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLUserId,             mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLIp,                 mode=IN,        jdbcType=VARCHAR },
+                
+                #{ outObjectName,           mode=OUT,       jdbcType=VARCHAR },
+                #{ outResult,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outRowCount,             mode=OUT,       jdbcType=INTEGER },
+                #{ outNotice,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outCursor,               mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=USER_OUT }
+           )
+        }
+    </select> -->
+    
+    <select id="searchCompanyPop" parameterType="companyUser" resultType="companyUser">
+		SELECT A.userId, A.KName, B.corpRegno, B.ceoName, B.corpZipCode, B.corpAddress1, B.corpAddress2
+			 , B.chargeName, B.ChargeEmail, B.chargeCellPhone, B.chargePhone
+		FROM T_USER A, T_COMPANYUSER B
+		WHERE A.USERID = B.USERID
+		<if test="schText != '' and schText != null">
+		AND A.KName CONCAT('%', #{schText}, '%')
+		</if>
+    </select>
+    
+    <select id="searchMemberPop" parameterType="companyUser" resultType="java.util.HashMap">
+		SELECT A.USERID, A.KNAME, B.HOMEPHONE, B.CELLPHONE, B.USERID AS EMAIL, B.HOMEZIPCODE, B.HOMEADDRESS1, B.HOMEADDRESS2
+		FROM T_USER A, T_PERSONUSER B
+		WHERE A.USERID = B.USERID
+		<if test="schText != '' and schText != null">
+		AND A.KNAME CONCAT('%', #{schText}, '%')
+		</if>
+    </select>
+	
+	<!-- 개인접속로그 추가 -->	 
+	 <select id="insertUserInfoLog" parameterType="companyUser">
+	   <!-- { call PkgLogServer.UserInfoLog
+	       (
+               #{ inDMLUserId,		mode=IN,	jdbcType=VARCHAR },
+               #{ inRECUserID,		mode=IN,	jdbcType=VARCHAR },
+               #{ inRECDesc,		mode=IN,	jdbcType=VARCHAR },
+               #{ inExecMenuId,		mode=IN,	jdbcType=VARCHAR },
+               #{ inDMLUserId,		mode=IN,	jdbcType=VARCHAR },
+               #{ inDMLIp,			mode=IN,	jdbcType=VARCHAR },
+               #{ inGubun,			mode=IN,	jdbcType=VARCHAR },
+               #{ message,			mode=IN,	jdbcType=VARCHAR },
+               #{ useComId,			mode=IN,	jdbcType=VARCHAR },
+               #{ fileGubun,		mode=IN,	jdbcType=VARCHAR },
+               #{ no2,				mode=IN,	jdbcType=VARCHAR }
+	       )
+	   } -->
+	   
+	   INSERT INTO T_USERINFOLOG
+		(
+			NO, INQUSERID, RECUSERID, MENUID, INQTIME, RECDESC, 
+			DMLUSERID, DMLIP, DMLTIME, GUBUN, REASON, GROUPID, FILEGUBUN, FILESIZE
+		)
+		VALUES
+		(
+			NEXTVAL('SEQT_USERINFOLOGNO'), #{inDMLUserId}, #{inRECUserID}, #{inExecMenuId}, NOW(), #{inRECDesc},
+			#{inDMLUserId}, #{inDMLIp}, NOW(), #{inGubun}, #{message}, #{useComId}, #{fileGubun}, #{no2}
+        )
+	 </select>
+
+	<!-- 경영공시 담당자 조회용 -->
+	<select id="selectAutonomyPersonList" parameterType="title" resultType="java.util.HashMap">
+		SELECT A.USERID,
+			   A.MANAGETYPE, 
+		       C.KNAME AS NAME, 
+		       E.PHONE, 
+		       F.KNAME AS DUTYNAME,
+		       G.LOGTIME
+		  FROM T_MANAGEUSER A
+	      LEFT JOIN (SELECT * FROM T_BOARD WHERE MENUID = #{menuId}) B
+		    ON A.BOARDID = B.BOARDID 
+	      LEFT JOIN T_USER C
+      		ON A.USERID = C.USERID 
+	      LEFT JOIN T_PERSONUSER D
+       	    ON A.USERID = D.USERID 
+	      LEFT JOIN T_TEAM E
+       	    ON A.USERID = E.USERID
+           AND E.DEPTSEQ =  (SELECT MAX(DEPTSEQ) FROM T_TEAM WHERE USERID = A.USERID AND SORT = '1') 
+	      LEFT JOIN T_DUTY F
+            ON E.DUTYID = F.DUTYID
+          LEFT JOIN (SELECT BOARDID, USERID, LOGTIME, MANAGETYPE FROM T_MANAGEUSERLOG WHERE TITLEID = #{titleId}) G
+       	    ON A.BOARDID = G.BOARDID
+           AND A.USERID = G.USERID
+           AND A.MANAGETYPE = G.MANAGETYPE
+	</select>
+
+	<insert id="insertChangeLog" parameterType="defaultDomain">
+		INSERT INTO T_CHANGELOG
+		(NO,DBNAME,CURRENTSCHEMA,SESSIONID,OBJECTTYPE,OBJECTNAME,OBJECTCOMMENT,STARTTIME,ENDTIME,EXECMENUID,DMLTYPE,
+		BEFOREDATA,AFTERDATA,NOTICE,DMLUSERID,DMLIP,DMLTIME
+		) VALUES
+		(
+		NEXTVAL('SEQT_CHANGELOGNO'), 'ghub.PT', 'KHOMEPORTAL', NULL,
+		#{objectType}, #{objectName}, FUNMENUNAME(#{inExecMenuId}), DATE_FORMAT(NOW(),'%Y/%m/%d'), DATE_FORMAT(NOW(),'%Y/%m/%d'), #{inExecMenuId}, #{dmlType},
+		#{inBeforeData}, #{inAfterData}, #{dmlNotice}, #{inDMLUserId}, #{inDMLIp}, NOW()
+		 )
+	</insert>
+	
+	<!-- 통합검색 로그 -->
+	<!-- <select id="unifiedSearchLog" parameterType="defaultDomain" statementType="CALLABLE">
+		{ call PkgLogServer.UnifiedSearchLog
+	       (     
+               #{ inDMLUserId,    mode=IN,	jdbcType=VARCHAR },
+               #{ mySiteId,		  mode=IN,	jdbcType=VARCHAR },
+               #{ inSearchWord,	  mode=IN,	jdbcType=VARCHAR },
+               #{ inSearchCount,  mode=IN,	jdbcType=INTEGER },
+               #{ inModule,	      mode=IN,	jdbcType=VARCHAR },
+               #{ inTerminal,     mode=IN,	jdbcType=VARCHAR },
+               #{ inDMLUserId,	  mode=IN,	jdbcType=VARCHAR },
+               #{ inDMLIp,		  mode=IN,	jdbcType=VARCHAR }  
+	       )
+	   }
+	</select> -->
+	
+	<!-- 개인로그인아웃로그 갱신 -->	 
+	<update id="updateUserLogInOutLog" parameterType="defaultDomain">
+		UPDATE T_USERLOGINOUTLOG SET
+			LOGOUTTIME = NOW(), STATE='F', USUALYN = #{state}, DMLUSERID = #{inDMLUserId}, DMLTime = NOW()
+		<if test='inCondition == "UDP"'>
+			WHERE NO = #{no}	
+		</if>	
+		<if test='inCondition == "INS"'>
+		WHERE USERID = #{inDMLUserId}
+		AND STATE = 'T'
+		</if>
+	</update>
+
+	<!-- 개인로그인아웃로그 추가 -->	 
+	<select id="insertUserLogInOutLog" parameterType="defaultDomain">
+	   <!-- { call PkgLogServer.UserLogInOutLog
+	       (
+               #{ inCondition,		mode=IN,	jdbcType=VARCHAR },
+               #{ userId,			mode=IN,	jdbcType=VARCHAR },
+               #{ inGubun,			mode=IN,	jdbcType=VARCHAR },
+               #{ state,        	mode=IN,    jdbcType=VARCHAR },
+               #{ no1,        		mode=IN,    jdbcType=VARCHAR },
+               #{ message,     		mode=IN,    jdbcType=VARCHAR },
+               #{ inModule,			mode=IN,	jdbcType=VARCHAR },
+               #{ inDMLUserId,		mode=IN,	jdbcType=VARCHAR },
+               #{ inDMLIp,			mode=IN,	jdbcType=VARCHAR }               
+	       )
+	   } -->
+	   
+	   INSERT INTO T_USERLOGINOUTLOG
+		(    
+			NO, USERID, LOGINTIME, GUBUN, BROWSER, STATE, REASON, DMLUSERID, DMLIP, DMLTIME
+		)
+		VALUES
+		(   
+			NEXTVAL('SEQT_USERLOGINOUTLOGNO'), #{userId}, NOW(), #{inGubun}, #{inTerminal}, 'T', #{message},
+			#{inDMLUserId}, #{inDMLIp}, NOW()
+		)
+	 </select>
+	 
+	<!-- 회원로그인정보 조회 -->	 
+	<select id="getLoginInfo" parameterType="java.lang.String" resultType="java.util.HashMap">
+		SELECT STATE, DMLIP, REASON AS SESSIONID FROM T_USERLOGINOUTLOG
+		WHERE USERID =  #{userId}
+		AND LOGINTIME = ( SELECT MAX(LOGINTIME) FROM T_USERLOGINOUTLOG WHERE USERID = #{userId})
+		
+    </select>
+    
+    <!-- 다른기기 로그인 체크 -->	 
+	<select id="getLoignCheck" parameterType="user" resultType="java.lang.String">
+		SELECT STATE FROM T_USERLOGINOUTLOG
+		WHERE USERID =  #{myId}
+		AND REASON = #{message}
+		AND LOGINTIME = ( SELECT MAX(LOGINTIME) FROM T_USERLOGINOUTLOG WHERE USERID = #{myId} AND REASON = #{message})
+    </select>
+    
+    <!-- 테이블조회 -->
+    <!-- <select id="selectTableList" parameterType="defaultDomain" resultType="java.util.HashMap">
+		SELECT TABLE_NAME  
+  		FROM ALL_TABLES
+      	WHERE OWNER = UPPER(#{dbOwner})
+ 		ORDER BY TABLE_NAME
+    </select>
+    
+    <select id="selectTableDetailList" parameterType="defaultDomain" resultType="java.util.HashMap">
+		SELECT A.OWNER,
+				A.TABLE_NAME,
+				A.COLUMN_NAME,
+				A.DATA_TYPE,
+				A.DATA_LENGTH,
+				A.NULLABLE,
+				A.COLUMN_ID,
+				B.COMMENTS,
+				NVL(C.CONSTRAINT_TYPE, '-') CONSTRAINT_TYPE
+		FROM ALL_TAB_COLUMNS A, ALL_COL_COMMENTS B,
+			(SELECT A.OWNER,
+					A.TABLE_NAME,
+					B.COLUMN_NAME,
+					B.POSITION,
+					'PK' CONSTRAINT_TYPE
+				FROM USER_CONSTRAINTS A, USER_CONS_COLUMNS B
+				WHERE A.CONSTRAINT_TYPE = 'P'
+				AND A.TABLE_NAME = B.TABLE_NAME
+				AND A.CONSTRAINT_NAME = B.CONSTRAINT_NAME
+				AND A.TABLE_NAME = #{tableName}) C
+		WHERE A.OWNER = B.OWNER(+)
+		AND A.OWNER = UPPER(#{dbOwner})
+		AND A.TABLE_NAME = B.TABLE_NAME(+)
+		AND A.COLUMN_NAME = B.COLUMN_NAME(+)
+		AND A.OWNER = C.OWNER(+)
+		AND A.TABLE_NAME = C.TABLE_NAME(+)
+		AND A.COLUMN_NAME = C.COLUMN_NAME(+)
+		AND A.TABLE_NAME = #{tableName}
+		ORDER BY COLUMN_ID
+	</select> -->
+	
+</mapper>

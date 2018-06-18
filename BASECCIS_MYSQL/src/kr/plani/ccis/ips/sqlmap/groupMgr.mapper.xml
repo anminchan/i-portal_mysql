@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.plani.ccis.ips.mapper.system.GroupMgrMapper">
+	
+	<!-- 그룹 정보 -->
+	<resultMap id="GROUP_OUT" type="group"/>
+		
+	<!-- 그룹 리스트 -->
+	<select id="list" parameterType="group" resultType="java.util.HashMap">
+		<include refid="common.pageHeader"/>
+		<choose>
+			<when test="inSearchText == '' or inSearchText == null">
+				<choose>
+					<when test="inGroupType == '' or inGroupType == null">
+			            SELECT A.GROUPID, A.KNAME, A.GROUPTYPE, B.KNAME AS GROUPTYPE_NAME,
+							A.DEPTH, A.HIGHERID, A.SORT, A.CNT, 
+                	       (SELECT COUNT(*) 
+                	        FROM T_GROUP a
+                	        WHERE a.STATE = 'T') AS TOTAL_CNT,
+			                A.STATE, A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG
+			            FROM
+			            (
+		                	SELECT A.*, IFNULL(B.CNT, 0) AS CNT
+		                    FROM 
+		                    (
+		                    	SELECT * 
+		                    	FROM T_GROUP 
+		                    	WHERE STATE = 'T' 
+		                    	ORDER BY GROUPID
+		                    ) A 
+		                    LEFT JOIN (SELECT GROUPID, COUNT(*) AS CNT FROM T_USERGROUP WHERE STATE = 'T' GROUP BY GROUPID) B
+		                    ON A.GROUPID = B.GROUPID
+		                    GROUP BY A.GROUPID
+			            ) A
+			            LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'GroupType') B
+			            ON A.GROUPTYPE = B.CODE
+			            ORDER BY A.GROUPID
+					</when>
+					<otherwise>
+						SELECT A.GROUPID, A.KNAME, A.GROUPTYPE, B.KNAME AS GROUPTYPE_NAME,
+		                   	A.DEPTH, A.HIGHERID, A.SORT, A.CNT, 
+                	       (SELECT COUNT(*) 
+                	        FROM T_GROUP a
+                	        WHERE STATE = 'T'
+		                    AND GROUPTYPE = #{inGroupType} ) AS TOTAL_CNT,
+		                   	A.STATE, A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG
+			            FROM
+			            (
+		                	SELECT A.*, IFNULL(B.CNT, 0) AS CNT
+		                    FROM
+		                    (
+		                    	SELECT * 
+		                    	FROM T_GROUP 
+		                    	WHERE STATE = 'T' 
+		                    	AND GROUPTYPE = #{inGroupType} 
+		                    	ORDER BY GROUPID
+		                    ) A 
+			                LEFT JOIN (SELECT GROUPID, COUNT(*) AS CNT FROM T_USERGROUP WHERE STATE = 'T' GROUP BY GROUPID) B
+			                ON A.GROUPID = B.GROUPID
+			                GROUP BY A.GROUPID
+						) A
+			            LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'GroupType') B
+			            ON A.GROUPTYPE = B.CODE
+			            ORDER BY A.GROUPID
+					</otherwise>
+				</choose>
+			</when>
+			<otherwise>
+				<choose>
+					<when test="inSearchType == 0">
+						<choose>
+							<when test="inGroupType == '' or inGroupType == null">
+								SELECT A.GROUPID, A.KNAME, A.GROUPTYPE, B.KNAME AS GROUPTYPE_NAME,
+				                   	A.DEPTH, A.HIGHERID, A.SORT, A.CNT, 
+		                	       (SELECT COUNT(*) 
+		                	        FROM T_GROUP a
+		                	        WHERE STATE = 'T'
+		                	        AND (a.KNAME LIKE CONCAT('%',IFNULL(#{inSearchText}, ''),'%') 
+		                	        OR a.GROUPID LIKE CONCAT('%',IFNULL(#{inSearchText}, ''),'%'))) AS TOTAL_CNT,
+				                   	A.STATE, A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG
+					            FROM
+					            (
+				                	SELECT A.*, IFNULL(B.CNT, 0) AS CNT
+				                    FROM
+				                    (
+				                    	SELECT * 
+				                    	FROM T_GROUP 
+				                    	WHERE STATE = 'T' 
+				                    	AND (KNAME LIKE CONCAT('%',IFNULL(#{inSearchText}, ''),'%') OR GROUPID LIKE CONCAT('%',IFNULL(#{inSearchText}, ''),'%')) 
+				                    	ORDER BY GROUPID
+				                    ) A 
+					                LEFT JOIN (SELECT GROUPID, COUNT(*) AS CNT FROM T_USERGROUP WHERE STATE = 'T' GROUP BY GROUPID) B
+					                ON A.GROUPID = B.GROUPID
+					                GROUP BY A.GROUPID
+								) A
+					            LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'GroupType') B
+					            ON A.GROUPTYPE = B.CODE
+					            ORDER BY A.GROUPID
+							</when>
+							<otherwise>
+								SELECT A.GROUPID, A.KNAME, A.GROUPTYPE, B.KNAME AS GROUPTYPE_NAME,
+				                   	A.DEPTH, A.HIGHERID, A.SORT, A.CNT, 
+		                	       (SELECT COUNT(*) 
+		                	        FROM T_GROUP a
+		                	        WHERE STATE = 'T'
+		                	        AND a.GROUPTYPE = #{inGroupType} 
+			                    	AND (a.KNAME LIKE CONCAT('%',IFNULL(#{inSearchText}, ''),'%') 
+			                    	OR a.GROUPID LIKE CONCAT('%',IFNULL(#{inSearchText}, ''),'%'))) AS TOTAL_CNT,
+				                   	A.STATE, A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG
+					            FROM
+					            (
+				                	SELECT A.*, IFNULL(B.CNT, 0) AS CNT
+				                    FROM
+				                    (
+				                    	SELECT * 
+				                    	FROM T_GROUP 
+				                    	WHERE STATE = 'T' 
+				                    	AND GROUPTYPE = #{inGroupType} 
+				                    	AND (KNAME LIKE CONCAT('%',IFNULL(#{inSearchText}, ''),'%') OR GROUPID LIKE CONCAT('%',IFNULL(#{inSearchText}, ''),'%')) 
+				                    	ORDER BY GROUPID
+				                    ) A 
+					                LEFT JOIN (SELECT GROUPID, COUNT(*) AS CNT FROM T_USERGROUP WHERE STATE = 'T' GROUP BY GROUPID) B
+					                ON A.GROUPID = B.GROUPID
+					                GROUP BY A.GROUPID
+								) A
+					            LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'GroupType') B
+					            ON A.GROUPTYPE = B.CODE
+					            ORDER BY A.GROUPID
+							</otherwise>
+						</choose>
+					</when>
+					<otherwise>
+						<choose>
+							<when test='inGroupType == "" or inGroupType == null'>
+								SELECT A.GROUPID, A.KNAME, A.GROUPTYPE, B.KNAME AS GROUPTYPE_NAME,
+				                   	A.DEPTH, A.HIGHERID, A.SORT, A.CNT, 
+		                	       (SELECT COUNT(*) 
+		                	        FROM T_GROUP a 
+		                	        WHERE STATE = 'T'
+		                	        <if test="inSearchType == 1"> 
+				                    	AND a.KNAME LIKE CONCAT('%',IFNULL(#{inSearchText}, ''),'%')
+				                    </if> 
+				                    <if test="inSearchType == 2"> 
+				                    	AND a.GROUPID LIKE CONCAT('%',IFNULL(#{inSearchText}, ''),'%')
+				                    </if> ) AS TOTAL_CNT,
+				                   	A.STATE, A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG
+					            FROM
+					            (
+				                	SELECT A.*, IFNULL(B.CNT, 0) AS CNT
+				                    FROM
+				                    (
+				                    	SELECT * 
+				                    	FROM T_GROUP 
+				                    	WHERE STATE = 'T'
+					                    <if test="inSearchType == 1"> 
+					                    	AND KNAME LIKE CONCAT('%',IFNULL(#{inSearchText}, ''),'%')
+					                    </if> 
+					                    <if test="inSearchType == 2"> 
+					                    	AND GROUPID LIKE CONCAT('%',IFNULL(#{inSearchText}, ''),'%')
+					                    </if> 
+				                    	ORDER BY GROUPID
+				                    ) A 
+					                LEFT JOIN (SELECT GROUPID, COUNT(*) AS CNT FROM T_USERGROUP WHERE STATE = 'T' GROUP BY GROUPID) B
+					                ON A.GROUPID = B.GROUPID
+								) A
+					            LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'GroupType') B
+					            ON A.GROUPTYPE = B.CODE
+					            ORDER BY A.GROUPID
+							</when>
+							<otherwise>
+								SELECT A.GROUPID, A.KNAME, A.GROUPTYPE, B.KNAME AS GROUPTYPE_NAME,
+				                   	A.DEPTH, A.HIGHERID, A.SORT, A.CNT, 
+		                	       (SELECT COUNT(*) 
+		                	        FROM T_GROUP a
+		                	        WHERE STATE = 'T'
+			                    	AND a.GROUPTYPE = #{inGroupType} 
+			                    	AND a.GROUPID LIKE CONCAT('%',IFNULL(#{inSearchText}, ''),'%') 
+			                    	AND a.KNAME LIKE CONCAT('%',IFNULL(#{inSearchText}, ''),'%')) AS TOTAL_CNT,
+				                   	A.STATE, A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG
+					            FROM
+					            (
+				                	SELECT A.*, IFNULL(B.CNT, 0) AS CNT
+				                    FROM
+				                    (
+				                    	SELECT * 
+				                    	FROM T_GROUP 
+				                    	WHERE STATE = 'T' 
+				                    	AND GROUPTYPE = #{inGroupType} 
+				                    	AND GROUPID LIKE CONCAT('%',IFNULL(#{inSearchText}, ''),'%') 
+				                    	AND KNAME LIKE CONCAT('%',IFNULL(#{inSearchText}, ''),'%') 
+				                    	ORDER BY GROUPID
+				                    ) A 
+					                LEFT JOIN (SELECT GROUPID, COUNT(*) AS CNT FROM T_USERGROUP WHERE STATE = 'T' GROUP BY GROUPID) B
+					                ON A.GROUPID = B.GROUPID
+					                GROUP BY A.GROUPID
+								) A
+					            LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'GroupType') B
+					            ON A.GROUPTYPE = B.CODE
+					            ORDER BY A.GROUPID
+							</otherwise>
+						</choose>
+					</otherwise>
+				</choose>
+			</otherwise> 
+		</choose>
+		<include refid="common.pageFooter"/>
+	</select>
+	
+	<!-- 그룹 상세 리스트 -->
+	<select id="view" parameterType="group" resultType="java.util.HashMap">
+		SELECT A.GROUPID, A.KNAME, A.KDESC, A.GROUPTYPE, B.KNAME AS GROUPTYPE_NAME, A.HIGHERID, A.SORT,
+               A.STATE, A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG
+    	FROM T_GROUP A
+        LEFT JOIN (SELECT * FROM T_CODE WHERE HIGHERCODE = 'GroupType' AND STATE = 'T') B
+    	ON A.GROUPTYPE = B.CODE
+    	WHERE A.GROUPID = #{groupId}
+    	AND A.STATE = 'T'
+	</select>
+	
+	<!-- 그룹내 회원 목록 -->
+	<select id="userList" parameterType="group" resultType="java.util.HashMap">
+		SELECT (@ROWNUM := @ROWNUM + 1) AS RNUM, A.* 
+		FROM
+		(
+			SELECT A.GROUPID, B.USERID, B.KNAME, B.KIND, C.KNAME AS KIND_NAME, B.JOINDATE,
+				A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG
+	    	FROM (SELECT * FROM T_USERGROUP WHERE GROUPID = #{groupId} AND STATE = 'T') A
+	        JOIN T_USER B
+	    	ON A.USERID = B.USERID
+	        LEFT JOIN (SELECT * FROM T_CODE WHERE HIGHERCODE = 'UserKind' AND STATE = 'T') C
+	    	ON B.KIND = C.CODE
+	    	ORDER BY B.KNAME
+    	) A
+		JOIN (SELECT @ROWNUM := 0) AS R
+	</select>
+	
+	<!-- 그룹 추가/수정/삭제 -->
+    <select id="act" parameterType="group" resultType="java.util.HashMap">
+	    <if test='inCondition == "입력"'>
+		  	INSERT INTO T_GROUP
+		  	(
+			  	GROUPID, 
+			  	KNAME, KDESC, GROUPTYPE, DEPTH, HIGHERID, SORT,
+				STATE, SITEID, FILEGUBUN, INSUSERID, INSIP, INSTIME, DMLUSERID, DMLIP, DMLTIME, DMLLOG
+			)
+			VALUES
+			(
+          		(SELECT CONCAT('GROUP', LPAD(SUBSTRING(MAX(IFNULL(GROUPID, 'GROUP00000')), 6, 5) + 1, 5, '0')) FROM T_GROUP A),
+          		#{KName}, #{KDesc}, #{groupType}, 1, '-', -1,
+				#{state}, #{siteId}, #{fileGubun}, #{inDMLUserId}, #{inDMLIp}, NOW(), #{inDMLUserId}, #{inDMLIp}, NOW(), '-'
+			)
+		</if>
+		<if test='inCondition == "수정"'>
+			UPDATE T_GROUP SET
+				KNAME = #{KName}, KDESC = #{KDesc}, GROUPTYPE = #{groupType}, STATE = #{state},
+                SITEID = #{siteId}, FILEGUBUN = #{fileGubun}, DMLUSERID = #{inDMLUserId}, DMLIP = #{inDMLIp}, DMLTIME=NOW()
+            WHERE GROUPID = #{groupId}
+		</if>
+		<if test='inCondition == "삭제"'>
+			UPDATE T_GROUP SET
+				STATE = 'F', DMLUSERID = #{inDMLUserId}, DMLIP = #{inDMLIp}, DMLTIME = NOW()
+            WHERE GROUPID = #{groupId}
+		</if>
+    </select>
+	
+	<!-- 그룹회원 추가 -->	 
+	<insert id="actUser" parameterType="group">
+	   <if test='inCondition == "입력"'>
+		   	INSERT INTO T_USERGROUP
+		   	(
+		   		GROUPID, USERID, STATE, INSUSERID, INSIP, INSTIME, DMLUSERID, DMLIP, DMLTIME, DMLLOG
+			)
+			VALUES
+			(
+				#{groupId}, #{userId}, #{state}, #{inDMLUserId}, #{inDMLIp}, NOW(), #{inDMLUserId}, #{inDMLIp}, NOW(), '-'
+			)
+		</if>
+		<if test='inCondition == "삭제"'>
+			DELETE FROM T_USERGROUP WHERE GROUPID = #{groupId} AND USERID = #{userId}
+		</if>
+	</insert>	
+
+</mapper>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
+	version="2.1">
+
+	<description>html custom tag</description>
+	<display-name>JSTL html</display-name>
+	<tlib-version>1.2</tlib-version>
+	<short-name>html</short-name>
+
+	<tag>
+		<description>XSS</description>
+		<name>xss</name>
+		<tag-class>kr.plani.ccis.common.tag.html.XssTag</tag-class>
+		<body-content>JSP</body-content>
+
+	</tag>
+
+</taglib>

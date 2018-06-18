@@ -1,0 +1,91 @@
+<html>
+
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>InsertValue</title>
+<meta name="author" content="Namo Interactive, Inc.">
+<link rel="stylesheet" href="../images/linkstyle.css">
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="purple" alink="red">
+
+<table border="0" width="640">
+    <tr>
+        <td width="10%" bgcolor="#EEEEEE" bordercolor="#999999">
+            <p align="center" class="pme">Param</p>
+        </td>
+        <td width="10%" bgcolor="#5A7FC1" bordercolor="#999999">
+            <p align="center" class="pme"><font color="white">Method</font></p>
+        </td>
+        <td width="10%" bgcolor="#EEEEEE" bordercolor="#999999">
+            <p align="center" class="pme">Event</p>
+        </td>
+        <td width="10%">
+            <p align="center" class="pme">&nbsp;</p>
+        </td>
+        <td width="50%">
+            <p align="center" class="pme">&nbsp;</p>
+        </td>
+    </tr>
+</table>
+<TABLE width="640" border=0>
+    <TR>
+        <TD>
+            <H2>InsertValue</H2>
+            <P class="dscrpt">현재 편집 중인 문서의 특정 위치에 HTML 형식의 내용을 삽입합니다.</P>
+            <p class="dscrpt">&nbsp;</p>
+            <H4>Syntax</H4>
+            <UL>
+                <PRE>HRESULT <span class="fname">InsertValue</span> (<BR>        long <FONT color="blue"><I>position,</I></FONT><BR>        BSTR<span class="paraname"> </span><I><FONT color=blue>newVal</FONT></I>
+);</PRE>
+            </UL>
+            <H4>Parameters</H4>
+            <P class="para"><span class="paraname">position</span></P>
+            <P class="paradsc">[in] 내용을 삽입할 위치를 입력합니다.</P>
+            <TABLE class="paradsc2" cellSpacing="0" borderColorDark="white" width=300 
+      borderColorLight=#999999 border=1>
+                <TR>
+                    <TD width=75 bgColor=#eeeeee>
+                        <P align="center">0</P>
+                    </TD>
+                    <TD width=215>
+                        <P>문서 맨 앞</P>
+                    </TD>
+                </TR>
+                <TR>
+                    <TD width=75 bgColor=#eeeeee>
+                        <P align="center">-1</P>
+                    </TD>
+                    <TD width=215>
+                        <P>문서 맨 뒤</P>
+                    </TD>
+                </TR>
+                <TR>
+                    <TD width=75 bgColor=#eeeeee>
+                        <P align="center">1</P>
+                    </TD>
+                    <TD width=215>
+                        <P>현재 커서 위치</P>
+                    </TD>
+                </TR>
+            </TABLE>
+            <P class="para"><span class="paraname">newVal</span></P>
+            <P class="paradsc">[in] 삽입할 내용을 HTML 형식으로 입력합니다.</P>
+            <p class="dscrpt">&nbsp;</p>
+            <H4>Return Values</H4>
+            <p class="dscrpt">없음</p>
+            <p class="dscrpt">&nbsp;</p>
+            <H4>Remarks</H4>
+            <P class="dscrpt">메소드는 Main class 호출 후 에디터가 로드된 다음 실행해야 정상적으로 실행됩니다..</P>
+            <P class="dscrpt">position값을 설정하지 않거나 지정한 위치 값과 다른 값을 입력했을 경우 현재 커서 위치에 내용이 삽입됩니다.</P>
+            <p class="dscrpt">&nbsp;</p>
+            <H4>Sample Codes</H4>
+            <P class="scode">JavaScript</P>
+            <pre class="scodedsc">var object = new NamoSE(&quot;test&quot;);
+object.editorStart();
+object.<b>InsertValue</b>(1, &quot;&lt;span style=color:red&gt; Test&lt;/span&gt;&quot;);</pre>
+		</TD>
+    </TR>
+<p class="dscrpt">&nbsp;</p>
+</BODY>
+</HTML>

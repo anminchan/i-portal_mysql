@@ -1,0 +1,50 @@
+<!doctype html> 
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="author" content="Namo Interactive, Inc.">
+<link href="../common.css" rel="stylesheet" type="text/css" />
+<title>나모 크로스에디터 도움말</title>
+<base target="right">
+<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+<script>
+function resizeH(){
+	$('#menuWrapper').css('height',$(window).height()-20+'px')}
+$(function(){
+	resizeH();
+})
+$(window).resize(resizeH)
+</script>
+</head>
+<script language="javascript" src="../popup.js"></script>	
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" scroll="no">
+<table border="0" cellspacing="0" cellpadding="0" style="width:100%; height:100%;">
+    <tr>
+        <td style="width:250px; height:100%" valign="top">
+		
+
+            <div id="menuWrapper" style="padding:10px;height:100%;overflow:auto;">
+                <!-- Tree ----------------------------------->
+                <p class="ctbic"><img src="../images/icon_list_01.png" style="vertical-align:middle" border="0">관리자 설정 안내</p>
+                <p class="ctmid"><img src="../images/icon_list_02.png" style="vertical-align:middle" border="0"><a href="admin.htm#about_inifile">관리자 설정 페이지 소개</a></p>
+                <p class="ctmid"><img src="../images/icon_list_02.png" style="vertical-align:middle" border="0"><a OnClick="doExpand(exp1)" href="admin.htm#options">관리자 설정</a></p>
+                <div id="exp1" style="display:;">
+                    <p class="ctsmall"><img src="../images/icon_list_03.png" style="vertical-align:middle" border="0"><a href="admin.htm#general">환경 설정</a></p>
+                    <p class="ctsmall"><img src="../images/icon_list_03.png" style="vertical-align:middle" border="0"><a href="admin.htm#editing">편집 환경 설정</a></p>
+                    <p class="ctsmall"><img src="../images/icon_list_03.png" style="vertical-align:middle" border="0"><a href="admin.htm#UI">화면 설정</a></p>
+                    <p class="ctsmall"><a href="admin.htm#accessibility"><img src="../images/icon_list_03.png" style="vertical-align:middle" border="0">웹 접근성 설정</a></p>
+                </div>
+                <p class="ctmid"><img src="../images/icon_list_02.png" style="vertical-align:middle" border="0"><a href="admin.htm#account">계정 관리</a></p>
+                <!-- Tree ----------------------------------->
+            </div>
+		
+        </td>
+		<td style="width:1px;" bgcolor="#C2CDD4"></td>
+		<td valign="top" style="height:100%">
+		<iframe name="right" src="admin.htm" width="100%" height="100%" frameborder="0" scrolling="auto" style="width:100%; height:100%"></iframe>
+		</td>
+    </tr>
+
+</table>
+</body>
+</html>

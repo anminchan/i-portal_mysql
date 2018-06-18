@@ -1,0 +1,244 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<mlsp>
+<languages>
+<language>ko</language>
+<language>en</language>
+</languages>
+<items>
+
+<!-- multiple file download monitor (AIR) -->
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_START_DOWNLOAD_TRANSFER</id>
+<ko>시작</ko>
+<en>Start</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_START_DOWNLOAD_CANCEL</id>
+<ko>취소</ko>
+<en>Cancel</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_CLOSE_WINDOW</id>
+<ko>닫기</ko>
+<en>Close</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_REMAINING_TIME</id>
+<ko>초 남음</ko>
+<en>Sec Remaining</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_DOWNLOAD_EXP_INIT</id>
+<ko>파일 다운로드</ko>
+<en>File Download</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_DOWNLOAD_EXP_TRANFERRING</id>
+<ko>%s개의 파일 중 %s번째 파일을 다운로드하고 있습니다.</ko>
+<en>Total %s, Downloading %s</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_CLOSE_MONITOR_ATC</id>
+<ko>다운로드가 완료되면 창을 종료합니다.</ko>
+<en>Close the window after complete.</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_BROWSE</id>
+<ko>위치 변경</ko>
+<en>Browse</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_GRID_HEADER_FILENAME</id>
+<ko>파일 이름</ko>
+<en>Name</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_GRID_HEADER_FILESIZE</id>
+<ko>크기</ko>
+<en>Size</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_GRID_HEADER_FILESTATUS</id>
+<ko>상태</ko>
+<en>Status</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_GRID_WAIT</id>
+<ko>대기</ko>
+<en>Wait</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_GRID_COMPLETE</id>
+<ko>완료</ko>
+<en>Complete</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_GRID_FAILURE</id>
+<ko>실패</ko>
+<en>Failure</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_DETAIL_SETTING</id>
+<ko>상세 설정</ko>
+<en>Setting</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_OVERLAP_TITLE</id>
+<ko>파일 이름이 같을 경우</ko>
+<en>Overlap Mode</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_OVERLAP_OVERWRITE</id>
+<ko>덮어쓰기</ko>
+<en>Overwrite</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_OVERLAP_RENAME</id>
+<ko>이름 바꾸기</ko>
+<en>Rename</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_OVERLAP_SKIP</id>
+<ko>건너뛰기</ko>
+<en>Skip</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_OVERLAP_INDIVIDUAL</id>
+<ko>파일별 선택</ko>
+<en>Individual</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_RESUME_TITLE</id>
+<ko>이전에 다운로드한 파일이 있는 경우</ko>
+<en>Resume Mode</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_RESUME_RESUME</id>
+<ko>이어받기</ko>
+<en>Resume</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_RESUME_NEW</id>
+<ko>새로 받기</ko>
+<en>New</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_RESUME_SKIP</id>
+<ko>건너뛰기</ko>
+<en>Skip</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_RESUME_INDIVIDUAL</id>
+<ko>파일별 선택</ko>
+<en>Individual</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_OVERLAPDLG_TITLE_EXP</id>
+<ko>같은 이름을 가진 파일이 있습니다.</ko>
+<en>This file already exists.</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_OVERLAPDLG_OVERWRITE_EXP</id>
+<ko>덮어쓰기</ko>
+<en>Overwrite</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_OVERLAPDLG_OVERWRITE_DETAIL_EXP</id>
+<ko>다운로드하는 파일로 이전 파일을 덮어씁니다.</ko>
+<en>It will be overwritten with downloaded file.</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_OVERLAPDLG_RENAME_EXP</id>
+<ko>이름 바꾸기</ko>
+<en>Rename</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_OVERLAPDLG_RENAME_DETAIL_EXP</id>
+<ko>이 파일의 이름을 변경 후 다운로드합니다.</ko>
+<en>This file will be downloaded with new filename.</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_OVERLAPDLG_SKIP_EXP</id>
+<ko>건너뛰기</ko>
+<en>Skip</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_OVERLAPDLG_SKIP_DETAIL_EXP</id>
+<ko>이 파일을 다운로드하지 않습니다.</ko>
+<en>This file will be skipped.</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_OVERLAPDLG_APPLY_ALL_FILES</id>
+<ko>모든 파일에 적용합니다.</ko>
+<en>Apply to all files.</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_RESUMEDLG_TITLE_EXP</id>
+<ko>이어받을 파일이 있습니다.</ko>
+<en>You have an extraordinary download file.</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_RESUMEDLG_RESUME_EXP</id>
+<ko>이어받기</ko>
+<en>Resume</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_RESUMEDLG_RESUME_DETAIL_EXP</id>
+<ko>중단된 부분부터 이어서 다운로드합니다.</ko>
+<en>This file will be downloaded at the suspended fraction.</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_RESUMEDLG_NEW_EXP</id>
+<ko>새로 받기</ko>
+<en>New</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_RESUMEDLG_NEW_DETAIL_EXP</id>
+<ko>처음부터 다시 다운로드합니다.</ko>
+<en>This file will be downloaded at the beginning.</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_RESUMEDLG_SKIP_EXP</id>
+<ko>건너뛰기</ko>
+<en>Skip</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_RESUMEDLG_SKIP_DETAIL_EXP</id>
+<ko>이 파일을 다운로드하지 않습니다.</ko>
+<en>This file will be skipped.</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_RESUMEDLG_APPLY_ALL_FILES</id>
+<ko>모든 파일에 적용합니다.</ko>
+<en>Apply to all files.</en>
+</item>
+
+<!-- multiple file download monitor message -->
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_MESSAGE_ALERT_TITLE</id>
+<ko>파일 다운로드</ko>
+<en>File Download</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_MESSAGE_CANNOT_PREPARE_LOCALCONNECTION</id>
+<ko>LocalConnection 객체를 준비할 수 없습니다. 다른 SWF 파일에서 사용되고 있는 Connection 이름입니다.</ko>
+<en>Can't Prepares a LocalConnection object. The connection name is already being used by another SWF.</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_MESSAGE_ERROR_OCCURRED_DOWNLOADING</id>
+<ko>다운로드 중 에러가 발생했습니다.</ko>
+<en>An error occurred while downloading files.</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_MESSAGE_SELECT_DOWNLOAD_DIRECTORY</id>
+<ko>다운로드할 경로를 선택하여 주십시오.</ko>
+<en>Please select a directory path to downloads.</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MONITOR_MESSAGE_COMPLETED_DOWNLOAD</id>
+<ko>다운로드가 완료되었습니다.</ko>
+<en>Downloads complete.</en>
+</item>
+
+</items>
+</mlsp>

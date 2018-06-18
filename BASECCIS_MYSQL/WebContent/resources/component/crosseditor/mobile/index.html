@@ -1,0 +1,52 @@
+﻿<!doctype html>
+	<head>
+		<meta charset="utf-8"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+		<title>CrossEditor Moblie Sample</title>
+		<link rel="stylesheet" href="./css/common.css">
+		<script type="text/javascript" src="../js/namo_scripteditor.js"></script>
+	</head>
+	<body lang="ko">
+		<div class="panel-body form-horizontal">
+			<div class="form-group">
+				<div class="col-xs-12">
+					<h1 class="text-center"><img src="http://comp.namo.co.kr/admin/images/bi_ce.png" alt="Namo CrossEdito3 Logo" title="Namo CrossEdito3 Logo" /></h1>
+					<h5 class="text-center">Mobile Sample Page</h5>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-xs-6">
+					<input type="text" class="form-control" id="name" name="name" placeholder="Name">
+				</div>
+				<div class="col-xs-6">
+					<input type="text" class="form-control" id="email" name="email" placeholder="Email">
+				</div>
+			</div>
+			<div class="form-group" id="pe_afD">
+				<div class="col-xs-12">
+					<textarea id="pe_aiw" name="pe_aiw" alt="initText" title="initText" Style="width:730px;height:450px;font-size:10pt"><p>Welcome to <span style="font-weight:bold;">CrossEditor 3.0</span> sample page</p></textarea>
+					<script type="text/javascript" language="javascript">
+
+						var CrossEditor = new NamoSE('pe_aiw');
+						CrossEditor.params.Width = "100%";
+						CrossEditor.params.ConfigXmlURL = "mobile/config/Config_mobile.xml";
+						CrossEditor.params.CreateTab = "9|9|9";
+						CrossEditor.EditorStart();
+						
+						function OnInitCompleted(e){
+							e.editorTarget.SetBodyValue(document.getElementById("pe_aiw").value);
+
+							var pe_afD = document.getElementById("pe_afD");
+							var pe_aFK = window.innerHeight - pe_afD.offsetTop - 85;
+							CrossEditor.SetUISize("100%", pe_aFK);
+						}
+					</script>
+				</div>
+			</div>
+			<div class="text-center">
+				<button class="btn btn-info" id="pe_aHG" onclick="alert('[내용]\n' + CrossEditor.GetBodyValue('pe_ZA'));">등록하기</button>
+			</div>
+		</div>
+	</body>	
+</html>

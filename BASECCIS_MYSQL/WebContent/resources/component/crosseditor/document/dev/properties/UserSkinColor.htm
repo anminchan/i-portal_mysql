@@ -1,0 +1,97 @@
+<html>
+
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>UserSkinColor</title>
+<meta name="author" content="Namo Interactive, Inc.">
+<link rel="stylesheet" href="../images/linkstyle.css">
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="purple" alink="red">
+
+<table border="0" width="640">
+    <tr>
+        <td width="10%" bgcolor="#5A7FC1" bordercolor="#999999">
+            <p align="center" class="pme"><font color="white">Param</font></p>
+        </td>
+        <td width="10%" bgcolor="#EEEEEE" bordercolor="#999999">
+            <p align="center" class="pme">Method</p>
+        </td>
+        <td width="10%" bgcolor="#EEEEEE" bordercolor="#999999">
+            <p align="center" class="pme">Event</p>
+        </td>
+        <td width="10%">
+            <p align="center" class="pme">&nbsp;</p>
+        </td>
+        <td width="50%">
+            <p align="center" class="pme">&nbsp;</p>
+        </td>
+    </tr>
+</table>
+<table border="0" width="639">
+    <tr>
+        <td width="633">
+            <h2>UserSkinColor</h2>
+            <p class="dscrpt">크로스에디터 UI에 각 라인별 색상을 설정합니다.</p>
+            <p class="dscrpt">&nbsp;</p>
+            <h4>Syntax</h4>
+            <ul>
+                <pre>[get]HRESULT <span class="fname">UserSkinColor</span> (<br>      BSTR* <span class="paraname">pVal</span><br>);</pre>
+            </ul>
+            <ul>
+                <pre>[put]HRESULT <span class="fname">UserSkinColor</span> (<br>      BSTR <span class="paraname">newVal</span><br>);</pre>
+            </ul>
+
+            <h4>Parameters</h4>
+            <p class="dscrpt">[get] <span class="para">pVal</span></p>
+            <p class="paradsc">[out, retval] 설정된 UserSkinColor값을 돌려줍니다.</p>
+            <p class="dscrpt">[put] <span class="para">newVal</span></p>
+            <p class="paradsc">[in] 크로스에디터 UI에 라인별 색상을 지정합니다.</p>
+            <p class="dscrpt">&nbsp;</p>
+            <h4>Return Values</h4>
+            <p class="dscrpt">현재 설정된 값을 돌려줍니다.</p>
+            <p class="dscrpt">&nbsp;</p>
+            <h4>Remarks</h4>
+            <p class="dscrpt">UserSkinColor 값을 설정하기 위해서는 에디터의 MainClass가 호출된 후, 에디터가 로드되기 전에 적용시켜 주어야 합니다. 호출은 생성된 MainClass 객체의 &quot;params&quot;을 통하여 할 수 있습니다. </p>
+            <p class="dscrpt">UserSkinColor 값은 외각선, 내각선, 폰트 색상, 툴바 배경색으로 구성돼 있습니다. 값 입력 시 네 가지의 값을 모두 입력해야 합니다. 각각의 값은 구분자(|)로 구분하여 입력해야 합니다.</p>
+            <p class="dscrpt">&nbsp;</p>
+            <table class="MsoTableGrid" border="1" cellspacing="0" cellpadding="0" align="left" style='border-collapse:collapse;border:none;mso-border-alt:solid windowtext .5pt;
+ mso-yfti-tbllook:480;mso-table-lspace:7.1pt;margin-left:4.85pt;mso-table-rspace:
+ 7.1pt;margin-right:4.85pt;mso-table-anchor-vertical:paragraph;mso-table-anchor-horizontal:
+ margin;mso-table-left:center;mso-table-top:.1pt;mso-padding-alt:0cm 5.4pt 0cm 5.4pt'>
+                <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes;
+  height:36.55pt'>
+                    <td width=304 valign="top" style='width:227.95pt;border:solid windowtext 1.0pt;
+  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:36.55pt'>
+                        <p class="MsoNormal" style='mso-element:frame;mso-element-frame-hspace:7.1pt;
+  mso-element-wrap:around;mso-element-anchor-vertical:paragraph;mso-element-anchor-horizontal:
+  margin;mso-element-left:center;mso-element-top:.1pt;mso-height-rule:exactly'><span
+  style='font-family:굴림'>입력 순서<span lang="EN-US"><o:p></o:p></span></span></p>
+                        <p class="MsoNormal" style='mso-element:frame;mso-element-frame-hspace:7.1pt;
+  mso-element-wrap:around;mso-element-anchor-vertical:paragraph;mso-element-anchor-horizontal:
+  margin;mso-element-left:center;mso-element-top:.1pt;mso-height-rule:exactly'><span
+  style='font-family:굴림'>외각선<span lang="EN-US">|</span>내각선<span lang="EN-US">|</span>폰트색상<span
+  lang="EN-US">|</span>툴바 백그라운드 색상<span lang="EN-US"><o:p></o:p></span></span></p>
+                    </td>
+                </tr>
+            </table>
+            <p class="dscrpt">&nbsp;</p>
+            <p>&nbsp;</p>
+          
+            <p class="dscrpt">&nbsp;</p>
+            <h4>Sample Codes</h4>
+
+            <p class="scode">JavaScript [get]</p>
+            <pre class="scodedsc">var object = new NamoSE(&quot;test&quot;);
+var edit = object.params.<b>UserSkinColor</b>;</pre>
+            <p class="dscrpt">&nbsp;</p>
+            <p class="scode">JavaScript [put]</p>
+            <pre class="scodedsc">var object = new NamoSE(&quot;test&quot;);
+object.params.<b>UserSkinColor</b> = &quot;yellow|blue|black|white&quot;;
+object.editorStart();</pre>
+            <p class="dscrpt">&nbsp;</p>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

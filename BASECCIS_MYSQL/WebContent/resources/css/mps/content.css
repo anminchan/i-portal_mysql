@@ -1,0 +1,105 @@
+@charset "utf-8";
+/*-------------------------------------------------
+content Style Sheet
+Version : 1.0
+Author : myeong-hee park
+Create date : 2017. 07. 12.
+Last update : 2017. 07. 12.
+-------------------------------------------------*/
+/* 제목  STYLE */
+.depth1_title,
+.depth1_title02 {
+	margin-bottom: 15px;
+	color: #000;
+	letter-spacing: -0.05em;
+	line-height: 1.2;
+	font-size: 1.6em;
+	font-family:"Square";
+	}
+.depth2_title,
+.depth2_title02  {
+	margin-bottom: 15px;
+	color: #2b437a;
+	letter-spacing: -0.05em;
+	line-height: 1.2;
+	font-size: 1.333em;
+	font-weight: 400;
+	}
+.depth3_title,
+.depth3_title02 {
+	position: relative;
+	margin-bottom: 12px;
+	padding-left: 12px;
+	color: #4d4d4d;
+	letter-spacing: -0.05em;
+	line-height: 1.2;
+	font-size: 1.2em;
+	font-weight: 300;
+	}
+.depth3_title:before,
+.depth3_title02:before {
+	display: block;
+	position: absolute;
+	top: 4px;
+	left: 0;
+	width: 6px;
+	height: 14px;
+	background-color:#2b437a;
+	border-radius: 3px;
+	content: '';
+	}
+[class$="_title02"] {
+	margin-top: 30px;
+	}
+
+/* 블릿  STYLE */
+[class^="lstyle_"] > li {
+	position: relative;
+	padding-left: 10px;
+	}
+[class^="lstyle_"] li:before {
+	display: block;
+	position: absolute;
+	top: 8px;
+	left: 0;
+	content: '';
+	} 
+[class^="lstyle_"] li > ul  {
+	margin-top: 7px;
+	}
+.lstyle_dot > li:before {
+	width: 5px;
+	height: 5px;
+	background-color:#3b3f4d;
+	border-radius: 100%;
+	}
+.lstyle_dashe > li:before {
+	top: 10px;
+	width: 4px;
+	height: 1px;
+	background-color: #6d6d6d;
+	}
+.table .xi-volume-up {
+	display: block;
+	width: 40px;
+	height: 26px;
+    margin: auto;
+	background-color: #526997;
+	color: #fff;
+	border-radius: 15px;
+	line-height: 26px;
+	font-size: 18px;
+	}
+.table .xi-attachment {
+	display: block;
+	width: 30px;
+	height: 30px;
+    margin: auto;
+	background-color: #000;
+	color: #fff;
+	border-radius: 100%;
+	line-height: 30px;
+	font-size: 16px;
+    transform: rotate( -50deg);
+	-webkit-transform: rotate( -50deg); 
+	}

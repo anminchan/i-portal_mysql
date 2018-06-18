@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" 
+"http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>    
+	<!-- 통합사이트 관리자  -->
+	<definition id="ips.main.layout" name="ips.main.layout" template="/template/ips/main.layout.jsp">
+		<put-attribute name="jsp.title" value="통합포털 관리자" />
+		<put-attribute name="jsp.body" expression="/WEB-INF/jsp/ips/${obj.jsp}.jsp" />
+    </definition>    
+    <definition id="ips.layout" name="ips.layout" template="/template/ips/layout.jsp">
+		<put-attribute name="jsp.title" value="통합포털 관리자" />
+		<put-attribute name="jsp.body" expression="/WEB-INF/jsp/ips/${obj.jsp}.jsp" />
+    </definition>    
+    
+    <definition id="ips.content.layout" name="ips.content.layout" template="/template/ips/content.layout.jsp">
+		<put-attribute name="jsp.title" value="통합포털 관리자" />
+		<put-attribute name="jsp.body" expression="/WEB-INF/jsp/ips/${obj.jsp}.jsp" />
+    </definition>
+
+    <definition id="ips.layoutPopup" name="ips.layoutPopup" template="/template/ips/layoutPopup.jsp">
+		<put-attribute name="jsp.title" value="통합포털 관리자" />
+		<put-attribute name="jsp.body" expression="/WEB-INF/jsp/ips/${obj.jsp}.jsp" />
+    </definition>
+    
+    <definition id="ips.layoutPopup_New" name="ips.layoutPopup_New" template="/template/ips/layoutPopup_New.jsp">
+		<put-attribute name="jsp.title" value="통합포털 관리자" />
+		<put-attribute name="jsp.body" expression="/WEB-INF/jsp/ips/${obj.jsp}.jsp" />
+    </definition>
+
+	<definition id="ips.layoutPopup02" name="ips.layoutPopup02" template="/template/ips/layoutPopup02.jsp">
+		<put-attribute name="jsp.title" value="통합포털 관리자" />
+		<put-attribute name="jsp.body" expression="/WEB-INF/jsp/ips/${obj.jsp}.jsp" />
+	</definition>
+    
+    <definition id="ips.layoutEmpty" name="ips.layoutEmpty" template="/template/ips/layoutEmpty.jsp">
+		<put-attribute name="jsp.title" value="통합포털 관리자" />
+		<put-attribute name="jsp.body" expression="/WEB-INF/jsp/ips/${obj.jsp}.jsp" />
+    </definition>    
+    
+    <definition id="default.layoutPopup" name="default.layoutPopup" template="/template/ips/layoutPopup.jsp">
+		<put-attribute name="jsp.title" expression="${obj.viewTitle}" />
+		<put-attribute name="jsp.body" expression="/WEB-INF/jsp/${obj.jsp}.jsp" />
+    </definition>
+    
+    <definition id="common.layoutPopup" name="common.layoutPopup" template="/template/common/layoutPopup.jsp">
+		<put-attribute name="jsp.title" expression="${obj.viewTitle}" />
+		<put-attribute name="jsp.body" expression="/WEB-INF/jsp/${obj.jsp}.jsp" />
+    </definition>
+        
+    <!-- Empty Layout for Ajax -->
+    <definition id="empty.layout" name="empty.layout" template="/template/empty.jsp">
+        <put-attribute name="jsp.body" expression="/WEB-INF/jsp/${obj.jsp}.jsp" />
+    </definition>
+        
+    <!-- 대표 홈페이지 기본 템플릿 -->
+    <definition id="mps.layout" name="mps.layout" template="/template/mps/main.layout.jsp">
+		<put-attribute name="mps.title" value="통합포털" />
+		<put-attribute name="mps.header.top" expression="/template/mps/header.top.jsp" />
+		<put-attribute name="mps.header.nav" expression="/template/mps/header.nav.jsp" />
+		<put-attribute name="mps.body" expression="/WEB-INF/jsp/mps/${obj.jsp}.jsp" />
+		<put-attribute name="mps.footer" expression="/template/mps/footer.jsp" />
+    </definition>
+    
+    <!-- 대표 홈페이지 상세 템플릿 -->
+    <definition id="mps.sub.layout" name="mps.sub.layout" template="/template/mps/sub.layout.jsp">
+		<put-attribute name="mps.title" value="통합포털" />
+		<put-attribute name="mps.header.top" expression="/template/mps/header.top.jsp" />
+		<put-attribute name="mps.header.nav" expression="/template/mps/header.nav.jsp" />
+		<put-attribute name="mps.body" expression="/WEB-INF/jsp/mps/${obj.jsp}.jsp" />
+        <put-attribute name="mps.content_footer" expression="/template/mps/content_footer.jsp" />
+		<put-attribute name="mps.footer" expression="/template/mps/footer.jsp" />
+    </definition>
+    
+    <!-- 대표홈페이지 컨텐츠 레이아웃 -->
+	<definition id="mps.content" name="mps.content" extends="mps.sub.layout">
+		<put-attribute name="mps.body" expression="/WEB-INF/jsp/${obj.jsp}.jsp" />
+	</definition>	
+	
+    <!-- 공통 메인 템플릿 -->
+    <definition id="common.main.layout" name="common.main.layout" template="/template/common/main.layout.jsp">
+		<put-attribute name="common.title" value="통합포털" />
+		<put-attribute name="common.header.top" expression="/template/common/header.top.jsp" />
+		<put-attribute name="common.header.nav" expression="/template/common/header.nav.jsp" />
+		<put-attribute name="common.body" expression="/WEB-INF/jsp/${obj.jsp}.jsp" />
+		<put-attribute name="common.footer" expression="/template/common/footer.jsp" />
+    </definition>
+    
+    <!-- 공통 서브 템플릿 -->
+    <definition id="common.sub.layout" name="common.sub.layout" template="/template/common/sub.layout.jsp">
+		<put-attribute name="common.title" value="통합포털" />
+		<put-attribute name="common.header.top" expression="/template/common/header.top.jsp" />
+		<put-attribute name="common.header.nav" expression="/template/common/header.nav.jsp" />
+		<put-attribute name="common.body" expression="/WEB-INF/jsp/${obj.jsp}.jsp" />
+		<put-attribute name="common.content_footer" expression="/template/common/content_footer.jsp" />
+		<put-attribute name="common.footer" expression="/template/common/footer.jsp" />
+    </definition>
+    
+    <!-- 공통 서브 Empty 템플릿 -->
+    <definition id="common.sub.layoutEmpty" name="common.sub.layoutEmpty" template="/template/common/sub.layoutEmpty.jsp">
+		<put-attribute name="common.title" value="통합포털" />
+		<put-attribute name="common.body" expression="/WEB-INF/jsp/${obj.jsp}.jsp" />
+    </definition>
+    
+    <definition id="emptyNL.layout" name="emptyNL.layout" template="/template/emptyNL.jsp">
+        <put-attribute name="jsp.body" expression="/WEB-INF/jsp/${obj.jsp}.jsp" />
+    </definition>
+    
+    <!-- 공통 콘텐츠 템플릿 -->
+	<definition id="common.content" name="common.content" extends="common.sub.layout">
+		<put-attribute name="mps.body" expression="/WEB-INF/jsp/${obj.jsp}.jsp" />
+	</definition>	
+        
+    <!-- Exception Layout -->
+    <definition id="exception.runtime" name="exception.runtime" template="/template/common/error.layout.jsp">
+		<put-attribute name="jsp.title" value="java.lang.Exception" />
+		<put-attribute name="jsp.body" expression="/WEB-INF/jsp/exception/runtimeException.jsp" />
+    </definition>
+    
+    <!-- Error Page -->
+    <definition id="error.notfound" name="error.notfound" template="/template/common/error.layout.jsp">
+		<put-attribute name="jsp.title" value="" />
+		<put-attribute name="jsp.body" expression="/WEB-INF/jsp/error/404.jsp" />
+    </definition>
+
+</tiles-definitions>

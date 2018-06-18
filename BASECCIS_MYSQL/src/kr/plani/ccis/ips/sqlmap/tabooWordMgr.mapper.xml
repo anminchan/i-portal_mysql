@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.plani.ccis.ips.mapper.site.TabooWordMgrMapper">
+
+	<select id="selectTabooWordList" parameterType="tabooWord" resultType="java.util.HashMap">
+		<include refid="common.pageHeader"/>
+			SELECT *
+			    FROM T_TABOOWORD
+			   WHERE STATE = 'T'
+			     <if test="schText != null and schText != ''">
+					AND KNAME LIKE '%' || #{schText} || '%'
+				 </if>
+				 <if test="keyBoardVal != null and keyBoardVal != ''">
+				 	<if test="keyBoard == 'korkey'">
+				 	<![CDATA[
+				 	AND CASE WHEN KNAME < 'ㄱ' THEN SUBSTR(KNAME, 1, 1) 
+		            	 		 WHEN ASCII('ㄱ') <= ASCII(KNAME) AND 
+		                 			  ASCII(KNAME)<= ASCII('ㅎ') THEN KNAME 
+					             WHEN KNAME < '나' THEN 'ㄱ'
+					             WHEN KNAME < '다' THEN 'ㄴ'
+					             WHEN KNAME < '라' THEN 'ㄷ'
+					             WHEN KNAME < '마' THEN 'ㄹ'
+					             WHEN KNAME < '바' THEN 'ㅁ'
+					             WHEN KNAME < '사' THEN 'ㅂ'
+					             WHEN KNAME < '아' THEN 'ㅅ'
+					             WHEN KNAME < '자' THEN 'ㅇ'
+					             WHEN KNAME < '차' THEN 'ㅈ'
+					             WHEN KNAME < '카' THEN 'ㅊ'
+					             WHEN KNAME < '타' THEN 'ㅋ'
+					             WHEN KNAME < '파' THEN 'ㅌ'
+					             WHEN KNAME < '하' THEN 'ㅍ'
+		            		ELSE 'ㅎ'
+		       				END = #{keyBoardVal}
+		       		]]>
+				 	</if>
+				 	<if test="keyBoard == 'engkey'">
+				 		<![CDATA[
+				 		AND LOWER(CASE WHEN KNAME < 'ㄱ' THEN SUBSTR(KNAME, 1, 1) 
+		            	 		 WHEN ASCII('ㄱ') <= ASCII(KNAME) AND 
+		                 			  ASCII(KNAME)<= ASCII('ㅎ') THEN KNAME 
+					             WHEN KNAME < '나' THEN 'ㄱ'
+					             WHEN KNAME < '다' THEN 'ㄴ'
+					             WHEN KNAME < '라' THEN 'ㄷ'
+					             WHEN KNAME < '마' THEN 'ㄹ'
+					             WHEN KNAME < '바' THEN 'ㅁ'
+					             WHEN KNAME < '사' THEN 'ㅂ'
+					             WHEN KNAME < '아' THEN 'ㅅ'
+					             WHEN KNAME < '자' THEN 'ㅇ'
+					             WHEN KNAME < '차' THEN 'ㅈ'
+					             WHEN KNAME < '카' THEN 'ㅊ'
+					             WHEN KNAME < '타' THEN 'ㅋ'
+					             WHEN KNAME < '파' THEN 'ㅌ'
+					             WHEN KNAME < '하' THEN 'ㅍ'
+		            		ELSE 'ㅎ'
+		       				END) = LOWER(#{keyBoardVal})
+		       		]]>
+				 	</if>
+				 </if>
+		<include refid="common.pageFooter"/>
+	</select>
+	
+	<insert id="insertTabooWord" parameterType="tabooWord">
+		<selectKey resultType="int" keyProperty="seq" order="BEFORE">
+	        SELECT NVL(MAX(SEQ),0)+1 FROM T_TABOOWORD
+	    </selectKey>
+	
+	    INSERT INTO T_TABOOWORD ( 
+		           SEQ, 
+		           KNAME,
+		           STATE, 
+		           INSUSERID, 
+		           INSIP, 
+		           INSTIME  
+		       ) 
+		       VALUES 
+		       ( 
+		           #{seq}, 
+		           #{KName} , 
+		           'T' , 
+		           #{inDMLUserId} , 
+		           #{inDMLIp} , 
+		           SYSDATE 
+		       )
+	</insert>
+	
+	<update id="updateTabooWord" parameterType="tabooWord">
+		UPDATE T_TABOOWORD SET KNAME = #{KName}
+		WHERE SEQ = #{seq}
+	</update>
+	
+	<update id="deleteTabooWord" parameterType="tabooWord">
+		UPDATE T_TABOOWORD SET STATE = 'F'
+		WHERE SEQ  = #{seq}
+	</update>
+</mapper>

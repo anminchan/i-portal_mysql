@@ -1,0 +1,127 @@
+<html>
+
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>OnInitCompleted</title>
+<meta name="author" content="Namo Interactive, Inc.">
+<link rel="stylesheet" href="../images/linkstyle.css">
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="purple" alink="red">
+
+<table border="0" width="640">
+    <tr>
+        <td width="10%" bgcolor="#EEEEEE" bordercolor="#999999">
+            <p align="center" class="pme">Param</p>
+        </td>
+        <td width="10%" bgcolor="#EEEEEE" bordercolor="#999999">
+            <p align="center" class="pme">Method</p>
+        </td>
+        <td width="10%" bgcolor="#5A7FC1" bordercolor="#999999">
+            <p align="center" class="pme"><font color="white">Event</font></p>
+        </td>
+        <td width="10%">
+            <p align="center" class="pme">&nbsp;</p>
+        </td>
+        <td width="50%">
+            <p align="center" class="pme">&nbsp;</p>
+        </td>
+    </tr>
+</table>
+<table border="0" width="640">
+    <tr>
+        <td>
+            <h2>OnInitCompleted<sub>v1.1 or higher</sub></h2>
+            <p class="dscrpt">크로스에디터가 정상적으로 초기화되어 메소드의 호출이 가능하다는 것을 알리는 이벤트입니다.</p>
+            <p class="dscrpt">&nbsp;</p>
+            <h4>Syntax</h4>
+            <ul>
+                <pre>void<span class="fname"> OnInitCompleted </span>(<br>   <span class="paraname">void</span><br>);</pre>
+            </ul>
+            <p class="scodedsc"><b>&lt;1.5 버전 이상&gt;</b></p>
+            <ul>
+                <pre>void<span class="fname"> OnInitCompleted </span>(
+   BSTR*<SPAN class="paraname"> type</SPAN>
+   Object*<SPAN class="paraname"> editorTarget</SPAN>
+   BSTR*<SPAN class="paraname"> editorName</SPAN><br>);</pre>
+            </ul>
+            <H4>Parameters</H4>
+            <p class="scodedsc"><b>&lt;1.5 버전 이상&gt;</b></p>
+            <P class=paradsc>[out] 이벤트 발생 시 아래와 같은 객체를 반환합니다. </P>
+            <TABLE class=paradsc2 height="109" cellSpacing=0 borderColorDark=white width=420 
+borderColorLight=#999999 border=1>
+                <TBODY>
+                <TR>
+                    <TD width=76 bgColor=#eeeeee height="25">
+                        <P align="center">객체명</P>
+                    </TD>
+                    <TD width="234" bgColor=#eeeeee height="25">
+                        <P align="center">용도</P>
+                    </TD>
+                    <TD width="96" bgColor=#eeeeee height="25">
+                        <P align="center">구분</P>
+                    </TD>
+                </TR>
+                <TR>
+                    <TD width=76 height="31">
+                         <P align=left>type</P>
+                    </TD>
+                    <TD width="234" height="31">
+                        <P align=left>이벤트 발생 type (load)</P>
+                    </TD>
+                    <TD width="96" height="31">
+                        <P align=left>이벤트 공통</P>
+                    </TD>
+                </TR>
+                <TR>
+                    <TD width=76 height="30">
+                        <P align=left>editorTarget</P>
+                    </TD>
+                    <TD width="234" height="30">
+                        <P align=left>에디터 메인 클래스 객체</P>
+                    </TD>
+                    <TD width="96" height="30">
+                        <P align=left>이벤트 공통</P>
+                    </TD>
+                </TR>
+                <TR>
+                    <TD width=76 height=18>
+                        <P align=left>editorName</P>
+                    </TD>
+                    <TD width="234" height=18>
+                        <P align=left>설정된 에디터 이름</P>
+                    </TD>
+                    <TD width="96" height=18>
+                        <P align=left>이벤트 공통</P>
+                    </TD>
+                </TR>
+                </TBODY>
+            </TABLE>
+            <p class="dscrpt">&nbsp;</p>
+            <h4>Remarks</h4>
+            <P class=dscrpt>크로스에디터의 Main class 호출 후 에디터가 로드된 다음 메소드를 실행해야 정상적으로 실행이 됩니다.</P>
+            <P class=dscrpt>크로스에디터의 Main class 호출 후 에디터가 로드됨과 동시에 메소드를 실행 시킬 때 환경적인 영향으로 메소드가 정상적으로 실행이 되지 않는 경우가 있습니다. 이런 경우 크로스에디터의 초기화가 정상적으로 완료 후 발생하는 OnInitCompleted 이벤트를 통해 메소드를 실행하면 안정적으로 메소드를 실행시킬 수 있습니다. </P>
+            <p class="dscrpt">&nbsp;</p>
+            <h4>Sample Codes</h4>
+            <p class="scode">JavaScript</p>
+            <pre class="scodedsc">var object = new NamoSE(&quot;test&quot;);
+object.editorStart();
+
+function <b>OnInitCompleted</b>(){
+object.SetBodyValue(&quot;&lt;p&gt;크로스에디터 샘플 페이지에 오신 것을 환영합니다.&lt;/p&gt;&quot;);
+}</pre>
+            <p class="scodedsc">&nbsp;</p>
+            <p class="scodedsc"><b>&lt;1.5 버전 이상&gt; </b></p>
+            <p class="scode">JavaScript</p>
+            <pre class="scodedsc">var object = new NamoSE(&quot;test&quot;);
+object.editorStart();
+
+function <b>OnInitCompleted</b>(e){
+e.editorTarget.SetBodyValue(&quot;&lt;p&gt;크로스에디터 샘플 페이지에 오신 것을 환영합니다.&lt;/p&gt;&quot;);
+} </pre>
+            <p class="dscrpt">&nbsp;</p>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

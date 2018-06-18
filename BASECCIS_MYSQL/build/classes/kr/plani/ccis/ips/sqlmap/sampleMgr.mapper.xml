@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.plani.ccis.ips.mapper.common.SampleMgrMapper">
+	<resultMap id="SAMPLE_OUT" type="hashmap">
+	    <result property="SAMPLECONTENT" column="SAMPLECONTENT" javaType="java.lang.String" jdbcType="CLOB"/>
+	</resultMap>
+	
+	<select id="list" parameterType="sample" resultType="java.util.HashMap">
+	<include refid="common.pageHeader"/>
+		SELECT  A.SAMPLEID, 
+				A.SAMPLETITLE,
+				A.SAMPLECONTENT, 
+				A.STATE,
+			    A.INSUSERID,
+			    A.INSIP,
+				A.INSTIME
+			FROM T_SAMPLE A
+			WHERE A.STATE = 'T'
+         <if test="schText != '' and schText != null">
+         	<if test="schType == 0">
+         	AND (A.SAMPLETITLE LIKE '%' || #{schText} || '%' OR A.SAMPLECONTENT LIKE '%' || #{schText} || '%')
+         	</if>
+         	<if test="schType == 1">
+         	AND A.SAMPLETITLE LIKE '%' || #{schText} || '%'
+         	</if> 
+         	<if test="schType == 2">
+         	AND A.SAMPLECONTENT LIKE '%' || #{schText} || '%'
+         	</if>
+         </if>
+		 ORDER BY SAMPLEID DESC
+	<include refid="common.pageFooter"/>
+	</select>
+
+	<select id="view" parameterType="sample" resultMap="SAMPLE_OUT">
+		SELECT SAMPLEID,
+			   SAMPLETITLE,
+			   SAMPLECONTENT,
+			   STATE,
+			   INSUSERID,
+			   INSIP,
+			   INSTIME
+		  FROM T_SAMPLE 
+		 WHERE SAMPLEID = #{sampleId}
+	</select>
+	
+	<select id="listFile" parameterType="sample" resultType="java.util.HashMap">
+		SELECT SAMPLEID
+			 , FILEID
+			 , USERFILENAME
+			 , SYSTEMFILENAME
+			 , FILEPATH
+			 , FILEEXTENSION
+			 , FILESIZE
+		FROM T_SAMPLEFILES 
+		WHERE SAMPLEID = #{sampleId}
+		  AND STATE = 'T'
+	</select>
+	
+	<insert id="insert" parameterType="sample">
+	<selectKey keyProperty="sampleId" resultType="int" order="BEFORE">
+		SELECT NVL(MAX(SAMPLEID), 0)+1 FROM T_SAMPLE
+	</selectKey>
+	INSERT 
+	  INTO T_SAMPLE 
+	       (
+	           SAMPLEID, 
+	           SAMPLETITLE,  
+	           SAMPLECONTENT,
+	           STATE, 
+	           INSUSERID, 
+	           INSIP, 
+	           INSTIME,
+			   DMLUSERID,
+			   DMLIP,
+			   DMLTIME        
+	       ) 
+	       VALUES 
+	       (
+	           #{sampleId} ,
+	           #{sampleTitle} ,
+	           #{sampleContent} ,
+	           'T' ,
+	           #{inDMLUserId} ,
+	           #{inDMLIp} ,
+	           SYSDATE ,
+	           #{inDMLUserId} ,
+	           #{inDMLIp} ,
+	           SYSDATE        	           
+	       ) 
+	</insert>
+	
+	<insert id="insertFiles" parameterType="sample">
+		INSERT INTO T_SAMPLEFILES (
+			   SAMPLEID
+			 , FILEID
+			 , USERFILENAME
+			 , SYSTEMFILENAME
+			 , FILEPATH
+			 , FILEEXTENSION
+			 , FILESIZE
+			 , STATE
+			 , INSUSERID
+			 , INSIP
+			 , INSTIME
+			 , DMLUSERID
+			 , DMLIP
+			 , DMLTIME 			 
+		) VALUES (
+			   #{sampleId}
+			 , (SELECT NVL(MAX(FILEID), 0) + 1 FROM T_SAMPLEFILES WHERE SAMPLEID = #{sampleId})
+			 , #{userFileName}
+			 , #{systemFileName}
+			 , #{filePath}
+			 , #{fileExtension}
+			 , #{fileSize}
+			 , 'T'
+			 , #{inDMLUserId}
+			 , #{inDMLIp}
+			 , SYSDATE
+	         , #{inDMLUserId}
+	         , #{inDMLIp}
+	         , SYSDATE 
+		)
+	</insert>
+	
+	<update id="update" parameterType="sample">
+		UPDATE T_SAMPLE
+		   SET SAMPLETITLE = #{sampleTitle}, 
+               SAMPLECONTENT = #{sampleContent},
+               DMLUSERID = #{inDMLUserId},
+			   DMLIP = #{inDMLIp},
+			   DMLTIME = SYSDATE
+	     WHERE SAMPLEID = #{sampleId}
+	</update>
+	
+	<update id="delete" parameterType="sample">
+		UPDATE T_SAMPLE 
+		   SET STATE  = 'F'
+		 WHERE SAMPLEID IN
+		 <foreach collection="sampleIds" item="item" index="index" separator="," open="(" close=")">
+	    	${sampleIds[index]}
+		 </foreach>
+	</update>
+	
+	<delete id="deleteFiles" parameterType="sample">
+		DELETE T_SAMPLEFILES 
+		WHERE SAMPLEID = #{sampleId}
+	</delete>	
+		
+</mapper>

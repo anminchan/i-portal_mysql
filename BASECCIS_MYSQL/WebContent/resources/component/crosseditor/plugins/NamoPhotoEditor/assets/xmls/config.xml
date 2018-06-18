@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<licenseNumber>9503-0103-150023</licenseNumber>
+	<domainKey>2b4f3f8e00714d24384c491b9daa2dc4e7bf94f90cd1f7d786c3c5a5aad1c5686d2ed6844c45b9ec098944cc6b5e193f</domainKey>
+	<maxImageNum>20</maxImageNum>
+	<maxImageWidth>1600</maxImageWidth>
+	<maxImageHeight>1600</maxImageHeight>
+	<maxImageBytes>10485760</maxImageBytes>
+	<checkImageTitle>off</checkImageTitle>
+	<locale>kor</locale>
+	<services>
+		<service>
+			<name>Editor</name>
+			<iconURL></iconURL>
+			<url>com/namo/Editor.swf</url>
+		</service>
+		<service>
+			<name>Slideshow</name>
+			<iconURL>assets/images/slideshow/slideshow_icon.png</iconURL>
+			<url>com/namo/Slideshow.swf</url>
+		</service>
+	</services>
+</config>

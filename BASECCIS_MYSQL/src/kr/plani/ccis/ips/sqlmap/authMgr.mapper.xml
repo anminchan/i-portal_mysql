@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.plani.ccis.ips.mapper.system.AuthMgrMapper">
+	
+	<!-- 권한 정보 -->
+	<resultMap id="AUTH_OUT" type="auth"/>
+	
+	<!-- 권한 리스트 -->
+	<select id="list" parameterType="auth" resultMap="AUTH_OUT">
+		SELECT A.MENUID, A.SITEID, A.KNAME, A.DEPTH, A.SORT, A.HIGHERID, 
+			   A.ROLEID_1, A.CHECKYN_1, A.ROLEID_2, A.CHECKYN_2, A.ROLEID_3, A.CHECKYN_3, A.ROLEID_4, A.CHECKYN_4, A.ROLEID_5, A.CHECKYN_5
+		FROM (SELECT A.MENUID, B.SITEID, B.KNAME, B.DEPTH, B.SORT, B.HIGHERID, 
+					 B.ROLEID_1, B.CHECKYN_1, B.ROLEID_2, B.CHECKYN_2, B.ROLEID_3, B.CHECKYN_3, B.ROLEID_4, B.CHECKYN_4, B.ROLEID_5, B.CHECKYN_5 
+			  FROM(SELECT MENUID
+				   FROM (SELECT  FN_MENUTREE('-', #{siteId}) AS MENUID, @level AS level
+		           FROM    (SELECT  @start_with := '-', @id := @start_with, @level := 0) vars, T_MENU
+				   WHERE   @id IS NOT NULL) A WHERE A.MENUID IS NOT NULL) A
+		      LEFT JOIN (SELECT MENUID, SITEID, KNAME, DEPTH, SORT, HIGHERID, ROLEID_1, CHECKYN_1, ROLEID_2, CHECKYN_2, ROLEID_3, CHECKYN_3, ROLEID_4, CHECKYN_4, ROLEID_5, CHECKYN_5
+						 FROM(SELECT A.MENUID, A.SITEID, A.KNAME, A.DEPTH, A.SORT, A.HIGHERID,
+									 MAX(IF(B.ROLETYPE = 'ADMIN', B.ROLEID, NULL)) AS ROLEID_1,
+									 MAX(IF(B.ROLETYPE = 'ADMIN', CASE WHEN C.ROLEID IS NOT NULL THEN 'Y' ELSE 'N' END, NULL)) AS CHECKYN_1,
+									 MAX(IF(B.ROLETYPE = 'WRITE', B.ROLEID, NULL)) AS ROLEID_2,
+									 MAX(IF(B.ROLETYPE = 'WRITE', CASE WHEN C.ROLEID IS NOT NULL THEN 'Y' ELSE 'N' END, NULL)) AS CHECKYN_2,
+									 MAX(IF(B.ROLETYPE = 'MODIFY', B.ROLEID, NULL)) AS ROLEID_3,
+									 MAX(IF(B.ROLETYPE = 'MODIFY', CASE WHEN C.ROLEID IS NOT NULL THEN 'Y' ELSE 'N' END, NULL)) AS CHECKYN_3,
+									 MAX(IF(B.ROLETYPE = 'DELETE', B.ROLEID, NULL)) AS ROLEID_4,
+									 MAX(IF(B.ROLETYPE = 'DELETE', CASE WHEN C.ROLEID IS NOT NULL THEN 'Y' ELSE 'N' END, NULL)) AS CHECKYN_4,
+ 									 MAX(IF(B.ROLETYPE = 'READ', B.ROLEID, NULL)) AS ROLEID_5,
+									 MAX(IF(B.ROLETYPE = 'READ', CASE WHEN C.ROLEID IS NOT NULL THEN 'Y' ELSE 'N' END, NULL)) AS CHECKYN_5
+							  FROM (SELECT * FROM T_MENU WHERE SITEID = #{siteId} AND STATE = 'T') A
+						      JOIN (SELECT * FROM T_ROLE WHERE STATE = 'T') B
+							  ON A.MENUID  = B.MENUID
+							  LEFT JOIN (SELECT * FROM T_GROUPROLE WHERE GROUPID = #{inGroupID} AND STATE = 'T') C
+							  ON B.ROLEID = C.ROLEID
+							  GROUP BY A.MENUID, A.SITEID, A.KNAME, A.DEPTH, A.SORT, A.HIGHERID
+							) D) B
+		ON A.MENUID = B.MENUID)A
+	</select>
+	
+	<!-- 권한 리스트 -->
+	<insert id="action" parameterType="auth">
+		<if test='inCondition == "입력"'>
+			INSERT INTO T_GROUPROLE
+			(
+				GROUPID, ROLEID, STATE, INSUSERID, INSIP, INSTIME, DMLUSERID, DMLIP, DMLTIME, DMLLOG
+			)
+			VALUES
+			(
+				#{inGroupID}, #{roleid}, 'T', #{inDMLUserId}, #{inDMLIp}, NOW(), #{inDMLUserId}, #{inDMLIp}, NOW(), '-' 
+			)
+		</if>
+		<if test='inCondition == "삭제"'>
+			DELETE FROM T_GROUPROLE
+            WHERE GROUPID = #{inGroupID}
+            AND ROLEID IN (SELECT ROLEID FROM T_ROLE WHERE MENUID IN (SELECT MENUID FROM T_MENU WHERE SITEID = #{siteId}))
+		</if>
+	</insert>	
+
+</mapper>

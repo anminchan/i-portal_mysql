@@ -1,0 +1,97 @@
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:output method="html" />
+<xsl:template match="/">
+
+<table id='pe_apx' class='pe_CN' cellspacing='0' cellpadding='0' style='border-collapse:separate;table-layout:fixed;text-align:left;border:0;'>
+	<tbody>
+	<tr>
+		<td class='pe_JT'><img id='pe_Tb' name='skin_left.gif' /></td>
+		<td class='pe_yM'>
+
+			<table id='pe_aoS' cellspacing='0' cellpadding='0' style='border-collapse:separate;table-layout:auto;'>
+				
+				<xsl:for-each select="ToolBar/Panel">
+				
+				<tr>
+					<td class='pe_yS'>
+
+					<xsl:for-each select="item">
+						
+						<span>
+							<xsl:choose>
+							<xsl:when test="@type = 'select'">
+
+								<xsl:element name="select">
+									
+									<xsl:attribute name="id" >
+										<xsl:value-of select="@name"/>
+									</xsl:attribute>
+
+									<xsl:attribute name="name" >
+										<xsl:value-of select="@name"/>
+									</xsl:attribute>
+
+								</xsl:element>
+
+							</xsl:when>
+							<xsl:otherwise>
+
+								<xsl:element name="img">
+									
+									<xsl:attribute name="id" >
+										<xsl:value-of select="@name"/>
+									</xsl:attribute>
+
+									<xsl:attribute name="name" >
+										<xsl:value-of select="@src"/>
+									</xsl:attribute>
+
+								</xsl:element>
+
+							</xsl:otherwise>
+							</xsl:choose>
+						</span>
+
+					</xsl:for-each>
+
+					</td>
+				</tr>
+
+				<xsl:if test="position() &lt; count(//Panel)">
+				
+				<tr>
+					<td class='pe_DQ'></td>
+				</tr>
+				<tr>
+					<td class='pe_FV'></td>
+				</tr>
+
+				</xsl:if>
+
+				</xsl:for-each>
+				
+			</table>
+		</td>
+		<td class='pe_JM'><img id='pe_yX' name='skin_right.gif' /></td>
+	</tr>
+	<tr>
+		<td colspan='3' class="pe_En">
+			<table width='100%' cellspacing='0' cellpadding='0' style='border-collapse:separate;table-layout:auto;background-color:#FFFFFF'>
+				<tr>
+					<td style='height:5px' colspan='2'></td>
+				</tr>
+				<tr>
+					<td style='width:5px'></td>
+					<td id='pe_aoh'></td>
+				</tr>
+				<tr>
+					<td id='pe_aoe' colspan='2' class='pe_JR'><img id='wysiwyg' name='btn_modebar_bk.gif' class='NamoSE_btn_modebar' /><img id='html' name='btn_modebar_bk.gif' class='NamoSE_btn_modebar NamoSE_btn_modebar_off' /><img id='preview' name='btn_modebar_bk.gif' class='NamoSE_btn_modebar NamoSE_btn_modebar_off' /></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	</tbody>
+</table>
+
+</xsl:template>
+</xsl:stylesheet>

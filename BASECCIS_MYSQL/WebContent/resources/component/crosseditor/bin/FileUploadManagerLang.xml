@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<mlsp>
+<languages>
+<language>ko</language>
+<language>en</language>
+</languages>
+<items>
+
+<!-- file upload manager -->
+<item>
+<id>UPLOAD_MANAGER_ADD_FILES</id>
+<ko>파일선택</ko>
+<en>Browse</en>
+</item>
+<item>
+<id>UPLOAD_MANAGER_REMOVE_FILES</id>
+<ko>X 삭제</ko>
+<en>Remove X</en>
+</item>
+<item>
+<id>UPLOAD_MANAGER_START_UPLOAD</id>
+<ko>업로드</ko>
+<en>Upload</en>
+</item>
+<item>
+<id>UPLOAD_MANAGER_TOTAL_STATUS</id>
+<ko>%s개의 파일 : %s</ko>
+<en>Total %s : %s</en>
+</item>
+<item>
+<id>UPLOAD_MANAGER_GRID_HEADER_FILENAME</id>
+<ko>파일 이름</ko>
+<en>Name</en>
+</item>
+<item>
+<id>UPLOAD_MANAGER_GRID_HEADER_FILESIZE</id>
+<ko>크기</ko>
+<en>Size</en>
+</item>
+<item>
+<id>UPLOAD_MANAGER_GRID_HEADER_FILESTATUS</id>
+<ko>상태</ko>
+<en>Status</en>
+</item>
+<item>
+<id>UPLOAD_MANAGER_GRID_WAIT</id>
+<ko>대기</ko>
+<en>Wait</en>
+</item>
+<item>
+<id>UPLOAD_MANAGER_GRID_COMPLETE</id>
+<ko>완료</ko>
+<en>Complete</en>
+</item>
+<item>
+<id>UPLOAD_MANAGER_GRID_FAILURE</id>
+<ko>실패</ko>
+<en>Failure</en>
+</item>
+<item>
+<id>UPLOAD_MANAGER_CONTEXTMENU_REMOVE_FILES</id>
+<ko>파일 삭제</ko>
+<en>Remove</en>
+</item>
+<item>
+<id>UPLOAD_MANAGER_CONTEXTMENU_INFORMATION</id>
+<ko>Namo CrossUploader 정보</ko>
+<en>About Namo CrossUploader</en>
+</item>
+
+<!-- file upload manager message -->
+<item>
+<id>UPLOAD_MANAGER_MESSAGE_ALERT_TITLE</id>
+<ko>파일 업로드</ko>
+<en>File Upload</en>
+</item>
+<item>
+<id>UPLOAD_MANAGER_MESSAGE_CANNOT_PREPARE_LOCALCONNECTION</id>
+<ko>LocalConnection 객체를 준비할 수 없습니다. 다른 SWF 파일에서 사용되고 있는 Connection 이름입니다.</ko>
+<en>Can't Prepares a LocalConnection object. The connection name is already being used by another SWF.</en>
+</item>
+<item>
+<id>UPLOAD_MANAGER_MESSAGE_NO_FILES_TO_TRANSFER</id>
+<ko>전송할 파일이 없습니다.</ko>
+<en>There are no files to transfer.</en>
+</item>
+<item>
+<id>UPLOAD_MANAGER_MESSAGE_RESTRICTED_EXTENSION</id>
+<ko>'%s' 파일은 전송이 제한된 파일 확장자입니다.</ko>
+<en>This file(%s) has a restricted extension.</en>
+</item>
+<item>
+<id>UPLOAD_MANAGER_MESSAGE_RESTRICTED_TOTAL_FILE_NUMBER</id>
+<ko>전송할 수 있는  파일 개수는 %s 입니다.</ko>
+<en>Total numbers of transferring files are %s files.</en>
+</item>
+<item>
+<id>UPLOAD_MANAGER_MESSAGE_RESTRICTED_FILE_SIZE</id>
+<ko>%s보다 큰 파일(%s)은 전송할 수 없습니다.</ko>
+<en>Bigger then %s, the file(%s) which will not be able to transfer.</en>
+</item>
+<item>
+<id>UPLOAD_MANAGER_MESSAGE_RESTRICTED_TOTAL_FILE_SIZE</id>
+<ko>전송할 수 있는 전체 파일의 크기는 %s입니다.</ko>
+<en>Maximum transferring size is %s.</en>
+</item>
+
+<!-- simple file upload monitor -->
+<item>
+<id>SIMPLE_UPLOAD_MONITOR_CANCEL_UPLOAD</id>
+<ko>취소</ko>
+<en>Cancel</en>
+</item>
+
+<!-- namo crossuploader information -->
+<item>
+<id>NAMO_CROSSUPLOADER_INFORMATION_VERSION</id>
+<ko>나모 크로스업로더 1.0.3</ko>
+<en>Namo CrossUploader 1.0.3</en>
+</item>
+<item>
+<id>NAMO_CROSSUPLOADER_INFORMATION_DESCRIPTION</id>
+<ko>이 제품은(는) 다음 사용자에게 등록되어 있습니다.</ko>
+<en>This product is registered to the following user.</en>
+</item>
+<item>
+<id>NAMO_CROSSUPLOADER_INFORMATION_COMPANY</id>
+<ko>소속/회사 : 한국보건복지인력개발원</ko>
+<en>Company : 한국보건복지인력개발원</en>
+</item>
+<item>
+<id>NAMO_CROSSUPLOADER_INFORMATION_USE</id>
+<ko>용도 : 홈페이지 게시판용</ko>
+<en>Use : INTERNET</en>
+</item>
+<item>
+<id>NAMO_CROSSUPLOADER_INFORMATION_PRODUCT_NUMBER</id>
+<ko>제품번호 : 16001-001203-000002</ko>
+<en>Product Number : 16001-001203-000002</en>
+</item>
+
+</items>
+</mlsp>

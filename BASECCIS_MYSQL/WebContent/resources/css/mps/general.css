@@ -1,0 +1,323 @@
+@charset "utf-8";
+/*-------------------------------------------------
+General Style Sheet
+Version : 1.0
+Author : myeong-hee park
+Create date : 2017. 07. 12.
+-------------------------------------------------*/
+html {
+	margin: 0;
+	padding: 0;
+	overflow-y: scroll;
+	-webkit-text-size-adjust: none; 
+	-moz-text-size-adjust: none; 
+	-ms-text-size-adjust: none; 
+	}
+body {
+	margin: 0;
+	padding: 0;	
+	color: #555;
+	line-height: 1.5;
+	vertical-align: baseline;
+	font-size: 93.8%;
+	font-family: Noto, "맑은 고딕", Malgun Gothic, "돋움", Dotum, "굴림", Gulim, Tahoma, Verdana, AppleGothic, UnDotum, sans-serif;
+	font-weight: 200;
+	}	
+/* render html5 elements as block */
+header, footer, article, section, aside, nav, main {
+	display: block;
+	}
+a {
+	color: #464646;
+	text-decoration: none;
+	}
+a:hover {
+	text-decoration: underline;
+	}
+img {
+	border: none;
+	}
+select, input, textarea {
+	border: solid 1px #dae0e6;
+	border-radius: 2px;
+	color: #454545;
+	box-sizing:  border-box;	
+	-webkit-transition: border-color .15s ease-in-out,background-color .15s ease-in-out;
+	transition: border-color .15s ease-in-out,background-color .15s ease-in-out;
+	font-family: Noto,"맑은 고딕", Malgun Gothic, arial, helvetica, clean, sans-serif;
+	font-size: 1em;
+	vertical-align: middle;
+	}
+select:focus,	
+input:focus,
+textarea:focus  {
+    border-color: #4d90fe;
+  	outline: none;
+	}	
+textarea {
+	font-size: 1em;
+	}
+select {
+	padding: 7px 6px;
+	}
+input[type="submit"],
+input[type="button"] {
+	cursor: pointer; 
+	}
+input[type="radio"], 
+input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin: 0 0 0 8px;
+	}	
+input[type="radio"]:first-child, 
+input[type="checkbox"]:first-child {
+	margin-left: 0;
+	} 
+input[type="text"],
+input[type="tel"],
+input[type="search"],
+input[type="number"],
+input[type="date"],
+input[type="email"],
+input[type="password"] {
+	height: 40px;
+	padding: 8px;
+	}
+ul, ol, li, dl, dt, dd, p {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	}
+h1, h2, h3, h4, h5, h6, strong {	
+	margin: 0;
+	padding: 0;
+	} 
+address {
+	font-style: normal;
+	}
+h1 {
+	letter-spacing: -0.05em;
+	}	
+hr {
+	display: none;
+	}	
+* button {
+	position: relative;
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+	background: none;
+	border: 0;
+	cursor: pointer; 
+	_cursor: hand;	
+	text-decoration: none;
+	overflow: visible;
+	font-size: 1em;
+	font-family:Noto, "맑은 고딕", Malgun Gothic, "돋움", Dotum, "굴림", Gulim, Tahoma, Verdana, AppleGothic, UnDotum, sans-serif;
+	white-space: nowrap;
+	}	
+form  {
+	margin: 0;
+	padding: 0;
+	}		
+fieldset  {
+	margin: 0;
+	padding: 0;
+	border: none;
+	}	
+legend  {
+	width: 100%;
+	height: 1px;
+	text-indent: -9999px;
+	overflow: hidden;
+	}
+iframe {
+	margin: 0;
+	padding: 0;
+	border: currentcolor; 
+	border-image-source: none;	
+	}
+/* 테이블 STYLE */	
+caption  {
+	width: 100%;
+	height: 1px;
+	text-indent: -9999px;
+	overflow: hidden;
+	}	
+table  {
+	width: 100%;
+	border-collapse: collapse;
+	border: none;
+	}
+table th  {
+	padding: 11px 20px;
+	font-weight: normal;
+	white-space: nowrap;
+	}
+table td  {
+	padding: 11px 20px;    
+	box-sizing: border-box;
+	color: #000;
+	white-space: normal;
+	word-break: break-all;
+	}
+/* skip navgation STYLE */
+#accessibility {
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+	font-size: 1.3em;
+	z-index: 200;
+	}
+#accessibility dt {	
+	width: 100%;
+	height: 0;
+	font-size:  0;
+	line-height: 0;
+	}
+#accessibility a {
+	display:block; 
+	position: absolute; 
+	top: -10000px; 
+	left: 0; 
+	width: 100%; 
+	height: 0; 
+	text-align:center; 
+	font-size: 1em;
+	z-index: 200; 
+	}
+#accessibility a:hover, 
+#accessibility a:focus, 
+#accessibility a:active{
+	position: absolute; 
+	top: 0; 
+	padding: 10px 0 25px;
+	background: #1d60a7;
+	color: #fff; 
+	z-index: 200;
+	}
+/* Float STYLE*/
+.float_wrap {
+	overflow: hidden;
+	}
+.clear  {	
+	clear: both;
+	}
+.float_left  {
+	float: left;
+	}
+.float_right  {
+	float: right;	
+	}	
+.display_none {
+	display: none;
+	}
+.display_block	{
+	display: block;
+	}	
+/* 폰트정렬 STYLE*/
+.txt_center  {
+	text-align: center;
+	}
+.txt_left  {
+	text-align: left;
+	}
+.txt_right  {
+	text-align: right;
+	}
+.txt_justify  {
+	text-align: justify;
+	}
+.input_nomal  {
+	width: auto;
+	}
+/* input size STYLE */
+.input_long	{
+	width: 100%;
+	}	
+.input_long02	{
+	width: 90%;
+	}
+.input_long03 {
+	width: 87%;
+	}
+.input_long04 {
+	width: 70%;
+	}
+.input_mid	{
+	width: 50%;
+	}
+.input_mid02 {
+	width: 45%;
+	}	
+.input_mid03 {
+	width: 35%;
+	}
+.input_small	{
+	width: 25%;
+	}
+/* point color STYLE */
+.point01,
+.point01_bold  {/* 빨강 */
+	color: #ea4854;
+	}
+.point02,
+.point02_bold,
+.point02 a {/*파랑 */
+	color: #2b437a;
+	}
+.black_txt {	
+	color: #000;
+	}	
+.black_bold {
+	color: #000;
+	font-weight: bold;
+	}	
+.gray_txt {
+	color: #555;
+	}		
+.point01_bold,	
+.point02_bold,
+.txt_bold  {
+	font-style: normal;
+	font-weight: bold;
+	}	
+.point03 {	
+	color: #00857a;
+	}
+.point03_bold {
+	color: #00857a;
+	font-weight: bold;
+	}	
+.txt_normal,
+.txt_normal a	 {
+	font-weight: normal !important;
+	}	
+.letter_spacing {
+	letter-spacing: 0;
+	}
+	
+/* img 정렬 STYLE */
+.vertical_top	{
+	vertical-align: top;
+	}	
+.vertical_mid {
+	vertical-align: middle; 
+	}
+.vertical_bom {
+	vertical-align: bottom; 
+	}
+.hidden	 {
+	display: block;
+	width: 100%;
+	height: 1px;
+	margin-top: -1px;
+	overflow: hidden;
+	}
+ .animated {
+    animation-duration: 1s;
+    -webkit-animation-duration: 1s;
+	transition:all .5s ease;
+	-webkit-transition:all .5s ease;
+	}

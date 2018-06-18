@@ -1,0 +1,65 @@
+<html>
+
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>GetBodyElementsByTagName</title>
+<meta name="author" content="Namo Interactive, Inc.">
+<link rel="stylesheet" href="../images/linkstyle.css">
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="purple" alink="red">
+
+<table border="0" width="640">
+    <tr>
+        <td width="10%" bgcolor="#EEEEEE" bordercolor="#999999">
+            <p align="center" class="pme">Param</p>
+        </td>
+        <td width="10%" bgcolor="#5A7FC1" bordercolor="#999999">
+            <p align="center" class="pme"><font color="white">Method</font></p>
+        </td>
+        <td width="10%" bgcolor="#EEEEEE" bordercolor="#999999">
+            <p align="center" class="pme">Event</p>
+        </td>
+        <td width="10%">
+            <p align="center" class="pme">&nbsp;</p>
+        </td>
+        <td width="50%">
+            <p align="center" class="pme">&nbsp;</p>
+        </td>
+    </tr>
+</table>
+<TABLE width=640 border=0>
+    <TR>
+        <TD width=634>
+            <H2>GetBodyElementsByTagName<sub>v1.5 or higher</sub></H2>
+            <P class="dscrpt">편집문서 body 안의 태그 이름에 해당하는 객체를 컬렉션 형식으로 얻을 수 있습니다.</P>
+            <p class="dscrpt">&nbsp;</p>
+            <H4>Syntax</H4>
+            <UL>
+                <PRE>HRESULT <span class="fname">GetBodyElementsByTagName</span> (<BR>        BSTR<span class="paraname"> pVal</span><br>);</PRE>
+            </UL>
+            <H4>Parameters</H4>
+            <P class="dscrpt">[put] <span class="para">pVal</span></P>
+            <p class="paradsc">[in] 컬렉션 형식으로 가져올 태그 이름을 지정합니다.</p>
+            <p class="dscrpt">&nbsp;</p>
+            <H4>Return Values</H4>
+            <P class="dscrpt">지정된 객체를 컬렉션 형식으로 반환합니다.</P>
+            <p class="dscrpt">&nbsp;</p>
+            <H4>Remarks</H4>
+            <P class="dscrpt">메소드는 Main class 호출 후 에디터가 로드된 다음 실행해야 정상적으로 실행됩니다.</P>
+            <p class="dscrpt">&nbsp;</p>
+            <H4>Sample Codes</H4>
+            <P class="scode">JavaScript</P>
+            <PRE class="scodedsc">var object = new NamoSE(&quot;test&quot;);
+object.editorStart();
+var TagList = object.<b>GetBodyElementsByTagName</b>(&quot;img&quot;);
+for (i=0; i&lt;TagList.length; i++){
+    alert(TagList[i].src);
+}</PRE>
+
+            <P class="dscrpt">&nbsp;</P>
+        </TD>
+    </TR>
+</TABLE>
+</BODY>
+</HTML>

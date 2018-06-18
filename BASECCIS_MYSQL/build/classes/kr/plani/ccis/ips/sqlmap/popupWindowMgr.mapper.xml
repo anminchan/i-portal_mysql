@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.plani.ccis.ips.mapper.site.PopupWindowMgrMapper">
+	
+	<!-- 팝업존설정 정보 -->
+	<resultMap id="POPUPWINDOW_OUT" type="popupWindow"/>
+	
+	<!-- 팝업존 리스트 -->
+	<select id="list" parameterType="popupWindow" statementType="CALLABLE">
+		{ call PkgQueryServer.ListPopup
+			( 
+       			#{ inRowsPerPage,			mode=IN,		jdbcType=INTEGER },
+				#{ inTargetPage,			mode=IN,		jdbcType=INTEGER },
+    			#{ siteId,			    	mode=IN,		jdbcType=VARCHAR },
+    			#{ KName,			    	mode=IN,		jdbcType=VARCHAR },
+    			#{ state,			    	mode=IN,		jdbcType=VARCHAR },
+				
+				#{ inExecMenuId,			mode=IN,		jdbcType=VARCHAR },
+				#{ inBeforeData,			mode=IN,		jdbcType=VARCHAR },
+				#{ inAfterData,				mode=IN,		jdbcType=VARCHAR },
+				#{ inTerminal,				mode=IN,		jdbcType=VARCHAR },
+				#{ inOsUser,				mode=IN,		jdbcType=VARCHAR },
+				#{ inModule,				mode=IN,		jdbcType=VARCHAR },
+				#{ inDMLUserId,				mode=IN,		jdbcType=VARCHAR },
+				#{ inDMLIp,					mode=IN,		jdbcType=VARCHAR },
+				
+				#{ outObjectName,			mode=OUT,		jdbcType=VARCHAR },
+				#{ outResult,				mode=OUT,		jdbcType=VARCHAR },
+				#{ outRowCount,				mode=OUT,		jdbcType=INTEGER },
+				#{ outNotice,				mode=OUT,		jdbcType=VARCHAR },
+				#{ outMaxRow,				mode=OUT,		jdbcType=INTEGER },
+				#{ outMaxPage,				mode=OUT,		jdbcType=INTEGER },
+				
+				<if test='excelDownYn == "N"'>
+				#{ outCursor,				mode=OUT,		jdbcType=CURSOR,		javaType=ResultSet,		resultMap=POPUPWINDOW_OUT }
+				</if>
+				
+				<if test='excelDownYn == "Y"'>
+				#{ outCursor,				mode=OUT,       jdbcType=CURSOR,		javaType=ResultSet,     resultMap=MAP_OUT }
+				</if>
+			)
+		}
+	</select>
+	
+	<!-- 팝업존 상세 -->
+	<select id="view" parameterType="popupWindow" statementType="CALLABLE">
+		{ call PkgQueryServer.ReadPopup
+			(
+				#{ siteId,				    mode=IN,		jdbcType=VARCHAR },
+				#{ popupId,				    mode=IN,		jdbcType=VARCHAR },
+				
+				#{ inExecMenuId,			mode=IN,		jdbcType=VARCHAR },
+				#{ inBeforeData,			mode=IN,		jdbcType=VARCHAR },
+				#{ inAfterData,				mode=IN,		jdbcType=VARCHAR },
+				#{ inTerminal,				mode=IN,		jdbcType=VARCHAR },
+				#{ inOsUser,				mode=IN,		jdbcType=VARCHAR },
+				#{ inModule,				mode=IN,		jdbcType=VARCHAR },
+				#{ inDMLUserId,				mode=IN,		jdbcType=VARCHAR },
+				#{ inDMLIp,					mode=IN,		jdbcType=VARCHAR },
+				
+				#{ outObjectName,			mode=OUT,		jdbcType=VARCHAR },
+				#{ outResult,				mode=OUT,		jdbcType=VARCHAR },
+				#{ outRowCount,				mode=OUT,		jdbcType=INTEGER },
+				#{ outNotice,				mode=OUT,		jdbcType=VARCHAR },
+				#{ outCursor,				mode=OUT,		jdbcType=CURSOR,		javaType=ResultSet,		resultMap=POPUPWINDOW_OUT }
+
+			)
+		}
+	</select>
+	<!-- 팝업존 추가/수정/삭제 -->	 
+	<select id="insert" parameterType="popupWindow" statementType="CALLABLE">
+		{ call PkgDMLServer.Main
+	    	(
+               #{ inWorkName,		mode=IN,	jdbcType=VARCHAR },
+               #{ inCondition,		mode=IN,	jdbcType=VARCHAR },
+               #{ inDMLData,		mode=IN,	jdbcType=VARCHAR },
+               #{ inCLOBData1,		mode=IN,	jdbcType=VARCHAR },
+               #{ inCLOBData2,		mode=IN,	jdbcType=VARCHAR },
+               #{ inExecMenuId,		mode=IN,	jdbcType=VARCHAR },
+               #{ inBeforeData,		mode=IN,	jdbcType=VARCHAR },
+               #{ inAfterData,		mode=IN,	jdbcType=VARCHAR },
+               #{ inTerminal,		mode=IN,	jdbcType=VARCHAR },
+               #{ inOsUser,			mode=IN,	jdbcType=VARCHAR },
+               #{ inModule,			mode=IN,	jdbcType=VARCHAR },
+               #{ inDMLUserId,		mode=IN,	jdbcType=VARCHAR },
+               #{ inDMLIp,			mode=IN,	jdbcType=VARCHAR },
+               #{ outObjectName,	mode=OUT,	jdbcType=VARCHAR },
+               #{ outResult,		mode=OUT,	jdbcType=VARCHAR },
+               #{ outRowCount,		mode=OUT,	jdbcType=INTEGER },  
+               #{ outNotice,		mode=OUT,	jdbcType=VARCHAR }	           
+	    	)
+		}
+	</select>
+</mapper>

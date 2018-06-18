@@ -1,0 +1,27 @@
+
+/**
+* NamoCrossUploader의 Monitor 창이 출력될 때 화면의 백그라운드 스타일입니다.
+*/
+#monitorBgLayer {
+   position:absolute;                    
+   left: 0px;top: 0px;             
+   width: 100%;
+   height: 100%;
+   background-color: black;
+   opacity:0.30; /* firefox, opera, safari, chrome */
+   -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(opacity=30)"; /* IE 8 */
+   filter:alpha(opacity=30); /* IE 4, 5, 6 and 7 */   
+   z-index: 101;
+}  
+
+/**
+* NamoCrossUploader의 Monitor 창의 스타일입니다.
+*/ 
+#monitorLayer {
+   position:absolute;                    
+   top: 25%;left:30%;
+   width: 610px;height: 358px;
+   margin-top: 0px;margin-left: 0px;
+   background-color: white;
+   z-index: 102;
+}

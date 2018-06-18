@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.plani.ccis.ips.mapper.system.MemberMgrMapper">
+    
+    <!-- 회원 정보 -->
+    <resultMap id="MEMBER_OUT" type="member"/>
+    
+    <!-- 회원 리스트 -->
+    <select id="list" parameterType="member" resultType="java.util.HashMap">
+        <include refid="common.pageHeader"/>
+	        SELECT A.USERID, A.PASSWORD, A.CERTIFICATION, A.KEY1, A.KEY2, A.KEY3, A.DKEY, A.KNAME, A.KIND, A.PASSWORDTIME, A.WITHDRAWTIME,  
+				A.JOINSITEID, A.JOINDATE, A.OUTDATE, A.STATE, A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG, 
+				B.MAILING, B.CELLPHONE, B.HOMEADDRESS1, B.HOMEADDRESS2,
+				(SELECT KNAME FROM T_CODE D WHERE STATE = 'T' AND HIGHERCODE = 'Mailing' AND B.MAILING = D.CODE) AS MAILING_NAME,
+				(SELECT KNAME FROM T_CODE E WHERE STATE = 'T' AND HIGHERCODE = 'Certification' AND A.CERTIFICATION = E.CODE) AS CERTIFICATION_NAME,
+				(SELECT KNAME FROM T_CODE F WHERE STATE = 'T' AND HIGHERCODE = 'UserKind' AND A.KIND = F.CODE) AS KIND_NAME,
+				(SELECT KNAME FROM T_SITE G WHERE STATE = 'T' AND A.JOINSITEID = G.SITEID) AS JOINSITEID_NAME
+			FROM T_USER A
+			LEFT JOIN T_PERSONUSER B
+			ON A.USERID = B.USERID
+			WHERE A.STATE = 'T'
+			<if test="kind != '' and kind != null">
+				AND A.KIND = #{kind}
+			</if>
+			<if test="inSchText != '' and inSchText != null">
+				<if test="inSchType == 0">
+	         		AND (A.KNAME LIKE CONCAT('%',#{inSchText},'%') OR A.USERID LIKE CONCAT('%',#{schText},'%'))
+	         	</if>
+	         	<if test="inSchType == 1">
+	         		AND A.KNAME LIKE CONCAT('%',#{inSchText},'%')
+	         	</if> 
+	         	<if test="inSchType == 2">
+	         		AND A.USERID LIKE CONCAT('%',#{inSchText},'%')
+				</if>
+			</if>
+			<if test="schStartDate != '' and schStartDate != null and schEndDate != '' and schEndDate != null">
+				AND	A.JOINDATE BETWEEN REPLACE(#{schStartDate}, '-', '') AND REPLACE(#{schEndDate}, '-', '')
+			</if>
+	        ORDER BY A.JOINDATE DESC, A.KNAME, A.USERID
+		<include refid="common.pageFooter"/>
+    </select>
+    
+    <select id="listCnt" parameterType="member" resultType="int">
+	    SELECT COUNT(*) TOTALCOUNT 
+	    FROM T_USER
+	   	WHERE STATE = 'T'
+		 <if test="kind != '' and kind != null">
+		 	AND KIND = #{kind}
+		 </if>
+	    <if test="inSchText != '' and inSchText != null">
+         	<if test="inSchType == 0">
+         	AND (KNAME LIKE CONCAT('%', #{inSchText}, '%') OR USERID LIKE CONCAT('%', #{schText}, '%'))
+         	</if>
+         	<if test="inSchType == 1">
+         	AND KNAME LIKE CONCAT('%', #{inSchText}, '%')
+         	</if> 
+         	<if test="inSchType == 2">
+         	AND USERID LIKE CONCAT('%', #{inSchText}, '%')
+         	</if>
+         </if>
+         <if test="schStartDate != '' and schStartDate != null and schEndDate != '' and schEndDate != null">
+			AND	JOINDATE BETWEEN REPLACE(#{schStartDate}, '-', '') AND REPLACE(#{schEndDate}, '-', '')
+		</if>
+    </select>
+    
+    <!-- 회원 상세 -->
+    <select id="view" parameterType="member" statementType="CALLABLE">
+        { call PKGQUERYSERVER.ReadUser
+           (
+                #{ userId,          mode=IN,        jdbcType=VARCHAR },
+                #{ kind,            mode=IN,        jdbcType=VARCHAR },
+                
+                #{ inExecMenuId,            mode=IN,        jdbcType=VARCHAR },
+                #{ inBeforeData,            mode=IN,        jdbcType=VARCHAR },
+                #{ inAfterData,             mode=IN,        jdbcType=VARCHAR },
+                #{ inTerminal,              mode=IN,        jdbcType=VARCHAR },
+                #{ inOsUser,                mode=IN,        jdbcType=VARCHAR },
+                #{ inModule,                mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLUserId,             mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLIp,                 mode=IN,        jdbcType=VARCHAR },
+                
+                #{ outObjectName,           mode=OUT,       jdbcType=VARCHAR },
+                #{ outResult,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outRowCount,             mode=OUT,       jdbcType=INTEGER },
+                #{ outNotice,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outCursor1,              mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=MAP_OUT },
+                #{ outCursor2,              mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=GROUP_OUT }
+           )
+        }
+    </select>
+    
+    <!-- 팝업 회원 리스트 -->
+    <select id="memberPopupList" parameterType="member" resultType="java.util.HashMap">
+    	<if test='inSchText == "" or inSchText == null'>
+        	SELECT A.KIND, B.KNAME AS KIND_NAME, A.USERID, A.KNAME, A.JOINDATE, C.CELLPHONE
+			FROM T_USER A
+			LEFT JOIN T_CODE B
+			ON A.KIND = B.CODE
+			AND HIGHERCODE = 'UserKind'
+			AND B.STATE = 'T'
+			LEFT JOIN T_PERSONUSER C
+			ON A.USERID = C.USERID
+			AND C.STATE = 'T'
+			WHERE A.STATE = 'T'
+	        <if test='kind !=null and kind != "T"'>
+            	AND A.KIND = #{kind}
+            </if>
+			ORDER BY A.KNAME
+        </if>
+        <if test='inSchText != "" and inSchText != null'>
+	        <if test='inSchType == 0'>
+	        	SELECT A.KIND, B.KNAME AS KIND_NAME, A.USERID, A.KNAME, A.JOINDATE, C.CELLPHONE
+				FROM T_USER A
+				LEFT JOIN T_CODE B
+				ON A.KIND = B.CODE
+				AND HIGHERCODE = 'UserKind'
+				AND B.STATE = 'T'
+				LEFT JOIN T_PERSONUSER C
+				ON A.USERID = C.USERID
+				AND C.STATE = 'T'
+				WHERE A.STATE = 'T'
+                AND (A.KNAME LIKE CONCAT('%',#{inSchText},'%') OR  A.USERID LIKE CONCAT('%',#{inSchText},'%'))
+		        <if test='kind !=null and kind != "T"'>
+	            	AND A.KIND = #{kind}
+	            </if>
+				ORDER BY A.KNAME
+        	</if>
+	        <if test='inSchType != 0'>
+	        	SELECT A.KIND, B.KNAME AS KIND_NAME, A.USERID, A.KNAME, A.JOINDATE, C.CELLPHONE
+				FROM T_USER A
+				LEFT JOIN T_CODE B
+				ON A.KIND = B.CODE
+				AND HIGHERCODE = 'UserKind'
+				AND B.STATE = 'T'
+				LEFT JOIN T_PERSONUSER C
+				ON A.USERID = C.USERID
+				AND C.STATE = 'T'
+				WHERE A.STATE = 'T'
+		        <if test='kind !=null and kind != "T"'>
+	            	AND A.KIND = #{kind}
+	            </if>
+		        <if test='inSchType == 1'>
+                	AND A.KNAME LIKE CONCAT('%',#{inSchText},'%')
+                </if>
+		        <if test='inSchType == 2'>
+                	AND A.USERID LIKE CONCAT('%',#{inSchText},'%')
+                </if>
+				ORDER BY A.KNAME
+	        </if>
+        </if>
+    </select>
+    
+     <!-- 기업회원 추가/수정/삭제 -->
+    <select id="action" parameterType="member" resultMap="MEMBER_OUT" statementType="CALLABLE">
+        { call PKGDMLSERVER.Main
+            (
+                 #{ inWorkName,               mode=IN,        jdbcType=VARCHAR },
+                 #{ inCondition,              mode=IN,        jdbcType=VARCHAR },
+                 #{ inDMLData,                mode=IN,        jdbcType=VARCHAR },
+                 #{ inCLOBData1,              mode=IN,        jdbcType=VARCHAR },
+                 #{ inCLOBData2,              mode=IN,        jdbcType=VARCHAR },
+                 #{ inExecMenuId,             mode=IN,        jdbcType=VARCHAR },
+                 #{ inBeforeData,             mode=IN,        jdbcType=VARCHAR },
+                 #{ inAfterData,              mode=IN,        jdbcType=VARCHAR },
+                 #{ inTerminal,               mode=IN,        jdbcType=VARCHAR },
+                 #{ inOsUser,                 mode=IN,        jdbcType=VARCHAR },
+                 #{ inModule,                 mode=IN,        jdbcType=VARCHAR },
+                 #{ inDMLUserId,              mode=IN,        jdbcType=VARCHAR },
+                 #{ inDMLIp,                  mode=IN,        jdbcType=VARCHAR },
+                 
+                 #{ outObjectName,            mode=OUT,       jdbcType=VARCHAR },
+                 #{ outResult,                mode=OUT,       jdbcType=VARCHAR },
+                 #{ outRowCount,              mode=OUT,       jdbcType=INTEGER },
+                 #{ outNotice,                mode=OUT,       jdbcType=VARCHAR }
+            )
+        }
+    </select>
+    
+     <!-- 내부직원 부서리스트 -->
+    <select id="memberTeamList" parameterType="member"  statementType="CALLABLE">
+	    { call PkgQueryServer.ListTeamInfo
+	            (       
+	                #{ userId,                  mode=IN,        jdbcType=VARCHAR },
+	                
+	                #{ inExecMenuId,            mode=IN,        jdbcType=VARCHAR },
+	                #{ inBeforeData,            mode=IN,        jdbcType=VARCHAR },
+	                #{ inAfterData,             mode=IN,        jdbcType=VARCHAR },
+	                #{ inTerminal,              mode=IN,        jdbcType=VARCHAR },
+	                #{ inOsUser,                mode=IN,        jdbcType=VARCHAR },
+	                #{ inModule,                mode=IN,        jdbcType=VARCHAR },
+	                #{ inDMLUserId,             mode=IN,        jdbcType=VARCHAR },
+	                #{ inDMLIp,                 mode=IN,        jdbcType=VARCHAR },
+	                
+	                #{ outObjectName,           mode=OUT,       jdbcType=VARCHAR },
+	                #{ outResult,               mode=OUT,       jdbcType=VARCHAR },
+	                #{ outRowCount,             mode=OUT,       jdbcType=INTEGER },
+	                #{ outNotice,               mode=OUT,       jdbcType=VARCHAR },
+	                #{ outCursor,               mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=MAP_OUT }
+	            )
+	        }
+    </select>    
+    
+    <!-- 브서리스트 -->
+    <select id="deptList" resultType="java.util.HashMap" >
+	SELECT
+		DECODE(DEPT_LEVEL,'0',KNAME,'1',''||KNAME,'2','-'||KNAME,'3','--'||KNAME,'4','---'||KNAME,'----'||KNAME) AS KNAME, 	 
+		DEPTID
+	FROM 
+		(SELECT 
+			A.DEPTID,		
+			A.KNAME,		
+	        A.HIGHERID,		
+	        A.DEPTH,
+	        (LEVEL - 1) AS DEPT_LEVEL	
+		FROM( SELECT * FROM T_DEPARTMENT WHERE DEPTSEQ IN (SELECT MAX(DEPTSEQ) FROM T_DEPARTMENT WHERE STATE = 'T')) A
+		WHERE A.STATE = 'T'
+		AND A.DEPTH != '1'
+	    START WITH A.HIGHERID = '-1'
+	    CONNECT BY PRIOR A.DEPTID = A.HIGHERID
+	    ORDER SIBLINGS BY A.DEPTID) X
+	</select> 
+	
+	<!-- 직위리스트 -->
+    <select id="dutyList" resultType="java.util.HashMap" >
+		SELECT
+			KNAME, 	
+			DUTYID
+		FROM 
+			T_DUTY
+		WHERE 
+	    	STATE = 'T'
+	    ORDER BY SORT
+	</select>
+	
+    <!-- 직급리스트 -->
+    <select id="positionList"  resultType="java.util.HashMap" >
+		SELECT
+			KNAME, 	
+			POSITIONID
+		FROM 
+			T_POSITION
+		WHERE 
+	    	STATE = 'T'
+	    ORDER BY SORT
+	</select>	
+	
+</mapper>

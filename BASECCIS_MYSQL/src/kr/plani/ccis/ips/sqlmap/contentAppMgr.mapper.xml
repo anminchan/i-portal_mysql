@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.plani.ccis.ips.mapper.site.ContentAppMgrMapper">
+		
+    <!-- 승인대기콘텐츠 게시판 리스트 -->
+    <select id="listCnt" parameterType="title" resultType="java.lang.Integer">
+          SELECT COUNT(1)
+	         FROM (SELECT A.*,B.BOARDID,B.BOARDKIND FROM T_LINK A LEFT OUTER JOIN T_BOARD B ON(A.MENUID=B.MENUID) WHERE A.Depth = 1 AND A.State = 'T' ORDER BY LINKID DESC) A
+	         	  JOIN (SELECT * FROM T_TITLE WHERE State = 'T' AND StateYn = 'N') B
+	         	  ON A.TITLEID = B.TITLEID 
+	              LEFT JOIN (SELECT * FROM T_CONTENTS WHERE State = 'T') G
+	              ON B.TITLEID = G.TITLEID
+	              JOIN T_USER D
+	              ON B.USERID = D.USERID 
+	              LEFT JOIN (SELECT 'guest' AS USERID, A.* FROM T_GUESTINFO A) E
+	              ON B.USERID = E.USERID
+				   LEFT JOIN (SELECT * FROM T_MENU WHERE STATE = 'T') J
+					 ON B.MENUID = J.MENUID
+                    JOIN (SELECT * FROM T_SITE WHERE STATE = 'T') H
+                      ON J.SITEID = H.SITEID
+                    JOIN(SELECT E.SITEID
+			               FROM (SELECT * FROM T_USERGROUP WHERE USERID = #{myId} AND STATE = 'T') A
+			               		JOIN (SELECT * FROM T_GROUP WHERE STATE = 'T') B
+				                  ON A.GROUPID = B.GROUPID
+			               		JOIN (SELECT * FROM T_GROUPROLE WHERE STATE = 'T') C
+		               			  ON B.GROUPID = C.GROUPID
+			               		JOIN (SELECT * FROM T_ROLE WHERE ROLETYPE = 'ADMIN' AND STATE = 'T') D
+				                  ON C.ROLEID = D.ROLEID
+			               		JOIN (SELECT * FROM T_MENU WHERE STATE = 'T') E
+		               			  ON D.MENUID = E.MENUID
+			               	GROUP BY E.SITEID) I
+	                   ON H.SITEID = I.SITEID <!-- 관리권한이 있는 사이트 JOIN -->
+                  WHERE 'GROUP00002' = (SELECT GROUPID FROM T_USERGROUP WHERE GROUPID = 'GROUP00002' AND USERID = #{myId})
+	         <if test="schText != '' and schText != null">
+				<if test="schType == 1">
+					AND IFNULL(B.KNAME, ' ') LIKE CONCAT('%', #{schText}, '%')
+				</if>
+				<if test="schType == 2">
+					AND IFNULL(G.KHTML, ' ') LIKE CONCAT('%', #{schText}, '%')
+				</if>
+				<if test="schType == 3">
+					AND IFNULL(IF(B.USERID = 'guest', E.GUESTNAME, B.USERNAME), ' ') LIKE CONCAT('%', #{schText}, '%')
+				</if>
+			</if>
+			<if test="country != null and country != ''">
+		        AND IFNULL(B.COUNTRY, ' ') LIKE CONCAT('%', #{country}, '%')
+			</if>
+			<if test="continent != null and continent != ''">
+		        AND IFNULL(B.CONTINENT, ' ') LIKE CONCAT('%', #{continent}, '%')
+			</if>
+			<if test="categoryId != null and categoryId != ''">
+	        	AND IFNULL(B.CATEGORYID, ' ') LIKE CONCAT('%', #{categoryId}, '%')
+			</if>
+    </select>
+
+    <select id="list" parameterType="title" resultType="java.util.HashMap">
+		SELECT A.NUM1, A.LINKID, A.TITLEID, A.KNAME, A.USERID, A.USERNAME,
+               A.DEPTH, A.PARENTINDEX, A.STATE, A.HITCOUNT, A.OPENYN, A.NOTICETITLEYN, A.SECRETTITLEYN, A.KEYWORD1, A.KEYWORD2, A.KEYWORD3, A.KEYWORD4, A.KEYWORD5, A.KEYWORD6, A.KEYWORD7, A.KEYWORD8, A.KEYWORD9, A.KEYWORD10,
+               A.CONTENTS1, A.CONTENTS2, A.CONTENTS3, A.CONTENTS4, A.CONTENTS5, A.CONTENTS6, A.ORIGIN, A.REPORTTIME, A.CONTINENT, A.COUNTRY,
+               A.PROCESS, A.STATEYN, A.INSTIME, A.DMLTIME, A.HIGHERID, A.FILEYN,
+               (SELECT DMLUSERID FROM T_LINK WHERE LINKID = A.PARENTLINKID) AS PARENTUSERID, A.MENUID, A.TMENUID, A.BOARDID, A.LINKURL, A.CATEGORYID,
+               (SELECT CATEGORYNAME FROM T_CATEGORY WHERE BOARDID = A.BOARDID AND CATEGORYID = A.CATEGORYID) AS CATEGORYNAME,
+               A.IMAGEFILENAME, A.IMAGESFILENAME, A.FILEPATH, A.ALTINFO, A.KHTML, A.APPEALUSERID
+        FROM (SELECT A.RNUM2 AS NUM1, A.PARENTINDEX, A.MENUID, A.TMENUID, A.TITLEID, A.LINKID, A.KNAME, A.USERID, A.DEPTH, A.STATE, A.HITCOUNT, A.OPENYN,
+                     A.NOTICETITLEYN, A.SECRETTITLEYN, A.KEYWORD1, A.KEYWORD2, A.KEYWORD3, A.KEYWORD4, A.KEYWORD5, A.KEYWORD6, A.KEYWORD7, A.KEYWORD8, A.KEYWORD9, A.KEYWORD10, A.Origin, A.ReportTime, 
+                     A.CONTENTS1, A.CONTENTS2, A.CONTENTS3, A.CONTENTS4, A.CONTENTS5, A.CONTENTS6, A.PROCESS, A.STATEYN, A.CONTINENT, A.COUNTRY,
+                     A.INSTIME, A.DMLTIME, A.HIGHERID, A.PARENTLINKID, A.REPLYNO, A.RNUM, A.UserName, A.FileYN,
+                     A.BOARDID, A.LINKURL, A.CATEGORYID, A.IMAGEFILENAME, A.IMAGESFILENAME, A.FILEPATH, A.ALTINFO, A.KHTML, A.APPEALUSERID
+              FROM (SELECT (@ROWNUM2 := @ROWNUM2 - 1) AS RNUM2, A.*
+		FROM(SELECT (@ROWNUM := @ROWNUM + 1) AS RNUM, A.*
+                     FROM (SELECT A.*
+	                    FROM 
+	                    (SELECT CONCAT(lpad(CONCAT(A.ParentLinkID),10,'0'), CONCAT(9999-1)) AS PARENTINDEX,
+								CONCAT(lpad(CONCAT(A.ParentLinkID),10,'0'), CONCAT(9999-ReplyNO)) AS CURINDEX,
+								A.MENUID, B.MENUID AS TMENUID, A.TITLEID, A.LINKID, B.KNAME, B.USERID, A.DEPTH, B.STATE, B.HITCOUNT, B.OPENYN,
+								B.NOTICETITLEYN, B.SECRETTITLEYN, B.KEYWORD1, B.KEYWORD2, B.KEYWORD3, B.KEYWORD4, B.KEYWORD5, B.KEYWORD6, B.KEYWORD7, B.KEYWORD8, B.KEYWORD9, B.KEYWORD10, B.ORIGIN, DATE_FORMAT(B.REPORTTIME, '%Y%m%d') AS REPORTTIME,
+								B.CONTENTS1, B.CONTENTS2, B.CONTENTS3, B.CONTENTS4, B.CONTENTS5, B.CONTENTS6, B.CONTINENT, B.COUNTRY,
+								DATE_FORMAT(B.INSTIME, '%Y%m%d') AS INSTIME, DATE_FORMAT(B.DMLTIME, '%Y%m%d') AS DMLTIME, A.HIGHERID, A.PARENTLINKID, A.REPLYNO,
+								IF(B.userid = 'guest', E.GUESTNAME, B.USERNAME) AS UserName,
+								IF(A.Depth = 1, (CASE B.Process WHEN '-' THEN '접수' WHEN 'R' THEN '처리중' WHEN 'C' THEN '답변완료' ELSE '' END), '') AS Process, B.STATEYN,
+								IF(ISNULL(C.Cnt), 'N', 'Y') AS FileYN, B.BOARDID, B.LINKURL, B.CATEGORYID,
+								G.IMAGEFILENAME, G.IMAGESFILENAME, G.FILEPATH, G.ALTINFO, G.KHTML, F.USERID AS APPEALUSERID
+						  FROM (SELECT A.*,B.BOARDID,B.BOARDKIND FROM T_LINK A LEFT OUTER JOIN T_BOARD B ON(A.MENUID=B.MENUID) WHERE A.Depth = 1 AND A.State = 'T' ORDER BY LINKID DESC) A
+						   JOIN (SELECT * FROM T_TITLE WHERE State = 'T' AND StateYn = 'N') B
+						   ON A.TITLEID = B.TITLEID
+						   LEFT JOIN (SELECT * FROM T_CONTENTS WHERE State = 'T') G
+						   ON B.TITLEID = G.TITLEID
+						   LEFT JOIN (SELECT TitleID, COUNT(*) AS CNT FROM T_FILES WHERE State = 'T' GROUP BY TitleID) C
+						   ON B.TITLEID = C.TITLEID
+						   JOIN T_USER D
+						   ON B.USERID = D.USERID
+						   LEFT JOIN (SELECT 'guest' AS USERID, A.* FROM T_GUESTINFO A) E
+						   ON B.TITLEID = E.TITLEID
+						   AND B.USERID = E.USERID
+						   LEFT JOIN T_APPEALUSER F
+						   ON B.TITLEID = F.TITLEID
+						   LEFT JOIN (SELECT * FROM T_MENU WHERE STATE = 'T') J
+							 ON B.MENUID = J.MENUID
+		                    JOIN (SELECT * FROM T_SITE WHERE STATE = 'T') H
+		                      ON J.SITEID = H.SITEID
+		                    JOIN(SELECT E.SITEID
+					               FROM (SELECT * FROM T_USERGROUP WHERE USERID = #{myId} AND STATE = 'T') A
+					               		JOIN (SELECT * FROM T_GROUP WHERE STATE = 'T') B
+						                  ON A.GROUPID = B.GROUPID
+					               		JOIN (SELECT * FROM T_GROUPROLE WHERE STATE = 'T') C
+				               			  ON B.GROUPID = C.GROUPID
+					               		JOIN (SELECT * FROM T_ROLE WHERE ROLETYPE = 'ADMIN' AND STATE = 'T') D
+						                  ON C.ROLEID = D.ROLEID
+					               		JOIN (SELECT * FROM T_MENU WHERE STATE = 'T') E
+				               			  ON D.MENUID = E.MENUID
+					               	GROUP BY E.SITEID) I
+			                   ON H.SITEID = I.SITEID <!-- 관리권한이 있는 사이트 JOIN -->
+	                   WHERE 'GROUP00002' = (SELECT GROUPID FROM T_USERGROUP WHERE GROUPID = 'GROUP00002' AND USERID = #{myId})
+					   <if test="schText != '' and schText != null">
+						    <if test="schType == 1">
+						    AND B.KNAME LIKE CONCAT('%', #{schText}, '%')
+						    </if>
+						    <if test="schType == 2">
+						    AND G.KHTML LIKE CONCAT('%', #{schText}, '%')
+						    </if>
+						    <if test="schType == 3">
+						    AND IFNULL(IF(B.USERID = 'guest', E.GUESTNAME, B.USERNAME), ' ') LIKE CONCAT('%', #{schText}, '%')
+						    </if>
+						</if>
+						<if test="country != null and country != ''">
+				            AND B.COUNTRY LIKE CONCAT('%', #{country}, '%')
+						</if>
+						<if test="continent != null and continent != ''">
+				            AND B.CONTINENT LIKE CONCAT('%', #{continent}, '%')
+						</if>
+						<if test="categoryId != null and categoryId != ''">
+				            AND B.CATEGORYID LIKE CONCAT('%', #{categoryId}, '%')
+						</if>) A
+                                 ORDER BY A.TITLEID DESC
+                           ) A
+				JOIN (SELECT @ROWNUM := 0) AS R2
+			) A
+			JOIN (SELECT @ROWNUM2 := @ROWNUM + 1) AS R2
+                    ) A
+	WHERE <![CDATA[ RNUM BETWEEN (((#{pageNum}-1) * #{rowCnt}) + 1) AND #{pageNum} * #{rowCnt}]]>
+       	   ) A
+    </select>
+    
+    <!-- 승인대기콘텐츠 게시판 상세조회 -->
+    <select id="view" parameterType="link" resultType="java.util.HashMap">
+        SELECT A.LINKID, B.TITLEID, B.MENUID, C.CONTENTSID, B.KNAME, C.KHTML, B.USERID,
+	            IF(B.USERID = 'guest@mireco.or.kr', (SELECT GUESTNAME FROM T_GUESTINFO WHERE TITLEID = B.TITLEID), B.USERNAME) AS USERNAME,
+	            B.HITCOUNT AS HITCOUNT, B.OPENYN, B.PROCESS, B.NOTICETITLEYN, B.SECRETTITLEYN, DATE_FORMAT(B.DMLTIME, '%Y%m%d') AS DMLTIME, DATE_FORMAT(B.INSTIME, '%Y%m%d') AS INSTIME,
+	            B.STARTTIME, B.ENDTIME, B.KEYWORD1, B.KEYWORD2, B.KEYWORD3, B.KEYWORD4, B.KEYWORD5, B.KEYWORD6, B.KEYWORD7, B.KEYWORD8, B.KEYWORD9, B.KEYWORD10,
+	            B.CONTENTS1, B.CONTENTS2, B.CONTENTS3, B.CONTENTS4, B.CONTENTS5, B.CONTENTS6, B.CATEGORYID, E.CATEGORYNAME,
+	            C.IMAGEFILENAME, C.IMAGESFILENAME, C.FILEPATH, C.ALTINFO
+	    FROM (SELECT * FROM T_LINK WHERE MENUID = #{paramMenuId} AND LINKID = #{linkId}) A
+	    JOIN T_TITLE B
+	      ON A.TITLEID = B.TITLEID
+	    JOIN T_CONTENTS C
+	      ON B.TITLEID = C.TITLEID 
+	    JOIN T_USER D
+	      ON B.USERID = D.USERID
+	    LEFT JOIN T_CATEGORY E
+	      ON B.BOARDID = E.BOARDID
+	     AND B.CATEGORYID = E.CATEGORYID
+    </select>
+    
+    <select id="listFiles" parameterType="link" resultType="java.util.HashMap">
+	    SELECT A.LINKID, B.TITLEID, C.FILEID, C.USERFILENAME, C.SYSTEMFILENAME, C.FILEPATH, C.FILEEXTENSION, C.FILESIZE
+	    FROM (SELECT * FROM T_LINK WHERE MENUID = #{paramMenuId} AND LINKID = #{linkId}) A
+	    JOIN T_TITLE B
+	      ON A.TITLEID = B.TITLEID
+	    JOIN T_FILES C
+	      ON B.TITLEID = C.TITLEID
+	    ORDER BY FILEID
+    </select>
+    
+    <!-- 승인대기콘텐츠 게시판 입력/등록 -->
+    <update id="update" parameterType="content">
+        UPDATE T_TITLE SET STATEYN = (SELECT STATEYN FROM (SELECT IF(STATEYN = 'N', 'Y', 'N')AS STATEYN FROM T_TITLE A WHERE TITLEID = (SELECT TITLEID FROM T_LINK A WHERE LINKID = #{linkId}))A) 
+        WHERE TITLEID = (SELECT TITLEID FROM T_LINK A WHERE LINKID = #{linkId}) 
+    </update>
+    
+</mapper>

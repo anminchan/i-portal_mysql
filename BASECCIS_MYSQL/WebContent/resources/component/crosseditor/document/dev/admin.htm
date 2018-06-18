@@ -1,0 +1,146 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="author" content="Namo Interactive, Inc.">
+<link href="../common.css" rel="stylesheet" type="text/css" />
+<title>크로스에디터 설치 도움말</title>
+</head>
+<body>
+
+<table style="line-height:120%; margin-right:20;" border="0" cellpadding="0" width="94%" align="center">
+    <tr>
+        <td width="923">
+            <h1>관리자 설정 안내</h1>
+            
+            <p class="mtext">나모 크로스에디터 관리자는 관리자 전용 페이지에서 크로스에디터의 환경이나 화면 구성을 설정할 수 있습니다. 즉 크로스에디터의 스킨 설정이나 도구 막대(Toolbar)의 구성과 배치 등 기본적인 편집기 화면 구성뿐만 아니라 편집 창의 줄 간격, 이미지 저장 경로, 인코딩 설정 등과 같은 각종 요소에 대한 정의가 가능합니다.</p>
+            <p class="mtext">관리자 설정 페이지에서 크로스에디터에 대한 세부 설정을 지정하지 않으면 크로스에디터의 기본 설정을 따르게 됩니다. 크로스에디터 관리자 설정 기능은 각 개발사에서 의도하는 작업 환경을 손쉽게 구현하는 것을 목표로 제작되었습니다. 관리자 설정 페이지에서 지정한 내용은 크로스에디터의 기본 설정에 우선하게 됩니다.</p>
+            <p class="mtext">여기에서는 관리자 페이지의 기능과 크로스에디터를 환경을 지정하고 변경하는 방법에 대하여 안내합니다.</p>
+            
+            <hr />
+            
+            <h3><a name="about_inifile">관리자 설정 페이지 소개</a></h3>
+            <ul>
+                <p class="mtext">크로스에디터 관리자는 크로스에디터 관리자 페이지에서 크로스에디터에 대한 설정을 지정하거나 변경할 수 있습니다. 크로스에디터 관리자 페이지는 관리자에게만 접근 권한이 있으며 관리자 설정 페이지는 다음과 같은 하위 메뉴를 갖습니다.</p>
+                <p class="mtext"><img src="../images/icon_list_03.gif" style="vertical-align:middle;" />미리보기: 크로스에디터가 사용자에게 어떻게 나타나는지 확인할 수 있습니다.<br />
+				<img src="../images/icon_list_03.gif" style="vertical-align:middle;" /><a href="#options">관리자 설정</a>: 크로스에디터의 환경 및 화면 설정을 지정할 수 있습니다.<br />
+				<img src="../images/icon_list_03.gif" style="vertical-align:middle;" /><a href="#account">계정 관리</a>: 크로스에디터 사용자의 계정을 관리할 수 있습니다.<br /></p>
+            </ul>
+            
+            <hr />
+            
+            
+            <h3><a name="options"></a>관리자 설정</h3>
+            <h5><a name="general">[환경 설정]</a></h5>
+            <p class="mlabel1">서버 OS</p>
+            <p class="mlabeltext">크로스에디터를 사용할 서버 운영체제를 설정합니다. 'WINDOW', 'LINUX', 'UNIX'중 하나를 선택할 수 있습니다. </p>
+            <p class="mlabel1">서버 정보</p>
+            <p class="mlabeltext">크로스에디터 서버 정보를 설정합니다.</p>
+            <p class="mlabel1">웹 언어</p>
+            <p class="mlabeltext">사용할 웹 언어를 지정합니다. 'ASP', 'JSP', 'PHP', 'ASP.NET', 'SERVLET' 중 하나를 선택할 수 있습니다.</p>
+            <p class="mlabel1">이미지 저장 경로</p>
+            <p class="mlabeltext">크로스에디터에서 사용자가 그림을 사용할 때 그림이 저장될 경로를 설정합니다. 설정하지 않는 경우 기본 경로인 'binary/images'에 저장됩니다. </p>
+            <p class="mlabel1">업로드 파일명 저장방식</p>
+            <p class="mlabeltext">크로스에디터에서 사용자가 그림을 업로드할 때 파일명 저장 방식을 설정합니다.</p>
+            <p class="mlabeltext">- 파일명 그대로 저장: 사용자가 업로드하는 그림의 기존 파일명을 그대로 사용합니다. '인코딩 타입' 목록에서 파일명 인코딩을 지정할 수 있습니다.</p>
+            <p class="mlabeltext">- 변환된 파일명으로 저장 (Base64): 그림 파일명을 base64방식으로 변환합니다.</p>
+            <p class="mlabeltext">- 변환된 파일명으로 저장(랜덤): 그림 파일명을 'yyyyMMddHHmmssfff_random문자 8자리'형식으로 변환합니다. 예를 들어 '20100507104537240_N7YTATPV.gif'와 같이 '년월일시분초밀리세컨드_알파벳과 숫자를 조합한 임의의 8자리'로 파일명이 변환됩니다.</p>
+            <p class="mlabel1">업로드 파일 서브 폴더 설정</p>
+            <p class="mlabeltext">크로스에디터에서 사용자가 파일을 삽입하는 경우, 업로드되는 파일을 저장할 폴더를 만들지 여부를 지정합니다.</p>
+            <p class="mlabel1">에디터 크기 </p>
+            <p class="mlabeltext">크로스에디터의 전체 너비와 높이를 설정합니다. 높이는 최소 '300' 이상으로 설정해야 편집이 가능합니다.</p>
+            <p class="mlabel1">최초 포커스 설정</p>
+            <p class="mlabeltext">크로스에디터를 처음 실행할 때 편집 창에 커서가 나타나도록 할지 여부를 설정합니다.<br />
+            'true'를 선택하면 편집 창에 커서나 입력되어 나타나며 'false'를 선택하면 크로스에디터를 처음 실행할 때 편집 창에 커서가 나타나지 않습니다.</p>
+            <p class="mlabel1">줄 간격 설정</p>
+            <p class="mlabeltext">편집 창에서 텍스트를 입력할 때 기본 줄 간격을 지정합니다.<br />
+            사용자가 편집 중 원하는대로 직접 줄 간격을 수정할 수 있습니다.</p>
+            <p class="mlabel1">편집중단 메시지 설정</p>
+            <p class="mlabeltext">사용자가 편집 중 웹 브라우저를 새로 고침하거나 웹 브라우저를 닫을 시, 경고 메시지를 보여줄 지 여부를 설정합니다. 'true'로 설정하면 경고 메시지를 보여주며 'false'로 설정하면 경고 메시지 없이 웹 브라우저가 새로 고침 되거나 닫힙니다. </p>
+            <p class="mlabel1">디버그 설정 </p>
+            <p class="mlabeltext">크로스에디터 사용 중 오류 발생시 메시지 출력 여부를 지정합니다. 'true'로 설정하면 크로스에디터에서는 메시지가 출력되지 않고 관리자 페이지의 미리보기 창에서만 메시지가 출력됩니다.</p>
+            <p class="mlabel1">표 보호문서 HTML탭 설정 </p>
+            <p class="mlabeltext">크로스에디터의 현재 문서 내에 표 보호 기능이 동작하는 표가 있을 경우, HTML탭 사용 여부를 설정합니다.</p>
+            <p class="mlabeltext">'true'로 설정하면 HTML탭을 사용할 수 있고, 'false'로 설정하면 HTML 탭을 사용할 수 없습니다. 기본값은 'false'입니다.</p>
+            <p class="mlabel1">HTML 소스 출력 설정</p>
+            <p class="mlabeltext">크로스에디터 HTML탭에서 HTML소스를 보여줄 때 HTML소스 전체를 보여줄 것인지(HTML 소스 전체 보여주기 옵션 선택 시) BODY 태그의 내용만 보여줄 지(Body 태그내 내용만 보여주기 옵션 선택 시) 설정합니다.</p>
+            <p class="mlabel1">script 태그 허용 여부</p>
+            <p class="mlabeltext">크로스에디터에서 스크립트 태그 삽입 여부를 지정합니다.</p>
+            <p class="mlabeltext">'true'로 설정하면 크로스에디터 사용자가 스크립트 태그를 삽입할 수 있고, 'false'로 설정하면 스크립트 태그를 삽입할 수 없습니다.</p>
+            <p class="mlabel1">iframe 태그 허용 여부</p>
+            <p class="mlabeltext">크로스에디터에서 아이프레임 태그 삽입 여부를 지정합니다.</p>
+            <p class="mlabeltext">'true'로 설정하면 크로스에디터 사용자가 아이프레임 태그를 삽입할 수 있고, 'false'로 설정하면 아이프레임 태그를 삽입할 수 없습니다.</p>
+            <p class="mlabel1">문서 Characterset</p>
+            <p class="mlabeltext">크로스에디터에서 작성한 문서의 기본 인코딩을 지정합니다.</p>
+            <p class="mlabel1">기본문서 경로 </p>
+            <p class="mlabeltext">크로스에디터를 처음 실행하거나 '새 문서' 메뉴를 이용하여 새 문서를 만들 때 기본 서식으로 사용할 HTML 파일의 경로를 지정합니다.</p>
+            <p class="mlabel1">파일 업로드 확장자 제한</p>
+            <p class="mlabeltext">크로스에디터에서 파일 넣기 시에 허용할 확장자를 지정합니다. ,(콤마) 구분자로 허용 목록을 설정합니다.</p>
+            <p class="mlabel1">이벤트 요소 제한 </p>
+            <p class="mlabeltext">크로스에디터에서 제한할 이벤트 요소(attribute)를 지정합니다. ,(콤마) 구분자로 제한 목록을 설정합니다.</p>
+            <p class="mlabel1">HTML태그 제한</p>
+            <p class="mlabeltext">크로스에디터에서 제한할 HTML 태그(tag)를 지정합니다. ,(콤마) 구분자로 제한 목록을 설정합니다.</p>
+            <p class="mlabel1">템플릿 URL 설정</p>
+            <p class="mlabeltext">크로스에디터 템플릿 메뉴의 목록을 설정합니다. 메뉴에 표시되는 문서명, 경로, 인코딩 정보를 설정합니다.</p>
+            
+            <h5><a name="editing">[편집 환경 설정]</a></h5>
+            <p class="mlabel1">글자 색상 설정</p>
+            <p class="mlabeltext">크로스에디터의 기본 글자 색상을 지정합니다.</p>
+            <p class="mlabel1">글자 크기 설정</p>
+            <p class="mlabeltext">크로스에디터의 글꼴 크기 상자에 나타날 목록을 설정합니다.</p>
+            <p class="mlabel1">줄 간격 설정</p>
+            <p class="mlabeltext">크로스에디터 줄간격 상자에 나타날 목록을 설정합니다.</p>
+            <p class="mlabel1">들여쓰기 간격 설정</p>
+            <p class="mlabeltext">크로스에디터의 들여쓰기 간격을 설정합니다.</p>
+            <p class="mlabel1">줄 바꾸기 설정</p>
+            <p class="mlabeltext">엔터 입력 시 &lt;p&gt;태그를 &lt;br&gt;태그로 변경합니다.</p>
+            <p class="mlabel1">테두리 색상 설정</p>
+            <p class="mlabeltext">크로스에디터의 기본 이미지 테두리 색상을 지정합니다.</p>
+            <p class="mlabel1">표 테두리 색상 설정</p>
+            <p class="mlabeltext">크로스에디터의 기본 표 테두리 색상을 지정합니다.</p>
+            <p class="mlabel1">표 배경 색상 설정</p>
+            <p class="mlabeltext">크로스에디터의 기본 표 배경 색상을 지정합니다.</p>
+            <h5><a name="UI">[화면 설정]</a></h5>
+            <p class="mlabel1">스킨 설정</p>
+            <p class="mlabeltext">크로스에디터의 스킨을 설정합니다. </p>
+            <p class="mlabel1">css 설정</p>
+            <p class="mlabeltext">크로스에디터의 편집 영역에 적용될 기본 css 파일을 설정합니다.</p>
+            <p class="mlabel1">Skin Color 설정</p>
+            <p class="mlabeltext">크로스에디터의 외각선 색깔이나 내각선 색깔, 기본 폰트 색깔이나 도구막대의 배경색을 지정합니다.<br />
+            &quot;#000000&quot;과 같이 16진수 HTML 코드 값이나 'black'과 같이 색깔 이름을 입력할 수 있습니다.</p>
+            <p class="mlabel1">탭바 설정</p>
+            <p class="mlabeltext">크로스에디터 화면에 표시될 탭의 종류를 지정합니다. '편집', 'HTML', '미리보기' 옵션이 있으며, '편집'은 기본 선택 사항입니다.</p>
+            <p class="mlabel1">툴바 설정</p>
+            <p class="mlabeltext">크로스에디터의 도구막대 기본 메뉴를 관리자가 지정할 수 있습니다.<br />
+            'true'를 선택하면 도구막대 메뉴를 지정할 수 있도록 도구막대 하위 메뉴가 나타납니다. 원하는 도구 단추를 선택하면 '미리보기'창에 선택된 단구 단추가 정렬되어 나타납니다.<br />
+            사용자가 사용하는 크로스에디터에 새로운 도구 단추가 어떻게 나타나는지 확인하려면 관리자 설정 페이지 상단의 '미리보기'를 누릅니다.</p>
+			
+			<!-- Custom 메뉴 설정 설명 추가 -->
+            <p class="mlabel1">Custom 메뉴 설정</p>
+            <p class="mlabeltext">크로스에디터의 도구막대 메뉴에 사용자 메뉴를 지정할 수 있습니다.<br />
+            지정할 메뉴의 '메뉴ID'를 입력합니다. '메뉴ID'는 영문자와 숫자를 이용하여 입력할 수 있으며, 첫 글자는 반드시 영문자로 입력해야 합니다.<br />
+			지정할 메뉴의 '실행 방식'을 선택합니다.<br />
+			- Function: 도구막대 메뉴에서 Custom 메뉴로 설정한 도구 단추를 누르면 해당 기능이 바로 실행됨.<br/>
+			- Plugin: 도구막대 메뉴에서 Custom 메뉴로 설정한 도구 단추를 누르면, 미리 정의해 둔 대화 상자가 나타나도록 함.<br />
+			'이미지 경로'에 지정할 메뉴의 도구 단추로 사용할 이미지 경로를 입력하고, '메뉴 이름'을 지정한 후, '확인'을 누르면 '설정된 Custom 메뉴'에 나타납니다.
+			</p>
+			
+            <h5><a name="accessibility"></a>[웹 접근성 설정]</h5>
+            <p class="mlabel1">문서 타이틀 설정</p>
+            <p class="mlabeltext">문서의 기본 제목을 설정합니다. HTML &lt;title&gt; 태그와 동일한 기능을 하는 것으로 문서의 기본 제목을 설정합니다.</p>
+            <p class="mlabel1">웹 접근성 강화 옵션 설정</p>
+            <p class="mlabeltext">크로스에디터 사용자가 콘텐츠를 입력할 때 적용할 웹 접근성 준수 정도를 설정합니다. 다음 옵션 중 하나를 선택할 수 있습니다.</p>
+            <p class="mlabeltext">- '기본(사용 안 함)'을 선택하면 웹 접근성의 기준을 적용하지 않고 사용자가 원하는대로 콘텐츠를 입력할 수 있습니다.</p>
+            <p class="mlabeltext">- '1단계(웹 접근성 기능 필수)'을 선택하면 사용자가 웹 접근성 필수 요소에 위배되는 콘텐츠를 입력할 때 에러 메시지를 보여주어 웹 접근성 필수 항목을 준수한 콘텐츠를 작동하도록 합니다. 예를 들어 사용자가 이미지를 삽입하면서 이미지 대체 텍스트를 입력하지 않으면 에러 메시지를 보여주어 이미지 대체 텍스트를 입력하도록 합니다.</p>
+            <p class="mlabeltext">-'2단계(1단계+외부 입력 불가)'를 선택하면 1단계 옵션에 적용한 웹 접근성 필수 요소를 준수하도록 할 뿐만 아니라 외부 텍스트 붙여넣기가 불가능합니다. 사용자에게 비표준 태그를 포함할 수 있는 외부 텍스트를 붙여 넣지 못하도록 함으로써 웹 접근성에 위배되는 상황을 원천으로 차단할 수 있습니다.</p>
+            
+            <hr />
+            
+            <h3><a name="account"></a>계정 관리</h3>
+            <p class="mtext">크로스에디터 관리자 계정의 비밀번호를 변경할 수 있습니다.</p>
+        </td>
+    </tr>
+
+</table>
+</body>
+
+</html>

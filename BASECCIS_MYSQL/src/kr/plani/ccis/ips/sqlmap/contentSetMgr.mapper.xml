@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.plani.ccis.ips.mapper.site.ContentSetMgrMapper">
+	
+	<!-- 콘텐츠설정 정보 -->
+	<resultMap id="CONTENTSET_OUT" type="contentSet"/>
+	
+	<!-- 콘텐츠설정 트리 리스트 -->
+	<select id="list" parameterType="contentSet" resultMap="CONTENTSET_OUT">
+		SELECT  A.MENUID, A.SITEID, A.MENU_NAME, A.DEPTH, A.SORT, A.HIGHERID,
+	           A.TABYN, A.TABYN_NAME, A.MENUTYPE, A.MENUTYPE_NAME,
+	           FN_MENUIDPATH(A.MENUID, '>') AS IDPATH, CONCAT('HOME', '>', FN_MENUNAMEPATH(A.MENUID, '>')) AS NAMEPATH,
+	           A.BOARDID, A.KNAME, A.KDESC, A.BOARDKIND, A.BOARDKIND_NAME, A.PAGECOUNT, A.BOARDLISTKIND, A.BOARDLISTKIND_NAME,
+	           A.COMMENTYN, A.COMMENTYN_NAME, A.NOTICEYN, A.NOTICEYN_NAME,
+	           A.SECRETYN, A.SECRETYN_NAME, A.RSSYN, A.RSSYN_NAME, A.CATEGORYYN, A.CATEGORYYN_NAME,
+	           A.IMAGEYN, A.IMAGEYN_NAME, A.FILEMAXCOUNT, A.FILEMAXSIZE, A.COUNTRYYN, A.COUNTRYYN_NAME,
+	           A.STARTTIME, A.ENDTIME, A.ADDFIELD1, A.ADDFIELD2, A.ADDFIELD3, A.ADDFIELD4, A.ADDFIELD5, A.ADDFIELD6,
+	           A.STATE, A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG,
+	           (SELECT COUNT(*) FROM T_TRANS WHERE MENUID = A.MENUID) AS CHILD_CNT,
+               (SELECT COUNT(*) FROM T_TRANS WHERE TARGETMENUID = A.MENUID) AS PARENT_CNT
+		FROM    (
+			SELECT MENUID FROM 
+			(
+				SELECT  FN_MENUTREE('-', #{siteId}) AS MENUID, @level AS level
+				FROM    (SELECT  @start_with := '-', @id := @start_with, @level := 0) vars, T_MENU
+				WHERE   @id IS NOT NULL
+			) A WHERE A.MENUID IS NOT NULL
+		) FN
+		LEFT JOIN    (SELECT A.MENUID, A.SITEID, A.KNAME AS MENU_NAME, A.DEPTH, A.SORT, A.HIGHERID,
+			           A.TABYN, B.KNAME AS TABYN_NAME, A.MENUTYPE, C.KNAME AS MENUTYPE_NAME,
+			           D.BOARDID, D.KNAME, D.KDESC, D.BOARDKIND, E.KNAME AS BOARDKIND_NAME, D.PAGECOUNT, D.BOARDLISTKIND, M.KNAME AS BOARDLISTKIND_NAME,
+			           D.COMMENTYN, F.KNAME AS COMMENTYN_NAME, D.NOTICEYN, G.KNAME AS NOTICEYN_NAME,
+			           D.SECRETYN, H.KNAME AS SECRETYN_NAME, D.RSSYN, K.KNAME AS RSSYN_NAME, D.CATEGORYYN, I.KNAME AS CATEGORYYN_NAME,
+			           D.IMAGEYN, L.KNAME AS IMAGEYN_NAME, D.FILEMAXCOUNT, D.FILEMAXSIZE, D.COUNTRYYN, N.KNAME AS COUNTRYYN_NAME,
+			           D.STARTTIME, D.ENDTIME, D.ADDFIELD1, D.ADDFIELD2, D.ADDFIELD3, D.ADDFIELD4, D.ADDFIELD5, D.ADDFIELD6,
+			           D.STATE, D.INSUSERID, D.INSIP, D.INSTIME, D.DMLUSERID, D.DMLIP, D.DMLTIME, D.DMLLOG
+			    FROM (SELECT * FROM T_MENU WHERE SITEID = #{siteId} AND STATE = 'T') A
+			    	 LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'TABYN') B
+			    	 ON A.TABYN = B.CODE
+         			 LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'MenuType') C
+         			 ON A.MenuType = C.CODE
+			         LEFT JOIN (select * FROM T_BOARD WHERE STATE = 'T') D
+			         ON A.MenuID = D.MenuID
+			         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'BoardKind') E
+			         ON D.BoardKind = E.CODE
+			         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'CommentYN') F
+			         ON D.CommentYN = F.CODE
+			         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'NoticeYN') G
+			         ON D.NoticeYN = G.CODE
+			         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'SecretYN') H
+			         ON D.SecretYN = H.CODE
+			         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'CategoryYN') I
+			         ON D.CategoryYN = I.CODE
+			         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'RssYN') K
+			         ON D.RssYN = K.CODE
+			         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'ImageYN') L
+			         ON D.ImageYN = L.CODE
+			         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'BoardListKind') M
+			         ON D.BoardListKind = M.CODE
+			         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'CountryYN') N
+			         ON D.CountryYN = N.CODE
+				) A
+		ON      FN.MENUID = A.MENUID
+	</select>
+	
+	<!-- 콘텐츠설정 트리 리스트(관리권한있는메뉴) -->
+	<select id="listAdmin" parameterType="contentSet" resultMap="CONTENTSET_OUT">
+		SELECT A.MENUID, A.CMENUID, A.SITEID, A.KNAME AS MENU_NAME, A.DEPTH, A.SORT, A.HIGHERID,
+	           A.TABYN, B.KNAME AS TABYN_NAME, A.MENUTYPE, C.KNAME AS MENUTYPE_NAME,
+	           FN_MENUIDPATH(A.MENUID, '>') AS IDPATH, CONCAT('HOME', '>', FN_MENUNAMEPATH(A.MENUID, '>')) AS NAMEPATH,
+	           D.BOARDID, D.KNAME, D.KDESC, D.BOARDKIND, E.KNAME AS BOARDKIND_NAME, D.PAGECOUNT, D.BOARDLISTKIND, M.KNAME AS BOARDLISTKIND_NAME, N.KNAME AS COUNTRYYN_NAME,
+	           D.COMMENTYN, F.KNAME AS COMMENTYN_NAME, D.NOTICEYN, G.KNAME AS NOTICEYN_NAME,
+	           D.IMAGEYN, L.KNAME AS IMAGEYN_NAME, D.SECRETYN, H.KNAME AS SECRETYN_NAME, D.RSSYN, K.KNAME AS RSSYN_NAME, D.CATEGORYYN, I.KNAME AS CATEGORYYN_NAME, D.FILEMAXCOUNT, D.FILEMAXSIZE, D.APPYN,
+	           D.STARTTIME, D.ENDTIME, D.ADDFIELD1, D.ADDFIELD2, D.ADDFIELD3,
+	           D.STATE, D.INSUSERID, D.INSIP, D.INSTIME, D.DMLUSERID, D.DMLIP, D.DMLTIME, D.DMLLOG
+	    FROM (SELECT A.MENUID, A.SITEID, A.KNAME, A.DEPTH, A.SORT, A.HIGHERID, A.IMAGEPATH, A.IMAGEFILE, A.PROGRAMURL,
+	                 A.CHARGEUSERID, A.TABYN, A.USERGRADEYN, A.MENUTYPE, A.STARTTIME, A.ENDTIME,
+	                 A.STATE, A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG, A.CMENUID
+	          FROM (SELECT A.*, B.MENUID AS CMENUID
+	                FROM (SELECT * FROM T_MENU WHERE SITEID = #{siteId} AND STATE = 'T') A
+	                LEFT JOIN
+	                     (SELECT E.MENUID, E.SITEID, E.KNAME, E.DEPTH, E.SORT, E.HIGHERID
+	                      FROM (SELECT * FROM T_USERGROUP WHERE USERID = #{myId} AND STATE = 'T') A
+	                           JOIN (SELECT * FROM T_GROUP WHERE STATE = 'T') B
+		                       ON A.GROUPID = B.GROUPID
+	                           JOIN (SELECT * FROM T_GROUPROLE WHERE STATE = 'T') C
+	                      	   ON B.GROUPID = C.GROUPID
+	                           JOIN (SELECT * FROM T_ROLE WHERE ROLETYPE = 'ADMIN' AND STATE = 'T') D
+			                   ON C.ROLEID = D.ROLEID
+	                           JOIN (SELECT * FROM T_MENU WHERE SITEID = #{siteId} AND STATE = 'T') E
+	                      	   ON D.MENUID = E.MENUID
+	                      GROUP BY E.MENUID, E.SITEID, E.KNAME, E.DEPTH, E.SORT, E.HIGHERID) B
+	                ON A.MENUID = B.MENUID) A
+	          START WITH A.CMENUID IS NOT NULL
+	          CONNECT BY PRIOR A.HIGHERID = A.MENUID
+	          GROUP BY A.MENUID, A.SITEID, A.KNAME, A.DEPTH, A.SORT, A.HIGHERID, A.IMAGEPATH, A.IMAGEFILE, A.PROGRAMURL,
+	                 A.CHARGEUSERID, A.TABYN, A.USERGRADEYN, A.MENUTYPE, A.STARTTIME, A.ENDTIME,
+	                 A.STATE, A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG, A.CMENUID
+	         ) A
+	         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'TabYN') B
+		     ON A.TabYN = B.CODE
+	         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'MenuType') C
+	    	 ON A.MenuType = C.CODE
+	         LEFT JOIN (SELECT * FROM T_BOARD WHERE STATE = 'T') D
+	    	 ON A.MenuID = D.MenuID
+	         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'BoardKind') E
+			 ON D.BoardKind = E.CODE
+	         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'CommentYN') F
+	    	 ON D.CommentYN = F.CODE
+	         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'NoticeYN') G
+	    	 ON D.NoticeYN = G.CODE
+	         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'SecretYN') H
+	    	 ON D.SecretYN = H.CODE
+	         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'CategoryYN') I
+	    	 ON D.CategoryYN = I.CODE
+	         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'RssYN') K
+	         ON D.RssYN = K.CODE
+	         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'ImageYN') L
+	    	 ON D.ImageYN = L.CODE
+	         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'BoardListKind') M
+	    	 ON D.BoardListKind = M.CODE
+	         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'CountryYN') N
+	         ON D.CountryYN = N.CODE
+	</select>
+	
+	<!-- 콘텐츠설정 상세 -->
+	<select id="view" parameterType="contentSet" resultMap="CONTENTSET_OUT">
+		SELECT D.BOARDID, A.MENUID, D.KNAME, D.KDESC, D.BOARDKIND, E.KNAME AS BOARDKIND_NAME, D.PAGECOUNT, D.BOARDLISTKIND, M.KNAME AS BOARDLISTKIND_NAME,
+	           D.COMMENTYN, F.KNAME AS COMMENTYN_NAME, D.NOTICEYN, G.KNAME AS NOTICEYN_NAME,
+	           D.SECRETYN, H.KNAME AS SECRETYN_NAME, D.RSSYN, K.KNAME AS RSSYN_NAME, D.CATEGORYYN, H.KNAME AS CATEGORYYN_NAME, 
+	           D.NEWYN, O.KNAME AS NEWYN_NAME, D.BOARDHEADERKHTML, D.BOARDFOOTERKHTML,
+	           D.IMAGEYN, L.KNAME AS IMAGEYN_NAME, D.FILEMAXCOUNT, D.FILEMAXSIZE, D.COUNTRYYN, N.KNAME AS COUNTRYYN_NAME, D.APPYN, P.KNAME AS APPYN_NAME,
+	           D.BOARDHEADERKHTML, D.BOARDFOOTERKHTML,
+	           D.STARTTIME, D.ENDTIME, 
+	           D.ADDFIELD1, D.ADDFIELD2, D.ADDFIELD3, D.ADDFIELD4, D.ADDFIELD5, D.ADDFIELD6, D.ADDFIELD7, D.ADDFIELD8, D.ADDFIELD9, D.ADDFIELD10,
+	           D.STATE, D.INSUSERID, D.INSIP, D.INSTIME, D.DMLUSERID, D.DMLIP, D.DMLTIME, D.DMLLOG, IFNULL(J.CNT, 0) AS CNT, D.SNSYN, D.CUSTOMIZINGYN
+	    FROM (SELECT * FROM T_MENU WHERE MENUID = #{paramMenuId} AND STATE = 'T') A
+	    	 JOIN T_BOARD D
+	    	 ON A.MenuID = D.MenuID 
+	         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'BoardKind') E
+	    	 ON D.BoardKind = E.CODE
+	         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'CommentYN') F
+		     ON D.CommentYN = F.CODE
+	         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'NoticeYN') G
+ 		     ON D.NoticeYN = G.CODE
+	         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'SecretYN') H
+		     ON D.SecretYN = H.CODE
+	         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'CategoryYN') I
+		     ON D.CategoryYN = I.CODE
+	         LEFT JOIN (SELECT MENUID, COUNT(*) AS CNT FROM T_LINK WHERE STATE = 'T' GROUP BY MENUID) J
+		     ON A.MENUID = J.MENUID
+	         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'RssYN') K
+		     ON D.RssYN = K.CODE
+	         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'ImageYN') L
+		     ON D.ImageYN = L.CODE
+	         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'BoardListKind') M
+		     ON D.BoardListKind = M.CODE
+	         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'CountryYN') N
+		     ON D.CountryYN = N.CODE
+	         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'NewYN') O
+		     ON D.NewYN = O.CODE
+		     LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'AppYN') P
+		     ON D.AppYN = P.CODE
+	</select>
+	
+	<select id="listCategory" parameterType="contentSet" resultType="java.util.HashMap">
+		SELECT B.BOARDID, C.CATEGORYID, C.CATEGORYNAME, C.STATE, C.INSUSERID, C.INSIP, C.INSTIME, C.DMLUSERID, C.DMLIP, C.DMLTIME, C.DMLLOG
+	    FROM (SELECT * FROM T_MENU WHERE MENUID = #{paramMenuId} AND STATE = 'T') A
+	    	 JOIN T_BOARD B
+	    	 ON A.MenuID = B.MenuID
+	    	 JOIN T_CATEGORY C
+	    	 ON B.BoardID = C.BoardID
+	</select>
+	
+	<select id="listCustomizing" parameterType="contentSet" resultType="java.util.HashMap">
+		SELECT *
+	    FROM T_DBOARDLIST
+	    WHERE BOARDID = (SELECT MAX(BOARDID) FROM T_BOARD WHERE MENUID = #{paramMenuId} AND STATE = 'T')
+	</select>
+	
+	<select id="listManageUser" parameterType="contentSet" resultType="java.util.HashMap">
+		SELECT B.BOARDID, C.USERID, E.KNAME AS USERNAME, F.DUTYID, G.KNAME AS DUTYNAME, F.POSITIONID, H.KNAME AS POSITIONNAME,
+	           F.PHONE, F.FAX, F.DEPTID, F.DEPTSEQ, I.KNAME AS DEPTNAME,
+	           C.MANAGETYPE, D.KNAME AS MANAGETYPENAME, C.SORT,
+	           C.STATE, C.INSUSERID, C.INSIP, C.INSTIME, C.DMLUSERID, C.DMLIP, C.DMLTIME, C.DMLLOG
+	    FROM (SELECT * FROM T_MENU WHERE MENUID = #{paramMenuId} AND STATE = 'T') A
+	    JOIN T_BOARD B
+	      ON A.MenuID = B.MenuID
+	    JOIN T_MANAGEUSER C
+	      ON B.BoardID = C.BoardID
+	    JOIN (SELECT * FROM T_CODE WHERE HIGHERCODE = 'ManageType' AND STATE = 'T') D
+	      ON C.MANAGETYPE = D.CODE
+	    JOIN T_USER E
+	      ON C.USERID = E.USERID
+		LEFT JOIN (SELECT * FROM T_TEAM WHERE DEPTSEQ IN (SELECT IFNULL(MAX(DEPTSEQ), 0) FROM T_TEAM WHERE STATE = 'T')) F
+		  ON C.USERID = F.USERID
+		LEFT JOIN T_DUTY G 
+		  ON F.DUTYID = G.DUTYID
+		LEFT JOIN T_POSITION H
+		  ON F.POSITIONID = H.POSITIONID
+		LEFT JOIN T_DEPARTMENT I
+		  ON F.DEPTSEQ = I.DEPTSEQ
+	    ORDER BY C.MANAGETYPE, C.SORT
+	</select>
+	
+	<!-- 콘텐츠설정 추가/수정/삭제 -->	 
+	<insert id="insert" parameterType="contentSet">
+		<selectKey keyProperty="boardId" resultType="string" order="BEFORE">
+			<if test='inCondition == "입력"'>
+				SELECT CONCAT('BOARD', LPAD(Substr(IFNULL(max(BOARDID), 'BOARD00000'),6 , 5)+1, 5, '0'))AS BOARDID  FROM T_BOARD
+			</if>
+			<if test='inCondition == "수정"'>
+				SELECT BOARDID FROM T_BOARD WHERE MENUID = #{paramMenuId}
+			</if>
+		</selectKey>
+		<if test='inCondition == "입력"'>
+			INSERT INTO T_BOARD(BOARDID, MENUID, KNAME, KDESC, BOARDKIND, PAGECOUNT, COMMENTYN, BOARDLISTKIND,
+                                NOTICEYN, SECRETYN, RSSYN, CATEGORYYN, IMAGEYN, SNSYN, NEWYN, CUSTOMIZINGYN, APPYN, FILEMAXCOUNT, FILEMAXSIZE, BOARDHEADERKHTML, BOARDFOOTERKHTML,
+                                STARTTIME, ENDTIME, COUNTRYYN, 
+                                ADDFIELD1, ADDFIELD2, ADDFIELD3, ADDFIELD4, ADDFIELD5, ADDFIELD6, ADDFIELD7, ADDFIELD8, ADDFIELD9, ADDFIELD10,
+                                STATE, INSUSERID, INSIP, INSTIME, DMLUSERID, DMLIP, DMLTIME, DMLLOG)
+            VALUES (#{boardId}, #{paramMenuId}, #{KName}, #{KDesc}, #{boardKind}, #{pageCount}, #{commentYN}, #{boardListKind},
+                    #{noticeYN}, #{secretYN}, #{rssYN}, #{categoryYN}, #{imageYN}, #{snsYN}, #{newYN}, #{customizingYN}, #{appYN}, #{fileMaxCount}, #{fileMaxSize}, #{boardHeaderKHtml}, #{boardFooterKHtml},
+                    NOW(), DATE_ADD(NOW(), INTERVAL +10 YEAR), #{countryYN}, 
+                    #{addField1}, #{addField2}, #{addField3}, #{addField4}, #{addField5}, #{addField6}, #{addField7}, #{addField8}, #{addField9}, #{addField10},
+                    #{state}, #{inDMLUserId}, #{inDMLIp}, NOW(), #{inDMLUserId}, #{inDMLIp}, NOW(), '-')
+		</if>
+		<if test='inCondition == "수정"'>
+			UPDATE T_BOARD
+            SET KNAME=#{KName}, KDESC=#{KDesc}, BOARDKIND = #{boardKind}, PAGECOUNT = #{pageCount}, COMMENTYN = #{commentYN}, BOARDLISTKIND = #{boardListKind},
+                NOTICEYN = #{noticeYN}, SECRETYN=#{secretYN}, RSSYN=#{rssYN}, CATEGORYYN=#{categoryYN}, IMAGEYN=#{imageYN}, SNSYN=#{snsYN}, 
+                NEWYN=#{newYN}, APPYN = #{appYN}, CUSTOMIZINGYN = #{customizingYN}, 
+                FILEMAXCOUNT=#{fileMaxCount}, FILEMAXSIZE=#{fileMaxSize},
+                ADDFIELD1=#{addField1}, ADDFIELD2 = #{addField2}, COUNTRYYN = #{countryYN}, ADDFIELD3=#{addField3}, ADDFIELD4=#{addField4}, 
+                ADDFIELD5 = #{addField5}, ADDFIELD6=#{addField6}, ADDFIELD7=#{addField7}, ADDFIELD8=#{addField8},
+                ADDFIELD9=#{addField9}, ADDFIELD10=#{addField10},
+                BOARDHEADERKHTML=#{boardHeaderKHtml}, BOARDFOOTERKHTML=#{boardFooterKHtml},
+                State=#{state}, DMLUserID=#{inDMLUserId}, DMLIP=#{inDMLIp}, DMLTime=NOW()
+            WHERE BOARDID = #{boardId}
+		</if>
+	</insert>
+	
+	<insert id="insertCategory" parameterType="contentSet">
+		INSERT INTO T_CATEGORY (BOARDID, CATEGORYID, CATEGORYNAME, STATE, INSUSERID, INSIP, INSTIME, DMLUSERID, DMLIP, DMLTIME, DMLLOG)
+                VALUES (#{boardId}, #{categoryId}, #{categoryName},
+                        'T', #{inDMLUserId}, #{inDMLIp}, NOW(), #{inDMLUserId}, #{inDMLIp}, NOW(), '-')
+	</insert>
+	
+	<insert id="insertCustomizing" parameterType="contentSet">
+		INSERT INTO T_DBOARDLIST (BOARDID, INFO, SORT)
+                VALUES (#{boardId},  #{categoryId}, (SELECT IFNULL(MAX(A.SORT), 0)+1 FROM T_DBOARDLIST A WHERE BOARDID = #{boardId}));
+	</insert>
+
+	<update id="deleteBoard" parameterType="contentSet">
+		UPDATE T_BOARD SET STATE = 'F'
+		WHERE BOARDID = #{boardId}
+	</update>
+	
+	<delete id="deleteCategory" parameterType="contentSet">
+		DELETE FROM T_CATEGORY WHERE BOARDID = #{boardId}
+	</delete>
+	
+	<delete id="deleteCustomizing" parameterType="contentSet">
+		DELETE FROM T_DBOARDLIST WHERE BOARDID = #{boardId}
+	</delete>
+	
+</mapper>

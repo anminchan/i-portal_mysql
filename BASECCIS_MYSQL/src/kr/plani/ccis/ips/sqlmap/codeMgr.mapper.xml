@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.plani.ccis.ips.mapper.system.CodeMgrMapper">
+
+    <!-- 코드 정보 -->
+    <resultMap type="code" id="CODE_OUT" />
+
+    <!-- 코드 콤보 리스트 -->
+    <select id="comboList" parameterType="code" resultMap="CODE_OUT">
+        SELECT CODE, HIGHERCODE, SITEID, KNAME, ENAME, DEPTH, SORT, STATE
+		FROM T_CODE
+		WHERE STATE = 'T'
+		AND HIGHERCODE = #{inCode}
+		ORDER BY SORT
+    </select>
+    
+     <!-- 코드 트리 리스트 -->
+    <select id="treeList" parameterType="code" resultMap="CODE_OUT">
+        SELECT CODE, HIGHERCODE, SITEID, KNAME, ENAME, DEPTH, SORT,
+           STATE, INSUSERID, INSIP, INSTIME, DMLUSERID, DMLIP, DMLTIME, DMLLOG
+    	FROM (SELECT * FROM T_CODE C WHERE C.SITEID = #{siteId} AND C.STATE = 'T') A
+    	ORDER BY SORT
+    </select>
+    
+   <!-- 코드 상세 -->
+	<select id="view" parameterType="code" resultMap="CODE_OUT">
+		SELECT A.CODE, A.HIGHERCODE, A.SITEID, A.KNAME, A.ENAME, B.KNAME AS HIGHERCODE_NAME, A.DEPTH, A.SORT,
+		A.STATE, A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG
+	    FROM (SELECT * FROM T_CODE C WHERE C.CODE = #{code} AND C.HIGHERCODE = #{higherCode} AND C.STATE = 'T') A
+	    LEFT JOIN T_CODE B
+	    ON A.HIGHERCODE = B.CODE
+	</select>
+	
+	<!-- 코드 중복여부 -->
+	<select id="check" parameterType="code" resultType="int">
+		SELECT COUNT(*) AS ROWCNT
+	    FROM T_CODE
+	    WHERE UPPER(CODE) = #{code}
+	    AND UPPER(HIGHERCODE) = #{higherCode}
+
+	</select>
+	
+	<!-- 코드 추가/수정/삭제 -->	 
+	<insert id="insert" parameterType="code">
+	  <if test='inCondition == "입력"'>
+			INSERT INTO T_CODE
+			(
+				CODE, HIGHERCODE, SITEID, KNAME, ENAME, DEPTH, SORT,
+	        	STATE, INSUSERID, INSIP, INSTIME, DMLUSERID, DMLIP, DMLTIME, DMLLOG
+	        )
+	        VALUES
+	        (
+	        	#{code}, #{higherCode}, #{siteId}, #{KName}, #{EName}, #{depth}, (SELECT IFNULL(MAX(SORT), 0) + 1 FROM T_CODE C WHERE C.HIGHERCODE = #{higherCode} AND C.SITEID = #{siteId}),
+				'T', #{inDMLUserId}, #{inDMLIp}, NOW(), #{inDMLUserId}, #{inDMLIp}, NOW(), '-'
+			)
+		</if>
+		<if test='inCondition == "수정"'>
+			UPDATE T_CODE SET 
+				SITEID = #{siteId}, KNAME = #{KName}, ENAME = #{EName}, DEPTH = #{depth}, SORT = #{sort},
+                STATE = #{state}, DMLUSERID = #{inDMLUserId}, DMLIP = #{inDMLIp}, DMLTIME = NOW()
+            WHERE CODE = #{code}
+            AND HIGHERCODE = #{higherCode}
+		</if>
+	</insert>
+	
+</mapper>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<!-- console로 log 남기기 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>
+                ▶ %-5level %d{HH:mm:ss.SSS} [%thread] %logger[%method:%line] - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+    <appender name="consoleForLoginInterceptor" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>
+                ▷ %-5level %d{HH:mm:ss} %logger[%method:%line] - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+ 
+	<!-- file로 log 남기기 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>
+                ▶ %-5level %d{HH:mm:ss.SSS} [%thread] %logger[%method:%line] - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+    
+    <appender name="file" class="ch.qos.logback.core.FileAppender">
+        <file>E:/project/2017/workspace/BASECCIS/logs/applicationRollingFile.log</file><!-- 운영 적용시 변경 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 파일이 하루에 한개씩 생성된다 -->
+            <fileNamePattern>E:/project/2017/workspace/BASECCIS/logs/applicationRollingFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+ 
+            <!-- maxHIstory 설정은 위 부분에 롤링 정책에 따라 적용되 된다고 보면된다. 위 설정데로 라면 30일이 지난 파일은 삭제가 된다.-->
+            <maxHistory>5</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>
+                ▶ %-5level %d{HH:mm:ss.SSS} [%thread] %logger[%method:%line] - %msg%n
+                <!-- [%method:%line] : 어떤 메소드에 어떤 라인에서 찍혔는지 %msg%n : 찍고 싶은 로그-->
+            </pattern>
+        </encoder>
+    </appender>
+        
+    <!-- 이 아래에 있는 애들 다 log로 찍겠다. -->
+    <logger name="org.springframework" level="info" />
+    <logger name="kr" level="DEBUG" />
+    <root level="info">
+        <appender-ref ref="console" />
+        <appender-ref ref="file" />
+    </root>
+        
+</configuration>

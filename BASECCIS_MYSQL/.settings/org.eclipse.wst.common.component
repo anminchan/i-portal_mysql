@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="BASECCIS_MYSQL">
+        <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <dependent-module archiveName="spring-core-4.3.16.RELEASE.jar" deploy-path="/WEB-INF/lib/" handle="module:/resource/spring-core-4.3.16.RELEASE/spring-core-4.3.16.RELEASE">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-messaging-4.3.16.RELEASE.jar" deploy-path="/WEB-INF/lib/" handle="module:/resource/spring-messaging-4.3.16.RELEASE/spring-messaging-4.3.16.RELEASE">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-oxm-4.3.16.RELEASE.jar" deploy-path="/WEB-INF/lib/" handle="module:/resource/spring-oxm-4.3.16.RELEASE/spring-oxm-4.3.16.RELEASE">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-jms-4.3.16.RELEASE.jar" deploy-path="/WEB-INF/lib/" handle="module:/resource/spring-jms-4.3.16.RELEASE/spring-jms-4.3.16.RELEASE">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-web-4.3.16.RELEASE.jar" deploy-path="/WEB-INF/lib/" handle="module:/resource/spring-web-4.3.16.RELEASE/spring-web-4.3.16.RELEASE">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-beans-4.3.16.RELEASE.jar" deploy-path="/WEB-INF/lib/" handle="module:/resource/spring-beans-4.3.16.RELEASE/spring-beans-4.3.16.RELEASE">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-instrument-4.3.16.RELEASE.jar" deploy-path="/WEB-INF/lib/" handle="module:/resource/spring-instrument-4.3.16.RELEASE/spring-instrument-4.3.16.RELEASE">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-aspects-4.3.16.RELEASE.jar" deploy-path="/WEB-INF/lib/" handle="module:/resource/spring-aspects-4.3.16.RELEASE/spring-aspects-4.3.16.RELEASE">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-expression-4.3.16.RELEASE.jar" deploy-path="/WEB-INF/lib/" handle="module:/resource/spring-expression-4.3.16.RELEASE/spring-expression-4.3.16.RELEASE">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-jdbc-4.3.16.RELEASE.jar" deploy-path="/WEB-INF/lib/" handle="module:/resource/spring-jdbc-4.3.16.RELEASE/spring-jdbc-4.3.16.RELEASE">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-context-4.3.16.RELEASE.jar" deploy-path="/WEB-INF/lib/" handle="module:/resource/spring-context-4.3.16.RELEASE/spring-context-4.3.16.RELEASE">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-webmvc-portlet-4.3.16.RELEASE.jar" deploy-path="/WEB-INF/lib/" handle="module:/resource/spring-webmvc-portlet-4.3.16.RELEASE/spring-webmvc-portlet-4.3.16.RELEASE">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-test-4.3.16.RELEASE.jar" deploy-path="/WEB-INF/lib/" handle="module:/resource/spring-test-4.3.16.RELEASE/spring-test-4.3.16.RELEASE">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-orm-4.3.16.RELEASE.jar" deploy-path="/WEB-INF/lib/" handle="module:/resource/spring-orm-4.3.16.RELEASE/spring-orm-4.3.16.RELEASE">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-instrument-tomcat-4.3.16.RELEASE.jar" deploy-path="/WEB-INF/lib/" handle="module:/resource/spring-instrument-tomcat-4.3.16.RELEASE/spring-instrument-tomcat-4.3.16.RELEASE">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-security-core-4.2.3.RELEASE.jar" deploy-path="/WEB-INF/lib/" handle="module:/resource/spring-security-core-4.2.3.RELEASE/spring-security-core-4.2.3.RELEASE">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-webmvc-4.3.16.RELEASE.jar" deploy-path="/WEB-INF/lib/" handle="module:/resource/spring-webmvc-4.3.16.RELEASE/spring-webmvc-4.3.16.RELEASE">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-websocket-4.3.16.RELEASE.jar" deploy-path="/WEB-INF/lib/" handle="module:/resource/spring-websocket-4.3.16.RELEASE/spring-websocket-4.3.16.RELEASE">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-tx-4.3.16.RELEASE.jar" deploy-path="/WEB-INF/lib/" handle="module:/resource/spring-tx-4.3.16.RELEASE/spring-tx-4.3.16.RELEASE">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-context-support-4.3.16.RELEASE.jar" deploy-path="/WEB-INF/lib/" handle="module:/resource/spring-context-support-4.3.16.RELEASE/spring-context-support-4.3.16.RELEASE">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="context-root" value="BASECCIS_MYSQL"/>
+        <property name="java-output-path" value="/BASECCIS_MYSQL/build/classes"/>
+    </wb-module>
+</project-modules>

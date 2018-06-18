@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.plani.ccis.ips.mapper.system.MenuMgrMapper">
+	
+	<!-- 메뉴 정보 -->
+	<resultMap id="MENU_OUT" type="menu"/>
+	
+	<!-- 메뉴 리스트 -->
+	<select id="list" parameterType="menu" resultMap="MENU_OUT">
+		SELECT  A.MENUID, A.SITEID, FUNSITENAME(A.SITEID)AS SITENAME, A.KNAME, 
+	            A.KDESC, A.DEPTH, A.SORT,
+	            A.HIGHERID, A.IMAGEPATH, A.IMAGEFILE,
+	            A.PROGRAMURL, A.CHARGEUSERID, A.TABYN,
+	            A.TABYN_NAME, A.USERGRADEYN, A.USERGRADEYN_NAME,
+	            A.DISPLAYYN, A.DISPLAYYN_NAME,
+  	            A.MENUTYPE, A.MENUTYPE_NAME,
+	            A.STARTTIME, A.ENDTIME, A.STATE,
+	            A.INSUSERID, A.INSIP, A.INSTIME,
+	            A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG, 
+	            FN_MENUIDPATH(A.MENUID, '>') AS IDPATH, 
+	            CONCAT('HOME', '>', FN_MENUNAMEPATH(A.MENUID, '>')) AS NAMEPATH,
+	            (SELECT COUNT(*) FROM T_TRANS WHERE MENUID = A.MENUID) AS CHILD_CNT,
+                (SELECT COUNT(*) FROM T_TRANS WHERE TARGETMENUID = A.MENUID) AS PARENT_CNT
+		FROM (SELECT MENUID
+				FROM(SELECT  FN_MENUTREE('-', #{siteId}) AS MENUID, @level AS level
+				       FROM    (SELECT  @start_with := '-', @id := @start_with, @level := 0) vars, T_MENU
+					  WHERE   @id IS NOT NULL) A 
+			   WHERE A.MENUID IS NOT NULL
+		) FN
+		LEFT JOIN (SELECT A.MENUID, A.SITEID, A.KNAME,
+			           A.KDESC, A.DEPTH, A.SORT,
+			           A.HIGHERID, A.IMAGEPATH, A.IMAGEFILE,
+			           A.PROGRAMURL, A.CHARGEUSERID, A.TABYN,
+			           B.KNAME AS TABYN_NAME, A.USERGRADEYN, C.KNAME AS USERGRADEYN_NAME,
+			           A.DISPLAYYN, E.KNAME AS DISPLAYYN_NAME,
+			           A.MENUTYPE, D.KNAME AS MENUTYPE_NAME,
+			           A.STARTTIME, A.ENDTIME, A.STATE,
+			           A.INSUSERID, A.INSIP, A.INSTIME,
+			           A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG
+			    FROM (SELECT * FROM T_MENU WHERE SITEID = #{siteId}) A
+			    	 LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'TABYN') B
+			    	 ON A.TABYN = B.CODE
+			         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'USERGRADEYN') C
+			         ON A.USERGRADEYN = C.CODE
+			         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'MENUTYPE') D
+			         ON A.MENUTYPE = D.CODE
+			         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'DISPLAYYN') E
+			         ON A.DISPLAYYN = E.CODE
+				) A
+		ON      FN.MENUID = A.MENUID
+	</select>
+
+	<!-- 메뉴 상세 -->
+	<select id="view" parameterType="menu" resultMap="MENU_OUT">
+		SELECT A.MENUID, A.SITEID, A.KNAME,
+	           A.KDESC, A.DEPTH, A.SORT,
+	           A.HIGHERID, FUNMENUNAME(A.HIGHERID) AS HIGHERID_NAME, A.IMAGEPATH, A.IMAGEFILE,
+	           A.PROGRAMURL, A.CHARGEUSERID, D.KNAME as CHARGEUSERID_NAME,
+	           <!-- E.DEPTID AS CHARGEDEPTID, H.KNAME AS CHARGEDEPTID_NAME, E.DUTYID AS CHARGEDUTYID, F.KNAME AS CHARGEDUTYID_NAME,
+               E.POSITIONID AS CHARGEPOSITIONID, G.KNAME AS CHARGEPOSITIONID_NAME, E.PHONE AS CHARGEPHONE, E.FAX AS CHARGEFAX, -->
+	           A.TABYN, B.KNAME AS TABYN_NAME, A.USERGRADEYN, C.KNAME AS USERGRADEYN_NAME, A.DISPLAYYN, L.KNAME AS DISPLAYYN_NAME,
+	           A.MENUTYPE, I.KNAME AS MENUTYPE_NAME, IFNULL(A.NEWMENUYN, 'N')AS NEWMENUYN,
+	           A.STARTTIME, A.ENDTIME, A.STATE,
+	           A.INSUSERID, A.INSIP, A.INSTIME,
+	           A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG
+	    FROM (SELECT * FROM T_MENU WHERE MENUID = #{paramMenuId}) A
+	    	 LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'TabYN') B
+	    	 ON A.TabYN = B.CODE
+	         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'UserGradeYN') C
+	         ON A.UserGradeYN = C.CODE
+	         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'DisplayYN') L
+	         ON A.DisplayYN = L.CODE
+	         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'MenuType') I
+	         ON A.MenuType = I.CODE
+	         LEFT JOIN (SELECT * FROM T_USER WHERE STATE = 'T') D
+	         ON A.CHARGEUSERID = D.USERID
+	         <!-- LEFT JOIN (SELECT * FROM T_TEAM WHERE STATE = 'T' AND DEPTSEQ = 1 AND DEPTSEQ = (SELECT MAX(DEPTSEQ) FROM T_DEPARTMENT WHERE STATE = 'T')) E 
+	         ON A.CHARGEUSERID = E.USERID
+	         LEFT JOIN (SELECT * FROM T_DUTY WHERE STATE = 'T') F 
+	         ON E.DUTYID = F.DUTYID
+	         LEFT JOIN (SELECT * FROM T_POSITION WHERE STATE = 'T') G  
+	         ON E.POSITIONID = G.POSITIONID
+	         LEFT JOIN (SELECT * FROM T_DEPARTMENT WHERE STATE = 'T') H  
+	         ON E.DEPTID = H.DEPTID
+	         AND E.DEPTSEQ = H.DEPTSEQ --> 
+	</select>
+	
+	<select id="selectBoardCnt" parameterType="menu" resultType="int">
+		SELECT COUNT(*)
+        FROM T_TITLE WHERE MenuID IN (SELECT MENUID 
+										FROM T_MENU
+								        WHERE MENUID = #{paramMenuId}
+								        UNION ALL
+								        SELECT  A.MENUID 
+										FROM (SELECT MENUID
+												FROM(SELECT  FN_MENUTREE(#{paramMenuId}, #{siteId}) AS MENUID, @level AS level
+												       FROM    (SELECT  @start_with := #{paramMenuId}, @id := @start_with, @level := 0) vars, T_MENU
+													  WHERE   @id IS NOT NULL) A 
+											   WHERE A.MENUID IS NOT NULL
+										) FN
+										LEFT JOIN (SELECT A.MENUID
+											    FROM (SELECT * FROM T_MENU WHERE SITEID = #{siteId}) A
+												) A
+										ON      FN.MENUID = A.MENUID)
+	</select>
+	
+	<select id="selectMenuTreeList" parameterType="menu" resultType="java.util.HashMap">
+		SELECT MENUID, MENUTYPE 
+		FROM T_MENU
+        WHERE MENUID = #{paramMenuId}
+        UNION ALL
+        SELECT  A.MENUID, A.MENUTYPE 
+		FROM (SELECT MENUID
+				FROM(SELECT  FN_MENUTREE(#{paramMenuId}, #{siteId}) AS MENUID, @level AS level
+				       FROM    (SELECT  @start_with := #{paramMenuId}, @id := @start_with, @level := 0) vars, T_MENU
+					  WHERE   @id IS NOT NULL) A 
+			   WHERE A.MENUID IS NOT NULL
+		) FN
+		LEFT JOIN (SELECT A.MENUID, A.MENUTYPE
+			    FROM (SELECT * FROM T_MENU WHERE SITEID = #{siteId}) A
+				) A
+		ON      FN.MENUID = A.MENUID
+			   
+	</select>
+	
+	<!-- 메뉴 추가/수정/삭제 -->	
+	<insert id="insert" parameterType="menu">
+		<selectKey keyProperty="paramMenuId" resultType="string" order="BEFORE">
+			<if test='inCondition == "입력"'>
+				SELECT CONCAT('MENU', LPAD(Substr(IFNULL(max(MenuID), 'MENU00000'),5 , 5)+1, 5, '0'))AS MENUID  FROM T_MENU
+			</if>
+			<if test='inCondition == "수정"'>
+				SELECT MENUID FROM T_MENU WHERE MENUID = #{paramMenuId}
+			</if>
+		</selectKey>
+		<if test='inCondition == "입력"'>
+			INSERT INTO T_MENU(MENUID, SITEID, KNAME,
+                             KDESC, DEPTH, SORT, HIGHERID,
+                             IMAGEPATH, IMAGEFILE, PROGRAMURL, STARTTIME, ENDTIME,
+                             CHARGEUSERID, TABYN, USERGRADEYN, DISPLAYYN, MENUTYPE, NEWMENUYN, IMGKIND, MENUKIND,
+                             STATE, INSUSERID, INSIP, INSTIME, DMLUSERID, DMLIP, DMLTIME, DMLLOG)
+			VALUES (#{paramMenuId}, #{siteId}, #{KName},
+			        #{KDesc}, #{Depth}, (SELECT IF(ISNULL(MAX(SORT)), 1, MAX(SORT)) +1 FROM T_MENU A WHERE HIGHERID = #{HigherID} AND SITEID = #{siteId}), #{HigherID},
+			        #{ImagePath}, #{ImageFile}, #{ProgramURL}, NOW(), DATE_ADD(NOW(), INTERVAL +10 YEAR),
+			        #{ChargeUserID}, #{TabYN}, #{UserGradeYN}, #{displayYN}, #{MenuType}, #{newMenuYN}, #{imgKind}, IF(#{siteId} = 'SITE00001', 'C', 'S'),
+			        #{State}, #{inDMLUserId}, #{inDMLIp}, NOW(), #{inDMLUserId}, #{inDMLIp}, NOW(), '-')
+		</if>
+		<if test='inCondition == "수정"'>
+			UPDATE T_MENU
+	           SET KName=#{KName}, KDesc=#{KDesc}, Depth = #{Depth}, Sort = #{Sort}, HigherID = #{HigherID}, ProgramURL=#{ProgramURL},
+	               ImagePath=#{ImagePath}, ImageFile=#{ImageFile}, CHARGEUSERID=#{ChargeUserID}, TabYN = #{TabYN}, UserGradeYN=#{UserGradeYN}, 
+	               DisplayYN=#{displayYN}, MenuType=#{MenuType}, NewMenuYN=#{newMenuYN}, IMGKIND=#{imgKind},
+	               State=#{State}, DMLUserID=#{inDMLUserId}, DMLIP=#{inDMLIp}, DMLTime = NOW()
+	           WHERE MenuID = #{paramMenuId}
+		</if>
+	</insert> 
+	
+	<insert id="insertRole1" parameterType="menu">
+		INSERT INTO T_ROLE(ROLEID, MENUID, KNAME, ROLETYPE,
+                               STATE, INSUSERID, INSIP, INSTIME, DMLUSERID, DMLIP, DMLTIME, DMLLOG)
+            SELECT NEXTVAL('SEQT_ROLEROLEID'), MENUID, '관리', 'ADMIN',
+                   'T', #{inDMLUserId}, #{inDMLIp}, NOW(), #{inDMLUserId}, #{inDMLIp}, NOW(), '-'
+            FROM T_MENU
+            WHERE MENUID = #{paramMenuId}
+	</insert>
+	
+	<insert id="insertRole2" parameterType="menu">
+		INSERT INTO T_ROLE(ROLEID, MENUID, KNAME, ROLETYPE,
+                               STATE, INSUSERID, INSIP, INSTIME, DMLUSERID, DMLIP, DMLTIME, DMLLOG)
+            SELECT NEXTVAL('SEQT_ROLEROLEID'), MENUID, '등록', 'WRITE',
+                   'T', #{inDMLUserId}, #{inDMLIp}, NOW(), #{inDMLUserId}, #{inDMLIp}, NOW(), '-'
+            FROM T_MENU
+            WHERE MENUID = #{paramMenuId}
+	</insert>
+	
+	<insert id="insertRole3" parameterType="menu">
+		INSERT INTO T_ROLE(ROLEID, MENUID, KNAME, ROLETYPE,
+                               STATE, INSUSERID, INSIP, INSTIME, DMLUSERID, DMLIP, DMLTIME, DMLLOG)
+            SELECT NEXTVAL('SEQT_ROLEROLEID'), MENUID, '수정', 'MODIFY',
+                   'T', #{inDMLUserId}, #{inDMLIp}, NOW(), #{inDMLUserId}, #{inDMLIp}, NOW(), '-'
+            FROM T_MENU
+            WHERE MENUID = #{paramMenuId}
+	</insert>
+	
+	<insert id="insertRole4" parameterType="menu">
+		INSERT INTO T_ROLE(ROLEID, MENUID, KNAME, ROLETYPE,
+                               STATE, INSUSERID, INSIP, INSTIME, DMLUSERID, DMLIP, DMLTIME, DMLLOG)
+            SELECT NEXTVAL('SEQT_ROLEROLEID'), MENUID, '삭제', 'DELETE',
+                   'T', #{inDMLUserId}, #{inDMLIp}, NOW(), #{inDMLUserId}, #{inDMLIp}, NOW(), '-'
+            FROM T_MENU
+            WHERE MENUID = #{paramMenuId}
+	</insert>
+	
+	<insert id="insertRole5" parameterType="menu">
+		INSERT INTO T_ROLE(ROLEID, MENUID, KNAME, ROLETYPE,
+                               STATE, INSUSERID, INSIP, INSTIME, DMLUSERID, DMLIP, DMLTIME, DMLLOG)
+            SELECT NEXTVAL('SEQT_ROLEROLEID'), MENUID, '읽기', 'READ',
+                   'T', #{inDMLUserId}, #{inDMLIp}, NOW(), #{inDMLUserId}, #{inDMLIp}, NOW(), '-'
+            FROM T_MENU
+            WHERE MENUID = #{paramMenuId}
+	</insert>
+	
+	<insert id="insertGroupRoleAuto" parameterType="menu">
+		<if test='siteId == "SITE00001"'>
+			<!-- 관리자사이트 GROUP00001:전체관리자그룹 -->
+            INSERT INTO T_GROUPROLE(GroupID, RoleID, State, INSUserID, INSIP, INSTime, DMLUserID, DMLIP, DMLTime, DMLLog)
+            VALUES ('GROUP00001', (SELECT ROLEID FROM T_ROLE WHERE MENUID = #{paramMenuId} AND ROLETYPE = 'ADMIN'), 'T', #{inDMLUserId}, #{inDMLIp}, NOW(), #{inDMLUserId}, #{inDMLIp}, NOW(), '-'); 
+        </if> 
+        <if test='siteId != "SITE00001"'>
+           <!-- 관리자사이트 외 GROUP00999:비회원그룹 -->
+           INSERT INTO T_GROUPROLE(GroupID, RoleID, State, INSUserID, INSIP, INSTime, DMLUserID, DMLIP, DMLTime, DMLLog)
+           VALUES ('GROUP00999', (SELECT ROLEID FROM T_ROLE WHERE MENUID = #{paramMenuId} AND ROLETYPE = 'READ'), 'T', #{inDMLUserId}, #{inDMLIp}, NOW(), #{inDMLUserId}, #{inDMLIp}, NOW(), '-');             
+        </if> 
+	</insert>
+	
+	<update id="upadteRoleState" parameterType="menu">
+		<!-- MENU 수정에 따른 ROLE 상태 값 동일하게 변경 -->
+        UPDATE T_ROLE
+        SET State=#{State} 
+        WHERE MenuID = #{paramMenuId}
+    </update>
+    
+    <!-- 메뉴삭제 Start -->
+	<delete id="deleteRole" parameterType="menu">
+		DELETE FROM T_ROLE WHERE MENUID = #{paramMenuId}
+	</delete>
+	
+	<delete id="deleteGroupRole" parameterType="menu">
+		DELETE FROM T_GROUPROLE WHERE ROLEID IN (SELECT ROLEID FROM T_ROLE WHERE MENUID = #{paramMenuId})
+	</delete>
+	
+	<delete id="deleteTrans" parameterType="menu">
+		DELETE FROM T_TRANS WHERE MENUID = #{paramMenuId}
+	</delete>
+	
+	<delete id="deleteBoard" parameterType="menu">
+		DELETE FROM T_BOARD WHERE MENUID = #{paramMenuId}
+	</delete>
+	
+	<delete id="deleteMenu" parameterType="menu">
+		DELETE FROM T_MENU WHERE MENUID = #{paramMenuId}
+	</delete>
+	<!-- 메뉴삭제 End -->
+    
+</mapper>

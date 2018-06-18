@@ -1,0 +1,123 @@
+<html>
+
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>CE_OnKeyActive</title>
+<meta name="author" content="Namo Interactive, Inc.">
+<link rel="stylesheet" href="../images/linkstyle.css">
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="purple" alink="red">
+
+<table border="0" width="640">
+    <tr>
+        <td width="10%" bgcolor="#EEEEEE" bordercolor="#999999">
+            <p align="center" class="pme">Param</p>
+        </td>
+        <td width="10%" bgcolor="#EEEEEE" bordercolor="#999999">
+            <p align="center" class="pme">Method</p>
+        </td>
+        <td width="10%" bgcolor="#5A7FC1" bordercolor="#999999">
+            <p align="center" class="pme"><font color="white">Event</font></p>
+        </td>
+        <td width="10%">
+            <p align="center" class="pme">&nbsp;</p>
+        </td>
+        <td width="50%">
+            <p align="center" class="pme">&nbsp;</p>
+        </td>
+    </tr>
+</table>
+<table border="0" width="640">
+    <tr>
+        <td>
+            <h2>CE_OnKeyActive<sub>v1.5 or higher</sub></h2>
+            <p class="dscrpt">편집 창에서 키보드 동작에 관한 이벤트가 발생할 경우 발생한 키보드의 가상키 값을 반환합니다.</p>
+            
+			<p class="dscrpt">&nbsp;</p>
+            
+			<h4>Syntax</h4>
+            <ul>
+                <pre>void <span class="fname">CE_OnKeyActive</span> (<BR>     BSTR* <SPAN class="paraname">type</SPAN><BR>     Object* <SPAN class="paraname">editorTarget</SPAN><BR>     BSTR* <SPAN class="paraname">editorName</SPAN><BR>     BSTR* <SPAN class="paraname">keyCode</SPAN><br>);</pre>
+            </ul>
+            <h4>Parameters</h4>
+            <P class="paradsc">[out] 이벤트 발생 시 아래와 같은 객체를 반환 합니다.</P>
+            <table class="paradsc2" border="1" cellspacing="0" width="420" bordercolordark="white" bordercolorlight="#999999" height="137">
+                <tr>
+                    <td width="76" bgcolor="#EEEEEE">
+						 <p align="center">객체명</p>
+                    </td>
+                    <td width="170" bgcolor="#EEEEEE">
+                        <p align="center">용도</p>
+                    </td>
+                    <td width="160" bgcolor="#EEEEEE">
+						 <p align="center">구분</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="76">            
+                        <p align="left">type</p>
+                    </td>
+                    <td width="170">
+                        <p align="left">이벤트 발생 type(keydown or keyup)</p>
+                    </td>
+                    <td width="160">
+                        <p align="left">이벤트 공통</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="76" height="33">
+                        <p align="left">editorTarget</p>
+                    </td>
+                    <td width="170" height="33">
+                        <p align="left">에디터 메인 클래스 객체</p>
+                    </td>
+                    <td width="160" height="33">
+                        <p align="left">이벤트 공통</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="76" height="18">
+                        <p align="left">editorName</p>
+                    </td>
+                    <td width="170" height="18">
+                        <p align="left">설정된 에디터 이름</p>
+                    </td>
+                    <td width="160" height="18">
+                        <p align="left">이벤트 공통</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="76">
+                        <p class=mtab>keyCode</p>
+                    </td>
+                    <td width="170">
+                        <p class=mtab>키보드 가상키</p>
+                    </td>
+                    <td width="160">
+                        <p align="left">CE_OnKeyActive 공통</p>
+                    </td>
+                </tr>
+            </table>
+            
+			<p class="dscrpt">&nbsp;</p>
+            
+			<h4>Remarks</h4>
+            <P class=dscrpt>크로스에디터의 Main class 호출 후 에디터가 로드된 다음 메소드를 실행해야 정상적으로 실행이 됩니다.</P>
+            
+			<p class="dscrpt">&nbsp;</p>
+            
+			<h4>Sample Codes</h4>
+            <p class="scode">JavaScript</p>
+            <pre class="scodedsc">var object = new NamoSE(&quot;test&quot;);
+object.editorStart();
+
+function <b>CE_OnKeyActive(e)</b>{
+alert(e.keyCode);
+}</pre>
+            <p class="dscrpt">&nbsp;</p>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<html>
+
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>SpanGrammarIgnore </title>
+<meta name="author" content="Namo Interactive, Inc.">
+<link rel="stylesheet" href="../images/linkstyle.css">
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="purple" alink="red">
+
+<table border="0" width="640">
+    <tr>
+        <td width="10%" bgcolor="#5A7FC1" bordercolor="#999999">
+            <p align="center" class="pme"><font color="white">Param</font></p>
+        </td>
+        <td width="10%" bgcolor="#EEEEEE" bordercolor="#999999">
+            <p align="center" class="pme">Method</p>
+        </td>
+        <td width="10%" bgcolor="#EEEEEE" bordercolor="#999999">
+            <p align="center" class="pme">Event</p>
+        </td>
+        <td width="10%">
+            <p align="center" class="pme">&nbsp;</p>
+        </td>
+        <td width="50%">
+            <p align="center" class="pme">&nbsp;</p>
+        </td>
+    </tr>
+</table>
+<table border="0" width="640">
+    <tr>
+        <td>
+            <H2>SpanGrammarIgnore<sub>v1.7 or higher</sub></H2>
+            <P class="dscrpt">SPAN 태그의 문법적 오류가 발생해도 표준화 모듈전환 작업 시 무시하고 처리되도록 합니다.</P>
+
+            <p class="dscrpt">&nbsp;</p>
+
+            <h4>Syntax</h4>
+            <UL>
+                <PRE>[get] HRESULT <SPAN class="fname">SpanGrammarIgnore</SPAN> (<BR>      boolean* <SPAN class="paraname">pVal</SPAN><BR>);</PRE>
+            </UL>
+            <UL>
+                <PRE>[put] HRESULT <SPAN class="fname">SpanGrammarIgnore</SPAN> (<BR>      boolean <SPAN class="paraname">newVal</SPAN><BR>);</PRE>
+            </UL>
+			
+			<h4>Parameters</h4>
+            <p class="dscrpt">[get]<SPAN class="para">pVal</SPAN></p>
+            <P class="paradsc">[out, retval] 설정된 SPAN 태그의 문법적 오류 허용 여부 설정값을 돌려줍니다.</P>
+            <p class="dscrpt">[put]<SPAN class="para">newVal</SPAN></p>
+            <P class="paradsc">[in] SPAN 태그의 문법적 오류 허용여부 설정합니다.</P>
+            <table class="paradsc2" border="1" cellspacing="0" width="300" bordercolordark="white" bordercolorlight="#999999">
+                <tr>
+                    <td width="75" bgcolor="#EEEEEE">            
+                        <p align="center">TRUE</p>
+                    </td>
+                    <td width="344">
+                        <p>SPAN 오류 무시</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="75" bgcolor="#EEEEEE">            
+                        <p align="center">FALSE</p>
+                    </td>
+                    <td width="344">
+                        <p>SPAN 오류 무시 안 함 (기본값)</p>
+                    </td>
+                </tr>
+            </table>
+            
+			<p class="dscrpt">&nbsp;</p>
+            
+			<h4>Return Values</h4>
+            <p class="dscrpt">현재 설정된 값을 돌려줍니다.</p>
+            
+			<p class="dscrpt">&nbsp;</p>
+            
+			<h4>Remarks</h4>
+            <p class="dscrpt">SpanGrammarIgnore값을 설정하기 위해서 에디터의 MainClass가 호출된 후, 에디터가 로드되기 전에 적용시켜 주어야 합니다.</p>
+            <p class="dscrpt">호출은 생성된 MainClass 객체의 &quot;params&quot;을 통하여 할 수 있습니다.</p>
+            <p class="dscrpt">기본값은 'false'입니다.</p>
+            
+			<p class="dscrpt">&nbsp;</p>
+            
+			<h4>Sample Codes</h4>
+			<P class="scode">JavaScript [get]</P>
+            <pre class="scodedsc">var object = new NamoSE(&quot;test&quot;);
+var edit = object.params.<b>SpanGrammarIgnore</b>;</pre>
+            
+			<p class="dscrpt">&nbsp;</p>
+            
+			<P class="scode">JavaScript [put]</P>
+            <pre class="scodedsc">var object = new NamoSE(&quot;test&quot;);
+object.params.<b>SpanGrammarIgnore</b> = true;
+object.editorStart();</pre>
+            <p class="dscrpt">&nbsp;</p>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

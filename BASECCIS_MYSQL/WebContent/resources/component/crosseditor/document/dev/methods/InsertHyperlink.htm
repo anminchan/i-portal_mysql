@@ -1,0 +1,68 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="generator" content="Namo WebEditor">
+<link rel="stylesheet" href="../images/linkstyle.css">
+<title>InsertHyperlink</title>
+<meta name="author" content="Namo Interactive Inc.">
+<meta name="classification" content="Method">
+</head>
+
+<body bgcolor="white" text="black" link="#485285" vlink="#4673A0" alink="#69A54C">
+<table border="0" width="640">
+    <tr>
+        <td width="10%" bgcolor="#EEEEEE" bordercolor="#999999">
+            <p align="center" class="pme">Param</p>
+        </td>
+        <td width="10%" bgcolor="#5A7FC1" bordercolor="#999999">
+            <p align="center" class="pme"><font color="white">Method</font></p>
+        </td>
+        <td width="10%" bgcolor="#EEEEEE" bordercolor="#999999">
+            <p align="center" class="pme">Event</p>
+        </td>
+        <td width="10%">
+            <p align="center" class="pme">&nbsp;</p>
+        </td>
+        <td width="50%">
+            <p align="center" class="pme">&nbsp;</p>
+        </td>
+    </tr>
+</table>
+<table width="640">
+    <tr>
+        <td>
+            <h2>InsertHyperlink</h2>
+            <p class="dscrpt">현재 캐럿이 위치한 곳에 하이퍼링크를 생성합니다.</p>
+            <p class="dscrpt">&nbsp;</p>
+            <h4>Syntax</h4>
+            <ul>
+                <pre>HRESULT <span class="fname">InsertHyperlink</span> (<br>        BSTR <span class="paraname">str,</span><br>        BSTR <span class="paraname">href</span><br>);</pre>
+            </ul>
+            <h4>Parameters</h4>
+            <p style="text-indent:-50; line-height:120%; margin-top:0; margin-bottom:0; margin-left:85;"><span class="para">str</span></p>
+            <p class="paradsc">[in] 문서에 표시할 문자열을 입력합니다. </p>
+            <p class="paradsc">입력 캐럿이 하이퍼링크에 있거나, 블럭이 설정되어 
+            있을 경우에는 <span class="paraname">str </span>은 무시되며, 그 외의 경우에만 적용됩니다. 또한 <span class="paraname">str 
+            </span>이 
+            없는 경우는 <span class="paraname">href </span>가 사용됩니다.</p>
+            <p style="text-indent:-50; line-height:120%; margin-top:0; margin-bottom:0; margin-left:85;"><span class="para">href</span></p>
+            <p class="paradsc">[in] 하이퍼링크 주소를 입력합니다. </p>
+            <p class="dscrpt">&nbsp;</p>
+            <h4>Return Values</h4>
+            <p class="dscrpt">없음</p>
+            <p class="dscrpt">&nbsp;</p>
+            <H4>Remarks</H4>
+            <P class=dscrpt>메소드는 Main class 호출 후 에디터가 로드된 다음 실행해야 정상적으로 실행됩니다.</P>
+            <P class=dscrpt> <span class="paraname">str</span> 값을 입력 하지 않은 경우 하이퍼링크의 text 값은 <span class="paraname">href</span> 값을 사용합니다.</P>
+            <P class=dscrpt>&nbsp;</P>
+            <h4>Sample Codes</h4>
+            <p class="scode">JavaScript</p>
+            <pre class="scodedsc">var object = new NamoSE(&quot;test&quot;);
+object.editorStart();
+object.<b>InsertHyperlink</b>(&quot;Namo&quot;,&quot;http://www.namo.co.kr&quot;);</pre>
+            <p class="dscrpt">&nbsp;</p>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

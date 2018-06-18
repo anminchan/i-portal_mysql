@@ -1,0 +1,61 @@
+<html>
+
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>GetHeadValue</title>
+<meta name="author" content="Namo Interactive, Inc.">
+<link rel="stylesheet" href="../images/linkstyle.css">
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="purple" alink="red">
+
+<table border="0" width="640">
+    <tr>
+        <td width="10%" bgcolor="#EEEEEE" bordercolor="#999999">
+            <p align="center" class="pme">Param</p>
+        </td>
+        <td width="10%" bgcolor="#5A7FC1" bordercolor="#999999">
+            <p align="center" class="pme"><font color="white">Method</font></p>
+        </td>
+        <td width="10%" bgcolor="#EEEEEE" bordercolor="#999999">
+            <p align="center" class="pme">Event</p>
+        </td>
+        <td width="10%">
+            <p align="center" class="pme">&nbsp;</p>
+        </td>
+        <td width="50%">
+            <p align="center" class="pme">&nbsp;</p>
+        </td>
+    </tr>
+</table>
+<table border="0" width="640">
+    <tr>
+        <td width="634">
+            <h2>GetHeadValue</h2>
+            <p class="dscrpt">현재 편집 중인 문서의 HTML head정보(&lt;head&gt;~&lt;/head&gt;)를 얻어옵니다.</p>
+            <p class="dscrpt">&nbsp;</p>
+            <h4>Syntax</h4>
+            <ul>
+                <pre>HRESULT <span class="fname">GetHeadValue</span>();</pre>
+            </ul>
+            <h4>Parameters</h4>
+            <p class="dscrpt">없음</p>
+            <p class="dscrpt">&nbsp;</p>
+            <h4>Return Values</h4>
+            <p class="dscrpt">head 정보를 문자열(XHTML 문법)로 반환합니다.</p>
+            <p class="dscrpt">&nbsp;</p>
+            <H4>Remarks</H4>
+            <P class="dscrpt">메소드는 Main class 호출 후 에디터가 로드된 다음 실행해야 정상적으로 실행됩니다.</P>
+            <p class="dscrpt">&nbsp;</p>
+            <h4>Sample Codes</h4>
+            <p class="scode">VBScript [get]</p>
+            <pre class="scodedsc">var object = new NamoSE(&quot;test&quot;);
+object.editorStart();
+var info = object.<b>GetHeadValue</b>();
+alert(info);</pre>
+            <p class="dscrpt">&nbsp;</p>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

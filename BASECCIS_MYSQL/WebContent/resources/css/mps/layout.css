@@ -1,0 +1,538 @@
+@charset "utf-8";
+/*-------------------------------------------------
+Layout Style Sheet
+Version : 1.0
+Author : myeong-hee park
+Create date : 2013. 11. 20.
+Last update : 2016. 08. 26.
+-------------------------------------------------*/
+/* Layout STYLE
+-------------------------------------------------*/ 
+.wrap_con {
+	width: 1200px;
+	margin: 0 auto;
+	overflow: hidden;
+	}
+#wrap {
+	width: 100%;
+	min-width: 1200px;	
+	}
+#header {
+	position: relative;
+    width: 100%;
+	margin: auto;	
+	z-index: 95;
+	}
+#header::after {
+    display: block;
+    position: absolute;
+    top: 97px;
+    left: 0;
+    width: 100%;
+    height: 0;
+    margin-top: -11px;
+    background-color: #fff;
+    transition: all 0.25s ease;
+    -webkit-transition: all 0.25s ease;
+    opacity: 0;
+    visibility: hidden;
+    content: '';
+ 	}
+#header.active::after {
+	height: 40px;
+    visibility: visible;
+    opacity: 1;
+	}
+
+
+/* LOGO, tside NAVIGATION STYLE
+-------------------------------------------------*/
+/* 로고 */	
+.logo {
+	float: left;
+	margin-top: 15px;
+	line-height: 1;
+	overflow: hidden;
+	}
+.top_service {
+    overflow: hidden;
+	}	
+.tsidemenu {
+	width: 1200px;
+	margin: 0 auto;
+	line-height: 1.2;
+	text-align: right;
+	overflow: hidden;
+	}	
+.tsidemenu li {
+	position: relative;
+	display: inline-block;
+	margin-left: 12px;
+	padding-left: 12px;
+	}
+.tsidemenu li:first-child {
+	margin-left: 0;
+	padding-left: 0;
+	}
+.tsidemenu li::after {
+	display:block;
+	position:absolute;
+	top: 50%;
+	left: 0;
+	width: 1px;
+	height: 10px;
+	margin-top: -5px;
+	background-color:  #b5b5b5;
+	content: '';
+	}
+.tsidemenu li:first-child::after {
+	display: none;
+	}
+.tsidemenu li a {
+    display: block;
+    padding: 10px 0;
+    line-height: 1.4;
+	}	
+.logo_wrap {
+    position: relative;
+    max-width: 100%;
+    min-height: 65px;
+    margin: 0 auto;
+    line-height: 1;
+    overflow: visible;
+	}	
+/* gnb */	
+#gnavigation {	
+    display: inline-block;
+    margin-left: 150px;
+	text-align: center;
+	letter-spacing: -0.05em;
+	}	
+#gnavigation > li {
+	float: left;
+	margin: 0 5px;	
+	text-align: center;
+	}
+#gnavigation > li > a {
+    display: block;
+	position: relative;
+	padding: 24px 5px;
+	color: #333;
+	font-size: 1.2em;
+	font-weight: 400; 
+	}
+#gnavigation li.active > a,
+#gnavigation li > a:hover {
+	color:#1c3f84;
+    text-decoration: none;
+	}
+#gnavigation > li > a:after {
+    display: block;
+    position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 0;
+	height: 0;
+	background-color: #1c3f84;
+	transition: width .3s ease-in-out;
+	content:'';
+	}
+#gnavigation li > a:hover:after,
+#gnavigation > li.active > a:after {
+	width: 100%;
+	height: 2px;
+	}
+#gnavigation .depth2 {
+	position: absolute;
+    top: 61px;
+	height: 0;
+	font-size: 1.067em;	
+	opacity: 0;
+	filter:alpha(opacity=0);
+    transition: all 0.2s ease;
+	-webkit-transition: all 0.2s ease;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 100;
+	} 
+#gnavigation > li:hover .depth2 {
+    height: 100%;
+    opacity: 1;
+    visibility: visible;
+	}	
+#gnavigation .depth2 > li {
+	float: left;
+	height: 100%;
+	margin: 0 14px;
+	}
+#gnavigation .depth2 > li > a {
+	display: block;
+	padding: 14px 0;
+	}
+#gnavigation .depth2 > li > a:before {
+	display: block;
+    position: absolute;
+	top: 48%;
+	left: 0;
+	width: 5px;
+    height: 5px;
+	border-radius: 100%;
+	filter:alpha(opacity=0);
+	-webkit-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+	content: '';
+	}
+#gnavigation .depth2 > li.active > a:before {
+	background-color: #1c3f84;
+	}
+#gnavigation > li.active > .depth2 {
+	display: block;
+	height: 44px;
+	opacity: 1;
+	filter:alpha(opacity=100);
+	}
+#gnavigation .menu06 > .depth2 {
+	right: 50px;
+	}
+#gnavigation .menu07 > .depth2 {
+	right: 0;
+	}
+
+#visual {
+	position: relative;
+	height: 300px;
+	background: url(../../images/mps/layout/visual.jpg) no-repeat center 0;	
+	text-align: center;
+	}
+#visual:after {
+	display: block;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 60px;
+	background-color: rgba(28, 63, 132, .8 );
+	content: '';
+	}
+#visual .eng {
+	display: block;
+	padding-top: 80px;
+	line-height: 1;
+	}
+#visual .kor {
+	display: block;
+	color: #fff;
+	font-size: 1.467em;
+	}
+/* 본문 Style
+-------------------------------------------------*/
+#body {	
+	clear: both;
+	position: relative;
+    margin: -60px auto 0;
+	overflow: hidden;
+	}
+#snavigation {
+	clear: both;
+	width: 1200px;
+	margin: auto;
+    text-align: center;	
+	overflow: hidden;
+	}	
+#snavigation ul {	
+	display: table;
+    width: 100%;
+	}
+#snavigation li {
+	display: table-cell;
+    width: 1%;
+    height: 58px;
+	}
+#snavigation li > a {
+    position: relative;
+    display: block;
+    line-height: 60px;
+    color: #fff;
+	}
+.page_location {
+	text-align: right;
+	}
+/* content STYLE */	
+#content {
+	position: relative;
+	width: 1200px;
+	margin: 20px auto 115px;
+	}
+#content .stitle {
+	margin: 10px 0 50px;
+	color: #333;
+	text-align: center;
+	line-height: 1.1;
+	font-size: 2.667em;
+	font-family:"Square";
+	}
+#content .stitle:after {
+	display: block;
+	width: 56px;
+	height: 3px;
+	margin: 15px auto 0;
+	background: #333;
+	content:'';
+	}
+/* 탭메뉴 */
+#subTabMenu {
+	position: relative;
+	}	
+#subTabMenu:before {
+	display: block; 
+	position: absolute;
+	top: 20px;
+	width: 100%;
+	height: 1px;
+	background-color: #000;
+	content:'';
+	}
+.tab_menu:before,		
+.tab_menu:after {	
+	display: table;
+	clear: both;
+	content: " ";
+	}	
+.tab_menu {
+	position: relative;
+	margin: 0 auto 60px; 
+	text-align: center;
+	}
+.tab_menu > li {	
+   display: inline-block;
+	position: relative;
+	width: 19.5%;
+	margin-left: -5px;
+    border-left: 3px solid #fff;
+    border-right: 3px solid #fff;
+	}
+.tab_menu > li > a {
+	position: relative;
+	display: block;
+	margin-right: -1px;
+	padding: 7px 35px;
+	background-color: #fff;
+	border: solid 1px #dcdcdc;
+	line-height: 1.6;
+	}
+.tab_menu > li.on > a {
+	background-color: #526997;
+	border-color: #4c6290;
+	color: #fff;
+	}
+#detail_content {
+	min-height: 500px;
+	margin: 0 auto;
+	overflow: hidden;
+	}
+/* 탭메뉴 */
+.snb_nav	 {
+	width: 100%;
+	margin-bottom: 40px;  
+	}
+.snb_nav:before,
+.snb_nav:after {	
+	display: table;
+	clear: both;
+	content: " ";
+	}	
+.snb_nav > li {
+	position: relative;
+	float: left;
+	width: 25%;
+	margin-right: -1px;
+	}
+.snb_nav > li > a {
+	position: relative;
+	display: block;
+	padding: 13px 20px;
+	color: #626262;
+	border: solid 1px #dcdcdc;
+	}
+.snb_nav > li.on > a {
+	background: #1c3f84;
+	color: #fff;
+	}
+/* 콘텐츠 하단 담당자정보 */	
+.person_area {
+	clear: both;
+	width: 100%;
+	margin-top: 55px;
+	padding: 17px 24px;
+	background-color: #fbfbfb;
+	border: solid 1px #eee;
+    box-sizing: border-box;
+	overflow: hidden;
+	}
+.person_area .subject {
+	float: left;
+	width:140px;
+	margin-right: 60px;
+	padding: 4px 0;
+	background-color: #fff;
+	color: #333;
+	border: dashed 1px #72757f;
+	border-radius: 19px;
+	letter-spacing: -0.05em;
+	text-align: center;
+	font-size: 1em;
+	font-weight: 200;
+	}
+.person_area .subject i {
+	margin-right: 3px;
+	color: #526997;
+	}
+.person_info {
+	float: left;
+	margin-top: 5px;
+	overflow: hidden;
+	}
+.person_area li {
+	position: relative;
+	float: left;
+	margin-left: 34px;
+	padding-left: 34px;
+	color: #313131;
+	}
+.person_area li:before {
+	display: inline-block;
+	position: absolute;
+	left: 0;
+	width: 1px;
+	height: 13px;
+	margin-top: 5px;
+	background-color: #bfbfbf;
+	content: '';
+	}	
+.person_area li strong {
+	display: inline-block;
+	margin-right: 10px;
+	font-weight: 200;
+	}
+.person_area li:first-child {
+	margin-left: 0;
+	padding-left: 0;
+	}
+.person_area li:first-child:before {
+	display: none;
+	}
+	
+.autonomy_person {
+	margin-bottom: 10px;
+	overflow: hidden;
+	}
+.autonomy_person dt {
+	display: inline-block;
+	margin: 0 5px;
+	font-weight: 300;
+	}	
+.autonomy_person dd {
+	display: inline-block;
+	margin-right: 10px;
+	}
+		
+/* Footer Style
+-------------------------------------------------*/
+#footer {
+	position: relative;
+	border-top: solid 1px #e5e5e5;
+	}
+#footer:before {
+	position: absolute;
+	top: 50px;
+	left: 0;
+	width: 100%;
+	height: 1px;
+	background-color: #e5e5e5;
+	content:'';
+	}
+#footer .wrap_con {
+	height: 50px;
+	margin-bottom: 30px;
+	overflow: inherit;
+	}
+
+/* 바로가기 메뉴 */		
+.fsidemenu {
+	float: left;
+	margin: 13px 0;
+	letter-spacing: -1px;
+	font-weight: 100;
+	overflow: hidden;
+	}
+.fsidemenu li {
+	position: relative;
+	float: left;
+	margin-left: 25px;	
+	}
+.fsidemenu li:first-child {
+	margin-left: 0;
+	}
+.fsidemenu .point02 {
+	font-weight: 200;
+	}
+
+/* 링크사이트 */			
+.select_link {
+	position: relative;
+	float: right;
+	width: 200px;
+	z-index: 95;
+	}
+.select_link > .link_title {
+	display: block;
+	height: 50px;
+	background-color: #eee;
+	line-height: 3.3;
+	font-size: 0.933em;
+	font-weight: 200;
+	}
+.select_link > .link_title a {
+	display: block;
+	position: relative;
+	height: 100%;
+	padding: 0 20px;
+	color: #777;
+	}
+.select_link > .link_title i {
+	position: absolute;
+	right: 20px;
+	line-height: 50px;
+	}
+.select_link > .link_site  {
+	display: none;
+	position: absolute;
+	bottom: 51px;
+    width: 100%;
+	padding: 20px;
+	background-color: #eee;
+	box-sizing: border-box;
+	}
+.select_link > .link_site > li {
+	margin-top: 6px;
+	}	
+.select_link > .link_site > li:first-child {
+	margin-top: 0;
+	}
+.link_site a {
+	color: #777;
+	}
+#footer address,
+#footer	.copyright {
+	clear: both;
+	width: 1200px;
+	margin: auto;
+	font-weight: 100;
+	}
+#footer	.copyright {
+	padding-bottom: 30px;
+	}
+#footer .float_wrap:after{
+	clear:both;
+	display:block;
+	content:""	
+	}

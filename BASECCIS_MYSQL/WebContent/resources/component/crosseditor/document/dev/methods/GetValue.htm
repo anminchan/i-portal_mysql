@@ -1,0 +1,80 @@
+<html>
+
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>GetValue</title>
+<meta name="author" content="Namo Interactive, Inc.">
+<link rel="stylesheet" href="../images/linkstyle.css">
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="purple" alink="red">
+
+<table border="0" width="640">
+    <tr>
+        <td width="10%" bgcolor="#EEEEEE" bordercolor="#999999">
+            <p align="center" class="pme">Param</p>
+        </td>
+        <td width="10%" bgcolor="#5A7FC1" bordercolor="#999999">
+            <p align="center" class="pme"><font color="white">Method</font></p>
+        </td>
+        <td width="10%" bgcolor="#EEEEEE" bordercolor="#999999">
+            <p align="center" class="pme">Event</p>
+        </td>
+        <td width="10%">
+            <p align="center" class="pme">&nbsp;</p>
+        </td>
+        <td width="50%">
+            <p align="center" class="pme">&nbsp;</p>
+        </td>
+    </tr>
+</table>
+<TABLE width=640 border=0>
+    <TR>
+        <TD>
+            <H2>GetValue</H2>
+            <P class="dscrpt">현재 편집 중인 문서의 내용 전체를 HTML 형식으로 얻어 옵니다.</P>
+            <p class="dscrpt">&nbsp;</p>
+            <H4>Syntax</H4>
+            <UL>
+                <PRE>HRESULT <span class="fname">GetValue</span> (<BR>        BSTR <span class="paraname">type</span><BR>);</PRE>
+            </UL>
+            <H4>Parameters</H4>
+            <P class="dscrpt"><span class="paraname">type</span></P>
+            <P class="paradsc">[in] HTML 양식을 설정합니다.</P>
+            <TABLE class="paradsc2" cellSpacing="0" borderColorDark="white" width="300" borderColorLight="#999999" border="1">
+                <TR>
+                    <TD width=75 bgColor=#eeeeee>
+                        <P align="center">HTML</P>
+                    </TD>
+                    <TD width=215>
+                        <P>HTML 문법으로 반환(기본)</P>
+                    </TD>
+                </TR>
+                <TR>
+                    <TD width=75 bgColor=#eeeeee>
+                        <P align="center">XHTML</P>
+                    </TD>
+                    <TD width=215>
+                        <P>XHTML 문서 양식으로 반환</P>
+                    </TD>
+                </TR>
+            </TABLE>
+            <p class="dscrpt">&nbsp;</p>
+            <H4>Return Values</H4>
+            <P class="dscrpt">HTML 전체 양식을 반환합니다.</P>
+            <p class="dscrpt">&nbsp;</p>
+            <H4>Remarks</H4>
+            <P class="dscrpt">메소드는 Main class 호출 후 에디터가 로드된 다음 실행해야 정상적으로 실행됩니다.</P>
+            <P class="dscrpt"><span class="paraname">type</span>에 값을 지정하지 않은 경우 기본값인 'HTML'로 설정됩니다.</P>
+            <p class="dscrpt">&nbsp;</p>
+            <H4>Sample Codes</H4>
+            <P class="scode">JavaScript</P>
+            <PRE class="scodedsc">var object = new NamoSE(&quot;test&quot;);
+object.editorStart();
+object.<b>GetValue</b>(&quot;XHTML&quot;);</PRE>
+            <P class="dscrpt">&nbsp;</P>
+        </TD>
+    </TR>
+</TABLE>
+</BODY>
+</HTML>

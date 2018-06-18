@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>나모 크로스에디터 설치 도움말</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="author" content="namo interactive inc." />
+	<meta name="author" content="namo crosseditor" />
+	<link href="../common.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+	<div id="wrap">
+<!--		<h1 id="logo">CrossEditor</h1> -->
+			<h2><a name="image" id="image">이미지 서버</a></h2>
+				<div class="contents_box2">
+					<p>기본적으로 이미지를 삽입하면 '기본 설치 폴더/binary' 폴더에 이미지가 업로드되며, WEB서버와 WAS서버가 분리된 경우엔 WAS서버 폴더에 설치된 binary 폴더에 업로드 됩니다.</p>
+					<p>관리자 설정 또는 ImageSavePath API를 이용하여 이미지 저장경로를 설정하는 경우에도 기본 설치 폴더(WAS) 위치에서 경로를 찾게 됩니다.</p>
+					<br />
+					<p>기본 경로가 아닌 별도 경로 또는 별도의 이미지 서버로 업로드하고 싶은 경우나, 이미지 서버의 도메인 정보가 다른 경우 아래의 방법을 적용하시기 바랍니다.</p>
+				</div>
+					<div class="contents_box3">
+						<ol class="contents_order">
+							<li><p>이미지를 업로드하려는 서버쪽에도 웹 서비스가 되도록 설정합니다.</p>
+
+								<p>같은 서버 내의 경로인 경우에는 크로스에디터 설치 폴더를 이용하여 설정이 가능하며, 업로드하려는 서버가 물리적으로 분리되어 있거나, 저장 경로에 URL로 접근할 수 없는 경우 웹 서비스가 되도록 설치해야 합니다.</p>
+									<p class="ctsmall2"><img src="images/icon_list_03.gif" alt="icon_list_03.gif" />&quot;크로스에디터 설치 폴더/websource&quot;를 해당 서버에 설치합니다.(ImagePath, ImageUpload, ImageUploadExecute, Util)</p>
+									<p class="ctsmall2"><img src="images/icon_list_03.gif" alt="icon_list_03.gif" />JSP버전의 경우 이미지 서버에 commons-fileupload와 commons-io 라이브러리가 설치되어야 합니다.</p>
+							</li>
+							<br />
+							<li><p>크로스에디터 삽입소스에 경로를 설정합니다.</p>
+								<p>크로스에디터를 삽입하는 페이지 스크립트에 이미지 저장경로(ImageSavePath)와 실제 이미지 업로드를 실행할 URL경로(UploadFileExcutePath)를 설정합니다.</p>
+								<br />
+								<p>JSP 버전</p>
+								<div class="contents_code">
+									<p>var CrossEditor = new NamoSE('namoeditor1');</p>
+									<p>CrossEditor.params.<b>ImageSavePath</b> = &quot;/crosseditor/binary&quot;;</p>
+									<p>CrossEditor.params.<b>UploadFileExecutePath </b>= &quot;http://도메인정보/crosseditor/websource/jsp/ImageUpload.jsp&quot;;</p>
+									<p>CrossEditor.EditorStart();</p>
+								</div>
+							</li>
+							<br />
+							<li><p>실제 이미지가 저장되는 물리적 경로와 해당 URL경로 설정</p>
+								<p>이미지 서버에 설치된 websource/웹 언어(asp, aspx, php, jsp)/ImagePath 파일의 주석을 해제하고, 실제 이미지가 저장되는 물리적 경로와 해당 URL 경로를 설정해 줍니다.</p>
+								<p>웹 언어가 ASP.NET인 경우에는 ImagePath_.aspx 파일의 _(언더바)를 제외한 후 사용하면 됩니다.</p>
+								<br />
+								<p>JSP 버전</p>
+								<div class="contents_code">
+									<p>if (imageUPath.equals(&quot;/crosseditor/binary&quot;)) { //ImageSavePath로 설정한 저장경로</p>
+									<p>  imagePhysicalPath = &quot;d:\\workspace\\ce\\image&quot;; //실제 물리적인 경로</p>
+									<p>  imageUPath = &quot;http://도메인정보/ce/image&quot;; </p>
+									<p>  //이미지 서버 도메인이 다른 경우 설정하여 사용 가능, 실제 URL로 접근이 가능해야 함.</p>
+									<p>}</p>
+								</div>
+							</li>
+						</ol>
+					</div>
+				<div class="contents_box2">
+					<p>크로스에디터는 기본적으로 웹 서버에서 돌아가지만 관리자 페이지, 이미지 업로드, 몇 가지의 플러그인 기능은 서버사이드 기술을 사용하고 있습니다. 따라서 WEB서버와 WAS서버가 분리되어 있는 경우 WAS서버에서 WEB서버의 파일에 접근이 가능해야 합니다.</p>
+					<p>만약, WEB서버와 WAS서버가 물리적으로 분리되어 있는 경우 mount 설정을 할 수 없거나, 공유 스토리지가 없는 경우에는 WAS서버에 업로드된 이미지를 WEB서버로 옮기는 로직을 직접 추가해야 합니다.</p>
+					<br />
+					<p>크로스에디터는 FTP로 파일을 옮기는 기능은 지원하지 않습니다.</p>
+				</div>
+			</div>
+</body>
+</html>

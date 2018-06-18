@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configuration>
+	<Product>
+		<Name>Namo CrossEditor</Name>
+		<Logo></Logo>
+		<Help></Help>
+		<Info></Info>
+	</Product>
+	<General>
+		<WebServerOS></WebServerOS>
+		<WebServerInfo></WebServerInfo>
+		<WebLanguage></WebLanguage>
+		<ImageSavePath></ImageSavePath>
+		<Width></Width>
+		<Height></Height>
+		<UploadFileNameType></UploadFileNameType>
+		<UploadFileViewer></UploadFileViewer>
+		<UploadFileSizeLimit></UploadFileSizeLimit>
+		<UploadFileSubDir></UploadFileSubDir>
+		<UploadFileExtBlockList></UploadFileExtBlockList>
+		<AttributeBlockList></AttributeBlockList>
+		<TagBlockList></TagBlockList>
+		<Template></Template>
+	</General>
+	<Editor>
+		<SetFocus></SetFocus>
+		<LineHeight></LineHeight>
+		<UnloadWarning></UnloadWarning>
+		<SetDebug></SetDebug>
+		<HTMLTabByTableLock></HTMLTabByTableLock>
+		<HTMLTabContents></HTMLTabContents>
+		<AccessibilityOption></AccessibilityOption>
+		<FontColor></FontColor>
+		<FontSizeList></FontSizeList>
+		<LineHeightList></LineHeightList>
+		<IndentPaddingValue></IndentPaddingValue>
+		<ReturnKeyActionBR></ReturnKeyActionBR>
+		<ImgLineColor></ImgLineColor>
+		<TableLineColor></TableLineColor>
+		<TableBGColor></TableBGColor>
+	</Editor>
+	<Document>
+		<CharSet></CharSet>
+		<DocBaseURL></DocBaseURL>
+		<DocTitle></DocTitle>
+		<AllowContentScript></AllowContentScript>
+		<AllowContentIframe></AllowContentIframe>
+		<MSOfficeTranON></MSOfficeTranON>
+	</Document>
+	<UI>
+		<Skin></Skin>
+		<UserSkinColor></UserSkinColor>
+		<Css></Css>
+		<UserToolbar></UserToolbar>
+		<CreateToolbar></CreateToolbar>
+		<CreateTab></CreateTab>
+		<IsQuestAutoSave></IsQuestAutoSave>
+	</UI>
+	<User>
+		<AddMenu></AddMenu>
+	</User>
+</Configuration>
+

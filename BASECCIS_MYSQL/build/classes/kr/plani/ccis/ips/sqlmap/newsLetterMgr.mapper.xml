@@ -1,0 +1,555 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.plani.ccis.ips.mapper.site.NewsLetterMgrMapper">
+
+	<select id="listNewsLetter" parameterType="newsLetter" resultType="java.util.HashMap">
+		<include refid="common.pageHeader"/>
+		SELECT A.NEWSLETTERID
+			, A.SITEID
+			, A.KNAME
+			, A.OPENYN
+			, A.SENDDUEDATE
+			, A.TEMPLATE
+			, A.UPIMAGE
+			, A.PUBNO
+			, A.PUBDATE
+			, A.PUBTIME
+			, A.STATE
+			, A.INSUSERID
+			, A.INSIP
+			, A.INSTIME
+			, A.DMLUSERID
+			, A.DMLIP
+			, A.DMLTIME
+			, A.DMLLOG
+			, B.KNAME AS INSUSERNAME      		
+      		, C.KNAME AS SITENAME
+		FROM T_NEWSLETTER A, T_USER B, T_SITE C
+		WHERE A.INSUSERID = B.USERID
+		AND A.SITEID = C.SITEID
+		AND A.STATE = 'T'
+		<if test="siteId != null and siteId != ''">
+		AND A.SITEID = #{siteId}
+		</if>
+		<if test="schText != null and schText != ''">
+		AND A.KNAME LIKE '%' || #{schText} || '%'
+		</if>
+		ORDER BY A.NEWSLETTERID DESC
+		<include refid="common.pageFooter"/>
+	</select>
+	
+	<resultMap type="java.util.HashMap" id="NEWSLETTER_OUT">
+	    <result property="UPIMAGEHTML" column="UPIMAGEHTML" javaType="java.lang.String" jdbcType="CLOB" />
+	    <result property="PREVIEWHTML" column="PREVIEWHTML" javaType="java.lang.String" jdbcType="CLOB" />
+	</resultMap>
+	
+	<select id="viewNewsLetter" parameterType="newsLetter" resultMap="NEWSLETTER_OUT">
+		SELECT
+				A.NEWSLETTERID
+				, A.SITEID
+				, A.KNAME
+				, A.OPENYN
+				, TO_DATE(TO_CHAR(A.SENDDUEDATE, 'yyyy-MM-dd'), 'yyyy-MM-dd') AS SENDDUEDATE
+				, TO_CHAR(A.SENDDUEDATE, 'hh24') AS HH
+				, TO_CHAR(A.SENDDUEDATE, 'mi') AS MM
+				, A.TEMPLATE
+				, A.UPIMAGE
+				, A.UPIMAGEFILENAME
+				, A.UPIMAGESFILENAME
+				, A.UPIMAGEFILEPATH
+				, A.UPIMAGEHTML
+				, A.PUBNO
+				, TO_DATE(A.PUBDATE, 'yyyy-MM-dd') AS PUBDATE
+				, A.PUBTIME
+				, A.STATE
+				, A.INSUSERID
+				, A.INSIP
+				, A.INSTIME
+				, A.DMLUSERID
+				, A.DMLIP
+				, A.DMLTIME
+				, A.DMLLOG				
+				, A.PREVIEWHTML
+		FROM T_NEWSLETTER A
+		WHERE A.NEWSLETTERID = #{newsLetterId}
+	</select>
+	
+	<insert id="insertNewsLetter" parameterType="newsLetter">
+		<selectKey keyProperty="newsLetterId" resultType="java.lang.String" order="BEFORE">
+			SELECT NVL(MAX(NEWSLETTERID), 0) + 1 FROM T_NEWSLETTER
+		</selectKey>
+
+		INSERT INTO T_NEWSLETTER (
+			NEWSLETTERID
+			, SITEID
+			, KNAME
+			, OPENYN
+			, SENDDUEDATE
+			, TEMPLATE
+			, UPIMAGE
+			, UPIMAGEFILENAME
+			, UPIMAGESFILENAME
+			, UPIMAGEFILEPATH
+			, UPIMAGEHTML
+			, PUBNO
+			, PUBDATE
+			, PUBTIME
+			, STATE
+			, INSUSERID
+			, INSIP
+			, INSTIME
+			, DMLUSERID
+			, DMLIP
+			, DMLTIME
+			, DMLLOG
+		) VALUES (
+			#{newsLetterId}
+			, #{siteId}
+			, #{KName}
+			, #{openYn}
+			, TO_DATE(#{sendDueDate} || ' ' || #{HH} || ':' || #{MM}, 'yyyy-MM-dd hh24:mi')
+			, #{template}
+			, #{upImage}
+			, #{upImageFileName}
+			, #{upImageSFileName}
+			, #{upImageFilePath}
+			, #{upImageHtml}
+			, #{pubNo}
+			, #{pubDate}
+			, #{pubTime}
+			, #{state}
+			, #{insuserId}
+			, #{inDMLIp}
+			, SYSDATE
+			, #{inDMLUserId}
+			, #{inDMLIp}
+			, SYSDATE
+			, #{dmlLog}
+		)
+	</insert>
+
+	<update id="updateNewsLetter" parameterType="newsLetter">
+		UPDATE T_NEWSLETTER
+		SET
+			  SITEID			= #{siteId}
+			, KNAME				= #{KName}
+			, PUBNO				= #{pubNo}
+			, PUBDATE			= #{pubDate}
+			, OPENYN			= #{openYn}
+			, SENDDUEDATE		= TO_DATE(#{sendDueDate} || ' ' || #{HH} || ':' || #{MM}, 'yyyy-MM-dd hh24:mi')
+			, TEMPLATE			= #{template}
+			, UPIMAGE			= #{upImage}
+			, UPIMAGEFILENAME	= #{upImageFileName}
+			, UPIMAGESFILENAME	= #{upImageSFileName}
+			, UPIMAGEFILEPATH	= #{upImageFilePath}
+			, UPIMAGEHTML		= #{upImageHtml}
+		WHERE NEWSLETTERID	= #{newsLetterId}
+	</update>
+
+	<update id="deleteNewsLetter" parameterType="newsLetter">
+		UPDATE T_NEWSLETTER
+		SET STATE = 'F'
+		WHERE NEWSLETTERID = #{newsLetterId}
+	</update>
+
+	<!-- 뉴스레터 포틀릿 설정 정보 삭제 -->
+	<delete id="deleteNewsLetterPortlet" parameterType="newsLetter">
+		DELETE FROM T_NEWSLETTER_PORTLET WHERE NEWSLETTERID = #{newsLetterId}
+	</delete>
+
+	<!-- 뉴스레터 포틀릿 설정 정보 입력 -->
+	<insert id="insertNewsLetterPortlet" parameterType="newsLetterPortlet">
+		INSERT INTO T_NEWSLETTER_PORTLET
+		(
+			NEWSLETTERID
+			,DIVID
+			,PORTLETTYPE
+			,CONTENTS_TITLE_USE
+			,CONTENTS_TITLE
+			,STATE
+			,INSUSERID
+			,INSIP
+			,INSTIME
+			,DMLUSERID
+			,DMLIP
+			,DMLTIME
+		)
+		VALUES
+		(
+			#{newsLetterId}
+			,#{divId}
+			,#{portletType}
+			,#{contents_title_use}
+			,#{contents_title}
+			,'T'
+			,#{inDMLUserId}
+			,#{inDMLIp}
+			,SYSDATE
+			,#{inDMLUserId}
+			,#{inDMLIp}
+			,SYSDATE
+		)
+	</insert>
+
+	<!-- 뉴스레터 포틀릿 콘텐츠 정보 삭제 -->
+	<delete id="deleteNewsLetterPortletContents" parameterType="newsLetter">
+		DELETE FROM T_NEWSLETTER_PORTLET_CONT WHERE NEWSLETTERID = #{newsLetterId}
+	</delete>
+
+	<!-- 뉴스레터 포틀릿 설정 정보 입력 -->
+	<insert id="insertNewsLetterPortletContents" parameterType="newsLetterPortletContents">
+		INSERT INTO T_NEWSLETTER_PORTLET_CONT
+		(
+			NEWSLETTERID
+			,DIVID
+			,SEQ
+			,SUBJECT
+			,LINK
+			,USERIMGFILENAME
+			,SYSTEMIMGFILENAME
+			,IMGFILEPATH
+			,IMGDESC
+			,CONTENTS
+			,HTML
+			,STATE
+			,INSUSERID
+			,INSIP
+			,INSTIME
+			,DMLUSERID
+			,DMLIP
+			,DMLTIME
+		)
+		VALUES
+		(
+			#{newsLetterId}
+			,#{divId}
+			,#{seq}
+			,#{subject}
+			,#{link}
+			,#{userImgFileName}
+			,#{systemImgFileName}
+			,#{imgFilePath}
+			,#{imgDesc}
+			,#{contents}
+			,#{html}
+			,'T'
+			,#{inDMLUserId}
+			,#{inDMLIp}
+			,SYSDATE
+			,#{inDMLUserId}
+			,#{inDMLIp}
+			,SYSDATE
+		)
+	</insert>
+
+	<!-- 뉴스레터 포틀릿 라인 정보 조회 -->
+	<select id="listPortletLine" parameterType="newsLetter" resultType="hashmap" >
+		SELECT LINEID, REPLACE(MAX(LINETYPE),',','-') LINETYPE, COUNT(LINETYPE) PORTLETCNT
+		FROM
+		(
+			SELECT LINEID, TO_CHAR(WM_CONCAT(PORTLETSIZE) OVER(PARTITION BY LINEID ORDER BY PORTLETID ASC))AS LINETYPE
+			FROM
+			(
+				SELECT
+						DIVID,
+						SUBSTR(DIVID, 1, 2) LINEID,
+						SUBSTR(DIVID, 3, 2) PORTLETID,
+						SUBSTR(DIVID, 5, 1) PORTLETSIZE,
+						PORTLETTYPE
+				FROM T_NEWSLETTER_PORTLET
+				WHERE NEWSLETTERID = #{newsLetterId}
+			)
+		)
+		GROUP BY LINEID
+		ORDER BY LINEID ASC
+	</select>
+
+	<resultMap id="newsLetterPortletContents" type="kr.plani.ccis.ips.domain.site.NewsLetterPortletContents">
+		<result property="newsLetterId" column="NEWSLETTERID" />
+		<result property="divId" column="DIVID" />
+		<result property="seq" column="SEQ" />
+		<result property="subject" column="SUBJECT" />
+		<result property="link" column="LINK" />
+		<result property="userImgFileName" column="USERIMGFILENAME" />
+		<result property="systemImgFileName" column="SYSTEMIMGFILENAME" />
+		<result property="imgFilePath" column="IMGFILEPATH" />
+		<result property="imgDesc" column="IMGDESC" />
+		<result property="contents" column="CONTENTS" javaType="java.lang.String" jdbcType="CLOB" />
+		<result property="html" column="HTML" javaType="java.lang.String" jdbcType="CLOB" />
+	</resultMap>
+
+	<!-- 뉴스레터 포틀릿 상세정보 조회 -->
+	<select id="listPortlet" parameterType="newsLetter" resultType="newsLetterPortlet" >
+		SELECT NEWSLETTERID, DIVID, LINEID, PORTLETID, PORTLETSIZE, PORTLETTYPE, CONTENTS_TITLE_USE, CONTENTS_TITLE
+		FROM
+		(
+			SELECT
+					NEWSLETTERID,
+					DIVID,
+					SUBSTR(DIVID, 1, 2) LINEID,
+					SUBSTR(DIVID, 3, 2) PORTLETID,
+					SUBSTR(DIVID, 5, 1) PORTLETSIZE,
+					PORTLETTYPE,
+					CONTENTS_TITLE_USE,
+					CONTENTS_TITLE
+			FROM T_NEWSLETTER_PORTLET
+			WHERE NEWSLETTERID = #{newsLetterId}
+		)
+		ORDER BY LINEID, PORTLETID ASC
+	</select>
+
+	<resultMap id="newsLetterPortletContentsMap" type="newsLetterPortletContents">
+		<result property="contents" column="CONTENTS" javaType="java.lang.String" jdbcType="CLOB" />
+		<result property="html" column="HTML" javaType="java.lang.String" jdbcType="CLOB" />
+	</resultMap>
+
+	<!-- 뉴스레터 포틀릿 콘텐츠 목록 조회 -->
+	<select id="listPortletContents" parameterType="newsLetterPortlet" resultMap="newsLetterPortletContentsMap" >
+		SELECT
+				NEWSLETTERID,
+				DIVID,
+				SEQ,
+				SUBJECT,
+				LINK,
+				USERIMGFILENAME,
+				SYSTEMIMGFILENAME,
+				IMGFILEPATH,
+				IMGDESC,
+				CONTENTS,
+				HTML
+		FROM T_NEWSLETTER_PORTLET_CONT
+		WHERE NEWSLETTERID = #{newsLetterId} AND DIVID = #{divId}
+		ORDER BY SEQ ASC
+	</select>
+
+
+	<select id="selectNewsLetterAppOverlapCheck" parameterType="newsLetter" resultType="newsLetter">
+		SELECT NVL(MAX(COUNT(APPEMAIL)), 0) AS COUNT, NVL(MAX(RCV_YN), 'N') AS RCVYN
+		FROM T_NEWSLETTERAPP
+		WHERE APPEMAIL = #{appEmail}
+		AND SITEID = #{siteId}
+		GROUP BY APPEMAIL, RCV_YN
+	</select>
+
+	<update id="updateNewsLetterAppRcvY" parameterType="newsLetter">
+		UPDATE T_NEWSLETTERAPP SET
+		RCV_YN = 'Y'
+		WHERE APPEMAIL = #{appEmail}
+		AND SITEID = #{siteId}
+	</update>
+
+	<insert id="actionNewsLetterApp" parameterType="newsLetter">
+		MERGE INTO T_NEWSLETTERAPP  A
+		USING (SELECT 1 FROM DUAL) D
+		ON (A.SITEID = #{siteId} AND A.APPEMAIL = #{appEmail})
+		WHEN MATCHED THEN
+		UPDATE SET A.APPTIME = SYSDATE, RCV_YN = 'Y'
+		WHEN NOT MATCHED THEN
+		INSERT(A.SITEID, A.APPEMAIL, A.APPTIME, A.STATE, A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLlOG)
+		VALUES (#{siteId}, #{appEmail}, SYSDATE, #{state}, #{inDMLUserId}, #{inDMLIp}, SYSDATE, #{inDMLUserId}, #{inDMLIp}, SYSDATE, #{dmlLog})
+	</insert>
+
+	<update id="rejectNewsLetterApp" parameterType="newsLetter">
+		UPDATE T_NEWSLETTERAPP
+		SET APPTIME = SYSDATE
+		, RCV_YN = 'N'
+		WHERE SITEID = #{siteId} AND APPEMAIL = #{appEmail}
+	</update>
+
+	<select id="selectNewsLetterApp" parameterType="newsletter" resultType="java.util.HashMap">
+		<include refid="common.pageHeader"/>
+			SELECT
+					MAX(SITEID) AS SITEID,
+					APPEMAIL,
+					MAX(APPTIME) AS APPTIME,
+					MAX(RCV_YN) AS RCV_YN,
+					DECODE( MAX(RCV_YN), 'Y', '수신허용', '수신거부') AS RCV_YN_NM
+			FROM
+			(
+				SELECT
+						SITEID,
+						APPEMAIL,
+						APPTIME,
+						RCV_YN
+				FROM T_NEWSLETTERAPP
+				WHERE 1=1
+				AND SITEID = #{siteId}
+				AND STATE = 'T'
+				<if test="rcvYn != null and rcvYn != ''">
+					AND RCV_YN = #{rcvYn}
+				</if>
+				<if test="schStartDate != null and schStartDate != ''">
+					<![CDATA[
+						AND TO_CHAR(APPTIME, 'yyyy-MM-dd') >= #{schStartDate}
+					]]>
+				</if>
+				<if test="schEndDate != null and schEndDate != ''">
+					<![CDATA[
+						AND TO_CHAR(APPTIME, 'yyyy-MM-dd') <= #{schEndDate}
+					]]>
+				</if>
+				<if test="appEmail != null and appEmail != ''">
+					AND APPEMAIL LIKE '%' || #{appEmail} || '%'
+				</if>
+
+				UNION ALL
+
+				SELECT
+						DECODE((SELECT JOINSITEID FROM T_USER WHERE USERID = A.USERID), '-', 'SITE00002', (SELECT JOINSITEID FROM T_USER WHERE USERID = A.USERID)) AS SITEID,
+						USERID AS APPEMAIL,
+						DMLTIME AS APPTIME,
+						NEWSLETTER AS RCV_YN
+				FROM T_PERSONUSER A
+				WHERE 1=1
+				AND STATE = 'T'
+				<if test="rcvYn != null and rcvYn != ''">
+					AND NEWSLETTER = #{rcvYn}
+				</if>
+				<if test="schStartDate != null and schStartDate != ''">
+					<![CDATA[
+						AND TO_CHAR(DMLTIME, 'yyyy-MM-dd') >= #{schStartDate}
+					]]>
+				</if>
+				<if test="schEndDate != null and schEndDate != ''">
+					<![CDATA[
+						AND TO_CHAR(DMLTIME, 'yyyy-MM-dd') <= #{schEndDate}
+					]]>
+				</if>
+				<if test="siteId != null and siteId != ''">
+					<if test="siteId == 'SITE00002'">
+						AND NEWSLETTERGUBUN LIKE '%' || 'Kps' || '%'
+					</if>
+					<if test="siteId == 'SITE00003'">
+						AND NEWSLETTERGUBUN LIKE '%' || 'Gfi' || '%'
+					</if>
+					<if test="siteId == 'SITE00004'">
+						AND NEWSLETTERGUBUN LIKE '%' || 'Mdi' || '%'
+					</if>
+					<if test="siteId == 'SITE00017'">
+						AND NEWSLETTERGUBUN LIKE '%' || 'Ghk' || '%'
+					</if>
+				</if>
+				<if test="appEmail != null and appEmail != ''">
+					AND USERID LIKE '%' || #{appEmail} || '%'
+				</if>
+
+				UNION ALL
+
+				SELECT
+						DECODE((SELECT JOINSITEID FROM T_USER WHERE USERID = B.USERID), '-', 'SITE00002', (SELECT JOINSITEID FROM T_USER WHERE USERID = B.USERID)) AS SITEID,
+						USERID AS APPEMAIL,
+						DMLTIME AS APPTIME,
+						NEWSLETTER AS RCV_YN
+				FROM T_COMPANYUSER B
+				WHERE 1=1
+				AND STATE = 'T'
+				<if test="rcvYn != null and rcvYn != ''">
+					AND NEWSLETTER = #{rcvYn}
+				</if>
+				<if test="schStartDate != null and schStartDate != ''">
+					<![CDATA[
+						AND TO_CHAR(DMLTIME, 'yyyy-MM-dd') >= #{schStartDate}
+					]]>
+				</if>
+				<if test="schEndDate != null and schEndDate != ''">
+					<![CDATA[
+						AND TO_CHAR(DMLTIME, 'yyyy-MM-dd') <= #{schEndDate}
+					]]>
+				</if>
+				<if test="siteId != null and siteId != ''">
+					<if test="siteId == 'SITE00002'">
+						AND NEWSLETTERGUBUN LIKE '%' || 'Kps' || '%'
+					</if>
+					<if test="siteId == 'SITE00003'">
+						AND NEWSLETTERGUBUN LIKE '%' || 'Gfi' || '%'
+					</if>
+					<if test="siteId == 'SITE00004'">
+						AND NEWSLETTERGUBUN LIKE '%' || 'Mdi' || '%'
+					</if>
+					<if test="siteId == 'SITE00017'">
+						AND NEWSLETTERGUBUN LIKE '%' || 'Ghk' || '%'
+					</if>
+				</if>
+				<if test="appEmail != null and appEmail != ''">
+					AND USERID LIKE '%' || #{appEmail} || '%'
+				</if>
+			)
+			GROUP BY APPEMAIL
+			ORDER BY APPTIME DESC
+		<include refid="common.pageFooter"/>
+	</select>
+
+	<select id="selectMailResult" parameterType="newsletter" resultType="java.util.HashMap">
+		<include refid="common.pageHeader"/>
+			SELECT
+					A.SUBJECT,
+					A.CONTENT,
+					A.SEND_FLAG,
+					A.SERFLD5,
+					B.EMAIL,
+					B.NAME,
+					B.SEND_RSLT_CD,
+					B.SEND_DATE,
+					CASE
+						WHEN (A.SEND_FLAG = 'Y' AND B.SEND_RSLT_CD = 00) THEN '성공'
+						WHEN (A.SEND_FLAG = 'Y' AND B.SEND_RSLT_CD != 00) THEN '실패'
+						WHEN A.SEND_FLAG = 'N' THEN '대기'
+						ELSE '실패'
+					END SEND_FLAG_NM,
+					CASE
+						WHEN B.SEND_RSLT_CD = '00' THEN ''
+						WHEN B.SEND_RSLT_CD = '01' THEN '형식오류'
+						WHEN B.SEND_RSLT_CD = '02' THEN '알 수 없는 HOST / 발송 서버 DNS 장애'
+						WHEN B.SEND_RSLT_CD = '03' THEN '알 수 없는 User / 휴면계정'
+						WHEN B.SEND_RSLT_CD = '04' THEN '발송 서버 IP 수신거부 처리 / 회원 개인이 수신거부 처리'
+						WHEN B.SEND_RSLT_CD = '05' THEN '메일박스가 가득 참 / 휴면계정'
+						WHEN B.SEND_RSLT_CD = '06' THEN '연결 오류 / 발송 서버 SPAM 등재 시 연결 거부'
+						WHEN B.SEND_RSLT_CD = '07' THEN '연결 시간 초과'
+						WHEN B.SEND_RSLT_CD = '91' OR B.SEND_RSLT_CD = '92' OR B.SEND_RSLT_CD = '99' THEN ''
+						WHEN (B.SEND_RSLT_CD = '' OR B.SEND_RSLT_CD IS NULL) AND A.SEND_FLAG = 'N' THEN '대기'
+						WHEN (B.SEND_RSLT_CD = '' OR B.SEND_RSLT_CD IS NULL) AND A.SEND_FLAG = 'Y' THEN '발송중'
+						ELSE '발송실패'
+					END SEND_RSLT_CD_NM
+			FROM EV_SEND_FORM A, EV_SEND_LIST B
+			WHERE A.SEQ = B.SEQ
+			AND A.SERFLD2 = #{menuId}
+			AND A.SERFLD5 = #{newsLetterId}
+			<if test="sendFlag != null and sendFlag != ''">
+				<if test='sendFlag == "Y"'>
+					AND B.SEND_RSLT_CD = '00'
+				</if>
+				<if test='sendFlag == "E"'>
+					AND (B.SEND_RSLT_CD != '00' OR B.SEND_RSLT_CD = '' OR B.SEND_RSLT_CD IS NULL)
+				</if>
+			</if>
+			<if test="appEmail != null and appEmail != ''">
+				AND B.EMAIL LIKE '%' || #{appEmail} || '%'
+			</if>
+			ORDER BY B.EMAIL
+		<include refid="common.pageFooter"/>
+	</select>
+
+	<select id="selectEmailSendForm" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT SEQ, MAIL_KIND, REGDATE, CONTENT,
+		SUBJECT, SEND_EMAIL, SEND_NAME, RETURN_EMAIL, SEND_FLAG, SERFLD5
+		FROM EV_SEND_FORM
+		WHERE SERFLD2 = #{menuId} AND SERFLD5 = #{newsLetterId}
+	</select>
+
+	<delete id="deleteSendForm" parameterType="java.util.HashMap">
+		DELETE FROM EV_SEND_FORM WHERE SEQ = #{SEQ}
+	</delete>
+
+	<delete id="deleteSendList" parameterType="java.util.HashMap">
+		DELETE FROM EV_SEND_LIST WHERE SEQ = #{SEQ}
+	</delete>
+	
+	<update id="updatePreviewHtml" parameterType="newsLetter">
+		UPDATE T_NEWSLETTER
+		SET
+			  PREVIEWHTML			= #{previewHtml}
+		WHERE NEWSLETTERID	= #{newsLetterId}
+	</update>
+	
+</mapper>

@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>나모 크로스에디터 설치 도움말</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="author" content="namo interactive inc." />
+	<meta name="author" content="namo crosseditor" />
+	<link href="../common.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+	<div id="wrap">
+<!-- 		<h1 id="logo">CrossEditor</h1> -->
+		<h2><a name="inquire" id="inquire">문의하기</a></h2>
+			<div class="contents_box2">
+				<p>해당 문서로 오류가 해결되지 않거나 기타 문의사항이 있는 경우 <a href="mailto:crosseditor@namo.co.kr">crosseditor@namo.co.kr</a>로 문의 메일을 보내주십시오.</p>
+				<br />
+				<p>오류와 관련하여 문의하실 때에는 오류와 관련하여 문의하실 때에는 아래의 사항을 함께 보내주시기 바랍니다.</p>
+				<ol class="contents_order">
+					<li>정확한 오류 내역(오류 메시지 포함)</li>
+					<li>오류가 발생하는 브라우저 정보(버전 포함)</li>
+					<li>에디터 편집 중에 발생하는 경우 재현 가능한 예제</li>
+				</ol>
+			</div>
+		<h2><a name="error" id="error">오류 목록</a></h2>
+			<div class="contents_box2">
+				<ol id="error_list" class="contents_order">
+					<li><a href="#error1">&quot;NamoSE를 찾을 수 없습니다.&quot;라는 메시지가 출력되는 경우</a></li>
+					<li><a href="#error2">스크립트 오류가 발생하는 경우</a></li>
+					<li><a href="#error3">&quot;승인되지 않은 도메인 정보입니다. 에디터 실행을 중단합니다.&quot;라는 메시지가 출력되는 경우</a></li>
+					<li><a href="#error4">&quot;HTML 파일을 로드하는데 실패했습니다. 에디터 정보를 찾을 수 없습니다.&quot;라는 메시지가 출력되는 경우</a></li>
+					<li><a href="#error5">&quot;XML 파일을 로드하는데 실패했습니다. 환경설정 파일을 로드할 수 없습니다. 에디터 기본주소 정보가 올바른지 확인하시기 바랍니다.&quot;라는 메시지가 출력되는 경우</a></li>
+					<li><a href="#error6">패치 적용 후 에디터 UI가 깨지는 경우</a></li>
+					<li><a href="#error7">에디터에 포커스가 가지 않는 경우</a></li>
+				</ol>
+			</div>
+		<h2><a name="solution" id="solution">해결 방법</a></h2>
+			<h3><a name="error1" id="error1">1. &quot;NamoSE를 찾을 수 없습니다.&quot;라는 메시지가 출력되는 경우</a></h3>
+				<h4>&quot;namo_scripteditor.js&quot; 링크 확인</h4>
+					<div class="contents_box2">
+						<p>&quot;namo_scripteditor.js&quot; 링크 주소를 제대로 입력했는지 확인 바랍니다.</p>
+					</div>
+			<h3><a name="error2" id="error2">2. 스크립트 오류가 발생하는 경우</a></h3>
+				<h4>&quot;namo_scripteditor.js&quot; 위치 확인</h4>
+					<div class="contents_box2">
+						<p>&quot;namo_scripteditor.js&quot; 링크를 BODY tag 안에 두었는지 확인 바랍니다.</p>
+						<p>&quot;namo_scripteditor.js&quot; 위치는 HEAD tag 안에 존재해야 합니다.</p>
+					</div>
+				<h4>패치 여부 확인</h4>
+					<div class="contents_box2">
+						<p>패치를 적용했을 때 스크립트 오류가 발생하는 경우 패치 파일 폴더의 모든 파일을 올바르게 덮어씌웠는지 확인 바랍니다.</p>
+					</div>
+			<h3><a name="error3" id="error3">3. &quot;승인되지 않은 도메인 정보입니다. 에디터 실행을 중단합니다.&quot;라는 메시지가 출력되는 경우</a></h3>
+				<h4>도메인 확인</h4>
+					<div class="contents_box2">
+						<p>빌드 발주 시에 신청한 도메인(혹은 IP)으로 에디터를 구동하지 않은 경우 해당 메시지가 나타날 수 있습니다. 신청한 도메인으로 접속한 것이 맞는지 확인바랍니다.</p>
+						<p>로컬 테스트 시에는 127.0.0.1로 테스트하거나, 해당 도메인을 hosts 파일에 등록 후 도메인으로 접속해야 합니다.</p>
+					</div>
+				<h4>방화벽 확인</h4>
+					<div class="contents_box3">
+						<p>크로스에디터는 구동 시에 나모의 인증서버를 통한 인증과정을 포함하고 있습니다.</p>
+						<p>&quot;crosseditor.namo.co.kr(121.254.175.145)&quot;과 포트번호 80으로 통신이 가능한지 확인 바랍니다.</p>
+						<div class="indent">
+						<p class="ctsmall2"><img src="images/icon_list_03.gif" alt="icon_list_03.gif" />크로스에디터를 설치한 서버에서 &quot;crosseditor.namo.co.kr&quot;로 ping이 나가는지 확인 바랍니다.</p>
+							<p class="ctsmall2"><img src="images/icon_list_03.gif" alt="icon_list_03.gif" />웹 서버와 WAS 서버가 분리되어 있는 경우엔 WAS 서버에서 ping을 날려야 합니다.</p>
+						</div>
+						<p>내부망을 사용하여 통신이 불가능한 경우 <a href="#inquire">문의</a> 바랍니다.</p>
+					</div>
+				<h4>쿠키 확인</h4>
+					<div class="contents_box2">
+						<p>쿠키를 사용 안 함으로 설정한 경우 쿠키 사용함으로 변경 바랍니다.</p>
+						<p>크로스에디터는 성능상의 이유로 여러 번 요청하는 경우에는 쿠키를 통해 인증을 처리하고 있습니다.</p>
+					</div>
+				<h4>패치를 한 경우</h4>
+					<div class="contents_box2">
+						<p>work directory에 기존에 컴파일 된 코드가 존재하면 삭제합니다.</p>
+						<p>서버에서 세션을 삭제하거나 서버를 다시 시작합니다.</p>
+					</div>
+			<h3><a name="error4" id="error4">4. &quot;HTML 파일을 로드하는데 실패했습니다. 에디터 정보를 찾을 수 없습니다.&quot;라는 메시지가 출력되는 경우</a></h3>
+				<h4>브라우저 재시작</h4>
+					<div class="contents_box2">
+						<p>브라우저를 완전히 닫고 다시 시작해 보시기 바랍니다.</p>
+					</div>
+				<h4>하나의 도메인에서 여러 개의 에디터를 사용하는 경우</h4>
+					<div class="contents_box2">
+						<p>같은 도메인에서 서로 다른 빌드의 에디터를 요청하는 경우 쿠키가 충돌하여 두 번째로 요청한 에디터가 동작하지 않을 수 있습니다</p>
+						<p>크로스에디터 생성 시의 이름을 변경하면 쿠키 충돌을 방지할 수 있습니다.<br />
+</p>
+						
+								<div class="contents_code">
+									<p>var CrossEditor = new NamoSE(“임의의 이름”);</p>
+
+								</div>
+				<h4>인증정보 페이지에 접근할 수 없는 경우</h4>
+					<div class="contents_box2">
+						<p>크로스에디터 인증 정보를 가져오지 못한 경우 나오는 메시지로, 크로스에디터 설치폴더/websource/웹 언어(asp, aspx, php, jsp)/EditorAuth 파일에서 호출하여 체크하게 됩니다.</p>
+						<p>EditorAuth 파일에 접근이 가능한지 확인해 보시기 바랍니다. (정상적으로 접근 시 인증정보 값이 보여집니다.)</p>
+						<p>인증정보 페이지에 접근이 가능하고 정상적인 값이 나온다면 브라우저의 세션 및 쿠키정보 삭제 후 브라우저를 재 시작 해보시기 바랍니다.</p>
+						<p>서버 자체에도 세션정보가 남아있을 수 있으니, 서버의 세션정보 삭제 후 재 시작 해보시는 것이 좋습니다.</p>
+					</div>
+				</div>
+			<h3><a name="error5" id="error5">5. &quot;XML 파일을 로드하는데 실패했습니다. 환경설정 파일을 로드할 수 없습니다. 에디터 기본주소 정보가 올바른지 확인하시기 바랍니다.&quot;라는 메시지가 출력되는 경우</a></h3>
+					<div class="contents_box2">
+						<p>패치 적용 시 패치 파일을 덮어쓰기 하지 않고, 새로 설치하는 경우에 발생하는 오류 메시지로, 기존의 크로스에디터 설치 폴더에 패치파일을 덮어쓰기 해주시면 됩니다.</p>
+					</div>
+			<h3><a name="error6" id="error6">6. 패치 적용 후 에디터 UI가 깨지는 경우</a></h3>
+				<h4>캐시 비우기</h4>
+					<div class="contents_box2">
+						<p>패치 파일을 덮어쓰기 한 후에 에디터를 띄우면 브라우저 캐시로 인해 UI가 깨질 수 있습니다. 브라우저 캐시를 삭제하면 해결됩니다.</p>
+						<p>또는 work directory에 기존에 컴파일된 코드가 존재하면 삭제 후 서버를 다시 시작합니다.</p>
+					</div>
+			<h3><a name="error7" id="error7">7. 에디터에 포커스가 가지 않는 경우</a></h3>
+					<div class="contents_box2">
+						<p>크로스에디터에 커서가 가지 않는 것은 IE엔진이 편집모드를 열어주지 않는 것으로, 아래 사항을 확인하시기 바랍니다.</p>
+						<p>크로스에디터를 삽입하는 페이지의 상단에 문서형식(DOCTYPE)을 지정해 주셔야 정상 동작을 합니다.</p>
+						<p>DOCTYPE을 사용하지 못하는 경우에는, 크로스에디터를 삽입하는 페이지의 head 태그 안에  &lt;meta http-equiv=&quot;x-ua-compatible&quot; content=&quot;ie=edge&quot; /&gt;&nbsp;태그를 추가하여 문서모드를 항상 최신 버전에 맞추도록 처리하여 테스트하시기 바랍니다.</p>
+						<br />
+						<p>또는 현재 서비스하는 페이지에 예를 들어 아래와 같이 meta 태그가 선언되어 있다면, </p>
+						<p>&lt;meta http-equiv= &quot;X-UA-Compatible&quot;content=&quot;IE=7&quot; /&gt; or &lt;meta http-equiv= &quot;X-UA-Compatible&quot;content=&quot;IE=8&quot; /&gt;</p>
+        <p>크로스에디터 설치폴더/config/htmls/crosseditor.html 상단의 head 태그에도 동일하게 설정해야 합니다.</p>
+		<br />
+        <p>참고로 상위에 있는 DTD를 하위에 있는 DTD가 상속을 받아 영향을 받기 때문에, iframe으로 호출한다면 최상위 페이지에도 동일하게 meta 태그를 추가해야 합니다.</p>
+		<br />
+        <p>호환성 보기 설정이 되어 있는 경우에는 호환성 보기 설정을 강제로 해당 브라우저 버전의 표준으로 설정해 줄 수 있는 방법이 없기 때문에, 호환성 보기 설정에서 수동으로 웹 사이트를 제거하거나 개발자도구(F12)를 이용하여 브라우저 모드를 표준으로 설정하여 사용해야 합니다.</p>
+						<p>&nbsp;</p>
+
+						</div>
+	</div>
+</body>
+</html>

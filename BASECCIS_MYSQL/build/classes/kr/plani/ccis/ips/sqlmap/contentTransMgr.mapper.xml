@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.plani.ccis.ips.mapper.site.ContentTransMgrMapper">
+
+	<select id="selectTransMenu" parameterType="trans" resultType="java.util.HashMap">
+		SELECT B.MENUID, A.SITEID, A.MENU_NAME, A.DEPTH, A.SORT, A.HIGHERID,
+		       A.TABYN, A.MENUTYPE, A.MENUTYPE_NAME,
+		       A.IDPATH, A.NAMEPATH,
+		       A.BOARDID, A.KNAME, A.KDESC, A.BOARDKIND, A.BOARDKIND_NAME, A.PAGECOUNT,
+		       A.COMMENTYN, A.NOTICEYN, 
+		       A.SECRETYN, A.RSSYN, A.CATEGORYYN,
+		       A.IMAGEYN, A.FILEMAXCOUNT, A.FILEMAXSIZE,
+		       A.STARTTIME, A.ENDTIME,
+		       A.STATE AS MENU_STATE, 
+		       B.TRANSID, B.TARGETMENUID, B.STATE,
+		       B.INSUSERID, B.INSIP, B.INSTIME, B.DMLUSERID, B.DMLIP, B.DMLTIME, B.DMLLOG,
+		       A.SITE_NAME
+		FROM (
+		    SELECT A.MENUID, B.SITEID, B.MENU_NAME, B.DEPTH, B.SORT, B.HIGHERID,
+		           B.TABYN, B.MENUTYPE, B.MENUTYPE_NAME,
+		           FN_MENUIDPATH(A.MENUID, '>') AS IDPATH, 
+		           FN_MENUNAMEPATH(A.MENUID, '>') AS NAMEPATH,
+		           B.BOARDID, B.KNAME, B.KDESC, B.BOARDKIND, B.BOARDKIND_NAME, B.PAGECOUNT,
+		           B.COMMENTYN, B.NOTICEYN, 
+		           B.SECRETYN, B.RSSYN, B.CATEGORYYN,
+		           B.IMAGEYN, B.FILEMAXCOUNT, B.FILEMAXSIZE,
+		           B.STARTTIME, B.ENDTIME, B.ADDFIELD1, B.ADDFIELD2, B.ADDFIELD3, B.ADDFIELD4, B.ADDFIELD5, B.ADDFIELD6,
+		           B.STATE, B.INSUSERID, B.INSIP, B.INSTIME, B.DMLUSERID, B.DMLIP, B.DMLTIME, B.DMLLOG,
+		           B.SITE_NAME
+		    FROM (SELECT MENUID
+					FROM(SELECT  FN_MENUTREE('-', '') AS MENUID, @level AS level
+					       FROM    (SELECT  @start_with := '-', @id := @start_with, @level := 0) vars, T_MENU
+						  WHERE   @id IS NOT NULL) A 
+				   WHERE A.MENUID IS NOT NULL) A
+				 LEFT JOIN (SELECT A.MENUID, A.SITEID, FUNSITENAME(A.SITEID)AS SITE_NAME, A.KNAME AS MENU_NAME,
+						           A.DEPTH, A.SORT, A.HIGHERID, A.IMAGEPATH, A.IMAGEFILE,
+						           A.PROGRAMURL, A.CHARGEUSERID, A.TABYN,
+						           B.KNAME AS TABYN_NAME, A.USERGRADEYN, C.KNAME AS USERGRADEYN_NAME,
+						           A.DISPLAYYN, E.KNAME AS DISPLAYYN_NAME,
+						           A.MENUTYPE, D.KNAME AS MENUTYPE_NAME,
+						           F.BOARDID, F.KNAME, F.KDESC, F.BOARDKIND, E.KNAME AS BOARDKIND_NAME, F.PAGECOUNT,
+						           F.COMMENTYN, F.NOTICEYN, 
+						           F.SECRETYN, F.RSSYN, F.CATEGORYYN,
+						           F.IMAGEYN, F.FILEMAXCOUNT, F.FILEMAXSIZE,
+						           F.STARTTIME, F.ENDTIME, F.ADDFIELD1, F.ADDFIELD2, F.ADDFIELD3, F.ADDFIELD4, F.ADDFIELD5, F.ADDFIELD6,
+						           F.STATE, F.INSUSERID, F.INSIP, F.INSTIME, F.DMLUSERID, F.DMLIP, F.DMLTIME, F.DMLLOG
+						    FROM (SELECT * FROM T_MENU) A
+						    	 LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'TABYN') B
+						    	 ON A.TABYN = B.CODE
+						         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'USERGRADEYN') C
+						         ON A.USERGRADEYN = C.CODE
+						         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'MENUTYPE') D
+						         ON A.MENUTYPE = D.CODE
+						         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'DISPLAYYN') E
+						         ON A.DISPLAYYN = E.CODE
+						         LEFT JOIN T_BOARD F
+						           ON A.MENUID = F.MENUID
+						         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'BoardKind') G
+						         ON F.BoardKind = G.CODE
+							) B
+				  ON A.MENUID = B.MENUID
+		    ) A
+		JOIN T_TRANS B
+		  ON A.MENUID = B.MENUID
+		WHERE B.STATE = 'T'
+		AND B.TARGETMENUID = #{transMenuId}
+	</select>
+	
+	<select id="selectTransTargetMenu" parameterType="trans" resultType="java.util.HashMap">
+		SELECT B.MENUID, A.SITEID, A.MENU_NAME, A.DEPTH, A.SORT, A.HIGHERID,
+		       A.TABYN, A.MENUTYPE, A.MENUTYPE_NAME,
+		       A.IDPATH, A.NAMEPATH,
+		       A.BOARDID, A.KNAME, A.KDESC, A.BOARDKIND, A.BOARDKIND_NAME, A.PAGECOUNT,
+		       A.COMMENTYN, A.NOTICEYN, 
+		       A.SECRETYN, A.RSSYN, A.CATEGORYYN,
+		       A.IMAGEYN, A.FILEMAXCOUNT, A.FILEMAXSIZE,
+		       A.STARTTIME, A.ENDTIME,
+		       A.STATE AS MENU_STATE, 
+		       B.TRANSID, B.TARGETMENUID, B.STATE,
+		       B.INSUSERID, B.INSIP, B.INSTIME, B.DMLUSERID, B.DMLIP, B.DMLTIME, B.DMLLOG,
+		       A.SITE_NAME
+		FROM (
+		    SELECT A.MENUID, B.SITEID, B.MENU_NAME, B.DEPTH, B.SORT, B.HIGHERID,
+		           B.TABYN, B.MENUTYPE, B.MENUTYPE_NAME,
+		           FN_MENUIDPATH(A.MENUID, '>') AS IDPATH, 
+		           FN_MENUNAMEPATH(A.MENUID, '>') AS NAMEPATH,
+		           B.BOARDID, B.KNAME, B.KDESC, B.BOARDKIND, B.BOARDKIND_NAME, B.PAGECOUNT,
+		           B.COMMENTYN, B.NOTICEYN, 
+		           B.SECRETYN, B.RSSYN, B.CATEGORYYN,
+		           B.IMAGEYN, B.FILEMAXCOUNT, B.FILEMAXSIZE,
+		           B.STARTTIME, B.ENDTIME, B.ADDFIELD1, B.ADDFIELD2, B.ADDFIELD3, B.ADDFIELD4, B.ADDFIELD5, B.ADDFIELD6,
+		           B.STATE, B.INSUSERID, B.INSIP, B.INSTIME, B.DMLUSERID, B.DMLIP, B.DMLTIME, B.DMLLOG,
+		           B.SITE_NAME
+		    FROM (SELECT MENUID
+					FROM(SELECT  FN_MENUTREE('-', '') AS MENUID, @level AS level
+					       FROM    (SELECT  @start_with := '-', @id := @start_with, @level := 0) vars, T_MENU
+						  WHERE   @id IS NOT NULL) A 
+				   WHERE A.MENUID IS NOT NULL) A
+				 LEFT JOIN (SELECT A.MENUID, A.SITEID, FUNSITENAME(A.SITEID)AS SITE_NAME, A.KNAME AS MENU_NAME,
+						           A.DEPTH, A.SORT, A.HIGHERID, A.IMAGEPATH, A.IMAGEFILE,
+						           A.PROGRAMURL, A.CHARGEUSERID, A.TABYN,
+						           B.KNAME AS TABYN_NAME, A.USERGRADEYN, C.KNAME AS USERGRADEYN_NAME,
+						           A.DISPLAYYN, E.KNAME AS DISPLAYYN_NAME,
+						           A.MENUTYPE, D.KNAME AS MENUTYPE_NAME,
+						           F.BOARDID, F.KNAME, F.KDESC, F.BOARDKIND, E.KNAME AS BOARDKIND_NAME, F.PAGECOUNT,
+						           F.COMMENTYN, F.NOTICEYN, 
+						           F.SECRETYN, F.RSSYN, F.CATEGORYYN,
+						           F.IMAGEYN, F.FILEMAXCOUNT, F.FILEMAXSIZE,
+						           F.STARTTIME, F.ENDTIME, F.ADDFIELD1, F.ADDFIELD2, F.ADDFIELD3, F.ADDFIELD4, F.ADDFIELD5, F.ADDFIELD6,
+						           F.STATE, F.INSUSERID, F.INSIP, F.INSTIME, F.DMLUSERID, F.DMLIP, F.DMLTIME, F.DMLLOG
+						    FROM (SELECT * FROM T_MENU) A
+						    	 LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'TABYN') B
+						    	 ON A.TABYN = B.CODE
+						         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'USERGRADEYN') C
+						         ON A.USERGRADEYN = C.CODE
+						         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'MENUTYPE') D
+						         ON A.MENUTYPE = D.CODE
+						         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'DISPLAYYN') E
+						         ON A.DISPLAYYN = E.CODE
+						         LEFT JOIN T_BOARD F
+						           ON A.MENUID = F.MENUID
+						         LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'BoardKind') G
+						         ON F.BoardKind = G.CODE
+							) B
+				  ON A.MENUID = B.MENUID
+		    ) A
+		JOIN T_TRANS B
+		  ON A.MENUID = B.MENUID
+		WHERE B.STATE = 'T'
+		AND B.MENUID = #{transTargetMenuId}
+	</select>
+	
+	<select id="selectNextTransId" parameterType="trans" resultType="java.lang.String">
+		SELECT IFNULL(MAX(TRANSID), 0)+1 FROM T_TRANS
+	</select>
+	
+	<insert id="insertTransMenu" parameterType="trans">
+	INSERT INTO T_TRANS (TRANSID, MENUID, TARGETMENUID, STATE, INSUSERID, INSIP, INSTIME, DMLUSERID, DMLIP, DMLTIME, DMLLOG)
+	VALUES (#{transId}
+			, #{transMenuId}
+			, #{transTargetMenuId}
+			, #{state}
+			, #{inDMLUserId}
+			, #{inDMLIp}
+			, SYSDATE
+			, #{inDMLUserId}
+			, #{inDMLIp}
+			, SYSDATE
+			, #{dmlLog})
+	</insert>
+	
+	<delete id="deleteTransMenu" parameterType="java.util.HashMap">
+	DELETE FROM T_TRANS WHERE TRANSID = #{TRANSID}
+	</delete>
+	
+	<delete id="deleteTransMenuId" parameterType="trans">
+	DELETE FROM T_TRANS WHERE MENUID = #{transMenuId}
+	</delete>
+	
+	<delete id="deleteTransTargetMenuId" parameterType="trans">
+	DELETE FROM T_TRANS WHERE TARGETMENUID = #{transTargetMenuId}
+	</delete>
+    
+</mapper>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.plani.ccis.ips.mapper.site.IpManagementMgrMapper">
+
+	<select id="selectIpManagementList" parameterType="ipManagement" resultType="java.util.HashMap">
+		<include refid="common.pageHeader"/>
+			SELECT *, (SELECT COUNT(*)AS CNT
+					     FROM T_IPMANAGEMENT A
+					    WHERE A.STATE = 'T'
+					    <if test="schType != null and schType == 1">
+				        AND CONCAT(A.IP_1, '.', A.IP_2, '.', A.IP_3, '.', A.IP_4) LIKE CONCAT('%',#{schText},'%')
+				        </if>
+				        <if test="schType != null and schType == 2">
+				        AND A.REMK LIKE CONCAT('%',#{schText},'%')
+				        </if>) AS TOTAL_CNT
+			    FROM T_IPMANAGEMENT
+			   WHERE STATE = 'T'
+			   <if test="schType != null and schType == 1">
+		        	AND CONCAT(IP_1, '.', IP_2, '.', IP_3, '.', IP_4) LIKE CONCAT('%',#{schText},'%')
+		        </if>
+		        <if test="schType != null and schType == 2">
+		        	AND REMK LIKE CONCAT('%',#{schText},'%')
+		        </if> 
+			ORDER BY SEQ DESC
+		<include refid="common.pageFooter"/>
+	</select>
+	
+	<select id="selectIpManagementListCnt" parameterType="ipManagement" resultType="int">
+			SELECT COUNT(*)AS CNT
+			    FROM T_IPMANAGEMENT
+			   WHERE STATE = 'T'
+			   <if test="schType != null and schType == 1">
+		        	AND CONCAT(IP_1, '.', IP_2, '.', IP_3, '.', IP_4) LIKE CONCAT('%',#{schText},'%')
+		       </if>
+		       <if test="schType != null and schType == 2">
+		        	AND REMK LIKE CONCAT('%',#{schText},'%')
+		       </if> 
+	</select>
+	
+	<select id="selectIpManagementView" parameterType="ipManagement" resultType="java.util.HashMap">
+		SELECT *
+		    FROM T_IPMANAGEMENT
+		   WHERE SEQ = #{seq}
+	</select>
+
+	<select id="selectIpAllYnCheck" parameterType="defaultDomain" resultType="java.lang.String">
+		SELECT  IF(COUNT(1) = 0, 'N', 'Y') AS ALLWYN
+	      FROM  T_IPMANAGEMENT A
+	     WHERE A.STATE = 'T'  
+	       AND A.ALLWYN = 'Y'
+	       AND (A.IP_1 = '*' OR A.IP_1 = SUBSTRING_INDEX(#{inDMLIp}, '.', 1))
+	       AND (A.IP_2 = '*' OR A.IP_2 = SUBSTRING_INDEX(SUBSTRING_INDEX(#{inDMLIp}, '.', 2), '.', -1))
+	       AND (A.IP_3 = '*' OR A.IP_3 = SUBSTRING_INDEX(SUBSTRING_INDEX(#{inDMLIp}, '.', -2), '.', 1))
+	       AND (A.IP_4 = '*' OR A.IP_4 = SUBSTRING_INDEX(#{inDMLIp}, '.', -1))
+	       AND NOT EXISTS (SELECT  1
+	                        FROM  T_IPMANAGEMENT B
+	                       WHERE B.STATE = 'T' 
+	                       	 AND B.ALLWYN = 'N'
+	                         AND (B.IP_1 = '*' OR B.IP_1 = SUBSTRING_INDEX(#{inDMLIp}, '.', 1))
+	                         AND (B.IP_2 = '*' OR B.IP_2 = SUBSTRING_INDEX(SUBSTRING_INDEX(#{inDMLIp}, '.', 2), '.', -1))
+	                         AND (B.IP_3 = '*' OR B.IP_3 = SUBSTRING_INDEX(SUBSTRING_INDEX(#{inDMLIp}, '.', -2), '.', 1))
+	                         AND (B.IP_4 = '*' OR B.IP_4 = SUBSTRING_INDEX(#{inDMLIp}, '.', -1))
+	                     )
+	</select>
+	
+	<insert id="insertIpManagement" parameterType="ipManagement">
+		<selectKey keyProperty="seq" resultType="int" order="BEFORE">
+			SELECT IFNULL(MAX(SEQ), 0)+1 FROM T_IPMANAGEMENT
+		</selectKey>
+	
+		INSERT INTO T_IPMANAGEMENT (SEQ, 
+				           IP_1, 
+				           IP_2, 
+				           IP_3, 
+				           IP_4, 
+				           ALLWYN, 
+				           REMK, 
+				           STATE, 
+				           INSUSERID, 
+				           INSIP, 
+				           INSTIME  
+				 ) VALUES (#{seq}, 
+				           #{ip_1} , 
+				           #{ip_2} , 
+				           #{ip_3} , 
+				           #{ip_4} , 
+				           #{allwYN} , 
+				           #{remk} ,
+				           'T' , 
+				           #{inDMLUserId} , 
+				           #{inDMLIp} , 
+				           NOW()) 
+	</insert>
+	
+	<update id="updateIpManagement" parameterType="ipManagement">
+		UPDATE T_IPMANAGEMENT SET IP_1 = #{ip_1}, IP_2 = #{ip_2}, IP_3 = #{ip_3}, IP_4 = #{ip_4}, ALLWYN = #{allwYN}, REMK = #{remk}, STATE = #{state}
+		WHERE SEQ = #{seq}
+	</update>
+	
+</mapper>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<settings>
+	
+		<!-- 
+	    각 mapper에 설정된 캐시를 전역적으로 사용할지 여부
+	    -->
+		<setting name="cacheEnabled" value="true" />
+		
+		<!-- 
+		늦은 로딩 사용여부
+		-->
+		<setting name="lazyLoadingEnabled" value="true" />
+		
+		<!-- 
+		활성화면 늦은로딩 프로퍼티를 가진 객체는 호출에 따라 로드
+		개별 프로퍼티는 요청할 때 로드
+		-->
+		<setting name="aggressiveLazyLoading" value="true" />
+		
+		<!-- 
+		한개의 구문에서 여러개의 ResultSet 을 허용할지 여부 (드라이버 지원해야 함)
+		-->
+		<setting name="multipleResultSetsEnabled" value="true" />
+		
+		<!-- 
+		컬럼명 대신 컬럼라벨을 사용
+		-->
+		<setting name="useColumnLabel" value="true" />
+		
+		<!-- 
+		생성키에 대한 jdbc 지원을 허용 - 지원하는 드라이버 필요
+		-->
+		<setting name="useGeneratedKeys" value="false" />
+		
+		<!-- 
+		MyBatis가 컬럼을 필드/프로퍼티에 자동으로 매핑할지 방법에 대한 명시
+		NONE : 하지 않음
+		PARTIAL(*) : 간단한 자동매핑
+		FULL : 처리 가능한 모든 자동매핑 처리
+		-->	
+		<setting name="autoMappingBehavior" value="PARTIAL"/>
+		
+		<!--
+		SIMPLE(*) : 특별히 하는 일이 없다.
+		REUSE : PreapredStatement 를 재사용
+		BATCH : 구문을 재사용하고 수정을 배치처리
+		-->
+		<setting name="defaultExecutorType" value="BATCH" />
+		
+		<!--
+		데이터베이스로부터 응답을 얼마나 오래 기다릴지 판단하는 타임아웃 설정 (양수)
+		-->
+		<setting name="defaultStatementTimeout" value="25000" />
+		
+		<!-- 
+		전통적인 데이터베이스 컬럼명 형태인 A_COLUMN 을 CamelCase 형태의 
+		프로퍼티형인 aColumn 으로 자동 매핑
+		-->
+		<setting name="mapUnderscoreToCamelCase" value="false"/>
+		
+		<!-- 
+		SESSION(*), STATEMENT
+		-->
+		<setting name="localCacheScope" value="SESSION"/>
+		
+		<!-- NULL, VARCHAR, OTHER(*) -->
+		<setting name="jdbcTypeForNull" value="NULL"/>
+		
+		<setting name="lazyLoadTriggerMethods" value="eqlas,clone,hashCode,toString"/>
+	</settings>
+	
+</configuration>

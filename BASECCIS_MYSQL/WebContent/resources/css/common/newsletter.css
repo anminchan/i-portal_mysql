@@ -1,0 +1,507 @@
+@charset "utf-8";
+/*-------------------------------------------------
+newsletter Style Sheet
+Version : 1.0
+Author : myeong-hee park
+Create date : 2016. 11. 14.
+Last update : 2016. 11. 14.
+-------------------------------------------------*/
+
+.newsletter_wrap {	
+	width: 790px;
+	margin: auto;
+	padding: 30px;
+	background: #f7fafe;
+	}
+.logo_vol {
+	height: 40px;
+	margin-bottom: 20px;
+	line-height: 1;
+	overflow: hidden;
+	}
+.logo_vol .logo {
+	float: left;
+	padding: 0;
+	background: none;
+	}
+.logo_vol .vol {
+    float: right;
+    margin: 0;
+    padding: 9px 0 0;
+    color: #252525;
+    font-size: 14px;
+    font-weight: bold;
+	}
+.logo_vol .date {
+	display: inline-block; 
+	margin-right: 2px; 
+	color: #6c6d70;
+	}
+.logo_vol .num {
+	font-size: 1.517em;
+	}
+.newsLetter_box {
+	overflow: hidden;
+	}	
+.newsletter_visual {
+	width: 100%;
+	height: 280px;
+	border-bottom: none;
+	overflow: hidden;
+	}
+.mdi_visual {
+	height: 250px;
+	}	
+.newsletter_visual img {
+	width: 100%;
+	}	
+.newsLetter_box .nav {	
+    margin-bottom: 30px;
+    background-color: #214c86;
+    font-size: 14px;
+    font-weight: bold;
+    overflow: hidden;
+	}
+.newsLetter_box .nav a {
+    display: block;
+    float: left;
+    width: 16.6%;
+    padding: 13px 0;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    line-height: 1.3;
+	}	
+.newsletter_wrap .nav a:first-child {
+	border-left: none;
+	}
+.newsletter_wrap .nav a.point_color	{
+	background: #343a43;
+	}
+.gfi_vol {
+	height: 50px; 
+	margin:0; 
+	padding: 0 30px; 
+	background: url(/resources/images/new_newsletter/gfi/vol.gif) no-repeat 0 0; 
+	color: #fff; 
+	letter-spacing: -1px; 
+	line-height: 50px; 
+	overflow: hidden;
+	}	
+.gfi_vol .point {
+	display: inline-block; 
+	margin-right: 10px; 
+	color: #ffa700; 
+	font-size: 1.286em; 
+	}	
+.gfi_vol .float_right {	
+	font-size: 0.929em; 
+	}
+.gfi_vol .float_right a {
+	color: #fff;
+	}
+.mdi_vol {
+	height: 63px;
+	border-bottom: solid 1px #e5e5e5;
+	overflow: hidden;
+	}	
+.mdi_vol .float_left {
+	margin: 20px 0 0 30px; 
+	font-weight: bold;
+	}	
+.mdi_vol .point {
+	display: inline-block; 
+	margin-right: 10px; 
+	color: #d9394a; 
+	font-size: 1.286em;
+	}
+	
+/* 뉴스레터 콘텐츠 STYLE
+-------------------------------------------*/	
+#newsletter_content {
+	padding: 30px 29px;
+    background: #fff;
+    border: solid 1px #d6dde7;
+    color: #6c6d70;
+    font-size: 13px;
+    overflow: hidden;
+	}
+/* 포틀릿 설정 */	
+.portlet_setting {
+	padding: 25px 0 33px;
+	background: #f8fafd;
+	border: dashed 2px #c6ceda; 
+	color: #687287;
+	text-align: center;
+	font-size: 1.286em;
+	}		
+.portlet_setting .point01 {	
+	color: #ec407a;
+	}
+.portlet_setting .btn_color {
+	display: block;
+	width: 160px;
+	height: 55px;
+	margin: 10px auto 0;
+	background: #ec407a;
+	color: #fff;
+	letter-spacing: -0.05em;
+	font-size: 1em;
+	font-weight: bold;
+	}
+#contentArea {
+	margin-bottom: 40px;
+	}	
+.ui-sortable {
+	width: 100%;
+    height: 157px;
+    margin-top: 10px;    
+    padding: 5px 0 5px 5px;
+    background: #eeeff3;
+    box-sizing: border-box;
+	}		
+.ui-sortable > article {
+	position: relative;
+	float: left;
+	height: 100%;
+	margin-left: 4px;
+	padding: 15px 20px;
+	background: url(../../images/new_newsletter/common/portlet_typeBg.gif) no-repeat 0 0;
+	border: solid 1px #e3e4e5;
+    border-right-color: #c9cacc;
+    border-bottom-color: #c9cacc;
+    box-sizing: border-box;
+	}	
+.ui-sortable:hover, 	
+.ui-sortable > article:hover {
+	cursor: move;
+	}
+.ui-sortable > article:first-child {
+	margin-left: 0;
+	}	
+.contype_full { 
+	width: 94%;
+	}	
+.contype_lg {
+	width: 66.66666667%;
+	}
+.contype_md {
+	width: 50%;
+	}
+.contype_sm {
+	width: 33.33333333%;
+	}
+.contype_xs {
+	width: 25%;
+	}	
+.ui-sortable .contype_lg {
+	width: 509px;
+	}
+.ui-sortable .contype_md {
+	width: 338px
+	}
+.ui-sortable .contype_sm {
+	width: 224px;
+	}
+.ui-sortable .contype_xs {
+	width: 167px;
+	}	
+.ui-sortable .subject {
+	width: 78%;
+	color: #343a43;
+	letter-spacing: -0.05em;
+	line-height: 1.2;
+	text-overflow: ellipsis; 
+	white-space: nowrap;
+	font-size: 1.143em;
+	overflow : hidden;
+	}
+/* 상하이동, 라인 삭제 */	
+.portletLine_control {
+	position: relative;
+	float: right;
+	width: 24px;
+	height: 90%;
+	margin: 5px 10px 0 0;
+    letter-spacing: -0.1em;
+	}
+.portletLine_control button {
+	display: block;
+	width: 100%;
+	}	
+.portletLine_control .move {
+	height: 20px;
+	margin-top: 5px;
+	background: url(../../images/new_newsletter/common/btn_move.gif) no-repeat 0 0;
+	text-indent: -9999px;
+	overflow: hidden;
+	}		
+.portletLine_control .after {
+	background-position: 0 bottom;
+	} 	
+.portletLine_control .delete {
+	position: absolute;
+	bottom: 0;
+	text-align: center;
+	font-size: 0.857em;
+	}
+.portletLine_control .hide {
+	display: block;
+	width: 1px;
+	height: 1px;
+	color: transparent;
+	overflow: hidden;
+	}	
+.type_setting {
+	position: absolute;
+	top: 18px;
+	right: 10px;
+	width: auto;
+	padding: 18px 0 0 4px;
+	background: url(../../images/new_newsletter/common/icon_setting.gif) no-repeat right 0;
+    cursor: pointer;	
+	}
+.type_setting:before,
+.potlet_control .addContent a:after {
+	clear: both;
+	float: right;
+	display: block;
+	width: 0;
+	height: 0;
+	margin-right: 15px;
+	border-bottom: 3px solid #000;
+	border-left: 3px solid transparent;
+	border-right: 3px solid transparent;
+	content:'';
+	}        
+.type_setting:before {	
+	opacity: 0;
+	}	
+.potlet_control .addContent a:after {
+	float: none;
+	position: absolute;
+    top: 23px;
+	left: 15px;
+	} 
+.type_setting button,
+.potlet_control .addContent:after {
+	display: block;
+	padding: 3px 7px;
+	background: #000;
+	box-shadow: 1px 1px 0 #d0d0d2;
+	border-radius: 2px;
+	color: #fff;
+	letter-spacing: -0.05em;
+	line-height: 1.1;
+	font: 0.786em Dotum;
+	overflow : hidden;
+	}
+.type_setting:hover {
+	height: 25px;
+	overflow: visible;
+	} 		
+.type_setting button {
+	position: absolute;
+	right: 0;
+	height: 0;
+	opacity: 0;
+	margin-top: 3px;
+    }
+.type_setting:hover:before {
+	opacity: 1;
+	transition: all 0.3s ease;
+    -webkit-transition: all 0.3s ease;
+	}
+.type_setting:hover button {
+	height: 20px;	
+	opacity: 1;
+	transition: all 0.3s ease;
+    -webkit-transition: all 0.3s ease;
+	}
+/* 콘텐츠 등록/변경 */	
+.potlet_control {
+	margin: 75px 0 0 -10px;
+	font-size: 0.95em;
+	overflow: hidden;
+	}
+.potlet_control > span	{
+	display: block;
+	}
+.potlet_control button {
+	color: transparent;
+	}
+.potlet_control .addContent {	
+	position: relative;
+	float: left;
+	height: 20px;
+	padding-left: 30px;
+	background: url(../../images/new_newsletter/common/icon_setting02.gif) no-repeat 10px 0;
+	letter-spacing: -0.08em;
+	}
+.potlet_control .addContent a {
+	color: #45474d;
+	}
+.potlet_control .addContent:after {
+	margin: 5px 0 0 -30px;
+	content:'콘텐츠 등록/변경';
+	font-size: 0.857em;
+	}
+.potlet_control .addContent:hover {	
+	height: 46px;
+	opacity: 1;
+	transition: all 0.3s ease;
+    -webkit-transition: all 0.3s ease;
+	}
+		
+/* 콘텐츠 좌우 이동 */	
+.potlet_control .potletMove {
+	float: right;
+	}
+.potletMove {
+	width: auto;
+	height: 20px;
+	}	
+.potletMove button {
+	float: left;
+	display: block;
+	width: 16px;
+	height: 21px;
+	background: url(../../images/new_newsletter/common/potletMove_control.gif) no-repeat 0 0;
+	color: transparent;
+	overflow: hidden;
+	}
+.potletMove .after {
+	background-position: -16px 0;
+	}	
+.ui-sortable > article:first-child .before {
+	background-position: 0 -20px;
+	}	
+.ui-sortable > article:nth-last-of-type(1) .after {
+	background-position: -16px -20px;
+	}
+#contentArea .ui-sortable:first-child .portletLine_control .before {
+	background-position: -24px 0;
+	}	
+#contentArea .ui-sortable:last-child .portletLine_control .after {
+	background-position: -24px -25px;
+	}
+/*포틀릿 Type 설정/변경 */
+.portlet_type_choice,
+.portlet_lineCount {
+    width: 698px;
+    margin: -20px 0 0 -15px;
+	overflow: hidden;
+	}
+.portlet_type_choice > li,
+.portlet_lineCount > li {
+	float: left;
+    width: 332px;
+    margin: 20px 0 0 15px;
+    color: #2f3743;
+    text-align: center;
+    font-weight: bold;
+    overflow: hidden;
+	}
+.portlet_type_choice > li:before {
+	display: block;
+	width: 100%;
+	height: 100px;
+	margin-bottom: 5px;
+	background: url(../../images/new_newsletter/common/portlet_type_choice.gif) no-repeat center 0; 
+	content: '';
+	}
+.portlet_type_choice > li.type02:before {
+	background-position: center -100px;
+	}
+.portlet_type_choice > li.type03:before {
+	background-position: center -200px;
+	}
+.portlet_type_choice > li.type04:before {
+	background-position: center -300px;
+	}
+.portlet_type_choice > li.type05:before {
+	background-position: center -400px;
+	}
+.portlet_type_choice > li.type06:before {
+	background-position: center 0;
+	}
+.txt_info {
+	margin-bottom: 10px;
+	}	
+.portlet_lineCount {
+	margin: 20px 0 0;
+	}	
+.portlet_lineCount > li  {
+	float: none;
+	width: 100%;
+	margin: 10px 0 0;
+	text-align: left;
+	}	
+.portlet_lineCount input {
+	margin-top: 42px;
+	}	
+.portlet_lineCount label {
+	display: inline-block;
+	width: 643px;
+	height: 98px;
+	background: url(../../images/new_newsletter/common/portlet_lineCount.gif) no-repeat center 0;
+    color: transparent;	
+    vertical-align: top;	
+	}
+.portlet_lineCount .type02 label {
+	background-position: center -108px;
+	}	
+.portlet_lineCount .type03 label {
+	background-position: center -216px;
+	}
+.portlet_lineCount .type04 label {
+	background-position: center -324px;
+	}
+.portlet_lineCount .type05 label {
+	background-position: center -432px;
+	}
+	
+/* 뉴스레터 footer STYLE
+-------------------------------------------*/
+.help_area {
+	margin: 0 29px 30px;
+	font-size: 0.929em; 
+	overflow: hidden;
+	}		
+.help_area .help {
+	float: left;
+	width: 380px;
+	margin-top: 13px;
+	padding: 5px 0 3px 80px;
+	background: url(../../images/new_newsletter/common/icon_phon02.png) no-repeat 0 0;  
+	line-height: 1.5;
+	}
+.help_area .help strong {	
+	display: block;
+	margin-bottom: 8px; 
+	color: #01756b;
+	}	
+.qrcode {
+	float: right;
+	width: 162px;
+	height: 87px;
+	padding: 13px 0 0 98px;
+	background: url(../../images/new_newsletter/common/qrcode_bg.gif) no-repeat 0 5px;  
+	letter-spacing: -0.1em;
+	}	
+.qrcode dt {
+	margin: 7px 0 5px;
+	color: #d9394a;
+	font-weight: bold;
+	}
+.slogan {
+	margin: 25px 0 20px;
+	padding-bottom: 20px;
+	border-bottom: solid 1px #d8d9dc;
+	text-align: center;
+	font-size: 0.929em;
+	}	
+.newsletter_copyright {
+	text-align: center;
+	font-size: 0.929em;
+	}	

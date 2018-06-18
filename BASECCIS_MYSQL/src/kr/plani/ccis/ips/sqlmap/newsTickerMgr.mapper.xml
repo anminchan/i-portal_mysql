@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.plani.ccis.ips.mapper.site.NewsTickerMgrMapper">
+
+	<select id="list" parameterType="newsTicker" resultType="java.util.HashMap">
+	<include refid="common.pageHeader"/>
+		SELECT  A.NEWSTICKERID, 
+				A.KNAME,
+				B.KNAME AS SITE_NAME,
+				A.STATE,
+				A.LINKURL,
+				A.STARTTIME,
+				A.ENDTIME,
+             	TO_DATE(A.STARTTIME, 'YYYY-MM-DD HH') AS CSTARTTIME, 
+             	TO_DATE(A.ENDTIME, 'YYYY-MM-DD HH') AS CENDTIME, 
+				A.NEWWINDOWYN,
+			    A.INSUSERID,
+			    A.INSIP,
+				A.INSTIME
+			FROM T_NEWSTICKER A
+			LEFT JOIN (SELECT * FROM T_SITE WHERE State = 'T') B
+			ON A.SITEID = B.SITEID
+			WHERE 1=1
+            <if test="KName != null and KName != ''">
+            AND A.KNAME LIKE '%' || #{KName} || '%'
+            </if>
+            <if test="siteId != null and siteId != ''">
+            AND A.SITEID LIKE '%' || #{siteId} || '%'
+            </if>
+		 	ORDER BY A.SITEID, A.NEWSTICKERID DESC
+	<include refid="common.pageFooter"/>
+	</select>
+
+	<select id="view" parameterType="newsTicker" resultType="java.util.HashMap">
+		SELECT A.NEWSTICKERID, 
+				A.KNAME,
+				B.KNAME AS SITE_NAME,
+				A.SITEID,
+				A.STATE,
+				A.LINKURL,
+				TO_CHAR(A.STARTTIME, 'YYYYMMDDHH24') AS STARTTIME, 
+				TO_CHAR(A.ENDTIME, 'YYYYMMDDHH24') AS ENDTIME,
+				A.NEWWINDOWYN,
+			    A.INSUSERID,
+			    A.INSIP,
+				A.INSTIME
+		  FROM (SELECT * FROM T_NEWSTICKER WHERE NEWSTICKERID = #{newsTickerId}) A
+		  LEFT JOIN(SELECT * FROM T_SITE WHERE State = 'T') B
+		  ON A.SiteID = B.SiteID
+	</select>
+	
+	<insert id="insert" parameterType="newsTicker">
+	<selectKey keyProperty="newsTickerId" resultType="int" order="BEFORE">
+		SELECT NVL(MAX(NEWSTICKERID), 0)+1 FROM T_NEWSTICKER
+	</selectKey>
+	INSERT 
+	  INTO T_NEWSTICKER 
+	       (
+	           NEWSTICKERID, 
+	           SITEID,
+			   KNAME,
+			   LINKURL,
+			   STARTTIME,
+			   ENDTIME,
+			   NEWWINDOWYN,
+	           STATE, 
+	           INSUSERID, 
+	           INSIP, 
+	           INSTIME,
+			   DMLUSERID,
+			   DMLIP,
+			   DMLTIME       
+	       ) 
+	       VALUES 
+	       (
+	           #{newsTickerId} ,
+	           #{siteId} ,
+	           #{KName} ,
+	           #{linkURL} ,
+	           TO_DATE(#{startTime},'YYYY-MM-DD HH24'), 
+	           TO_DATE(#{endTime},'YYYY-MM-DD HH24'),
+	           #{newWindowYn} ,
+	           'T' ,
+	           #{inDMLUserId} ,
+	           #{inDMLIp} ,
+	           SYSDATE ,
+	           #{inDMLUserId} ,
+	           #{inDMLIp} ,
+	           SYSDATE       	           
+	       ) 
+	</insert>
+	
+	<update id="update" parameterType="newsTicker">
+		UPDATE T_NEWSTICKER
+		   SET KNAME = #{KName}, 
+		   	   LINKURL = #{linkURL} ,
+		   	   SITEID = #{siteId} ,
+			   STARTTIME = TO_DATE(#{startTime},'YYYY-MM-DD HH24') ,
+			   ENDTIME = TO_DATE(#{endTime},'YYYY-MM-DD HH24') ,
+			   NEWWINDOWYN = #{newWindowYn} ,
+			   STATE = #{state},
+               DMLUSERID = #{inDMLUserId},
+			   DMLIP = #{inDMLIp},
+			   DMLTIME = SYSDATE
+	     WHERE NEWSTICKERID = #{newsTickerId}
+	</update>
+	
+	<delete id="delete" parameterType="newsTicker">
+		DELETE FROM T_NEWSTICKER
+		 WHERE NEWSTICKERID IN
+		 <foreach collection="newsTickerIds" item="item" index="index" separator="," open="(" close=")">
+	    	${newsTickerIds[index]}
+		 </foreach>
+	</delete>
+		
+</mapper>

@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:jms="http://www.springframework.org/schema/jms" xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:oxm="http://www.springframework.org/schema/oxm"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:tool="http://www.springframework.org/schema/tool"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+	default-autowire="byName"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+      http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+      http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd
+      http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+      http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+      http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+      http://www.springframework.org/schema/jms http://www.springframework.org/schema/jms/spring-jms.xsd
+      http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang.xsd
+	  http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+      http://www.springframework.org/schema/oxm http://www.springframework.org/schema/oxm/spring-oxm.xsd
+      http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+      http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
+      http://www.springframework.org/schema/tool http://www.springframework.org/schema/tool/spring-tool.xsd
+      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+      http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+      http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd">
+
+	<!-- 
+	###############################################################################################
+	## Spring & Spring MVC Setting
+	############################################################################################### 
+	-->
+	<mvc:annotation-driven />
+	
+	<aop:aspectj-autoproxy />
+	
+	<bean id="annotationHandlerAdaptor" class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="synchronizeOnSession" value="true" /><!-- Controller를 처리하기 전에 session에 대하여 synchronized 처리를 통해 동시에 session에 여러 thread가 접근하는 것을 막는 역할 -->
+	</bean>
+
+	<context:component-scan base-package="kr" />
+	
+	<context:annotation-config />
+	
+	<util:properties id="jdbc" location="classpath:jdbc.xml" /><!-- 통합플랫폼 jdbc경로 -->
+	<util:properties id="config" location="classpath:application.config.xml" /><!-- 통합플랫폼 config경로 -->
+	
+	<!-- 정적컨텐츠사용 -->
+	<mvc:resources location="/resources/" mapping="/resources/**" /><!-- 통합플랫폼 resources경로 -->
+	<mvc:resources location="/html/" mapping="/html/**" /><!-- 통합플랫폼 html경로 -->
+	<mvc:resources location="/UploadFiles/" mapping="/UploadFiles/**" /><!-- 통합플랫폼 기본파일경로 -->
+	
+	<!-- 
+	###############################################################################################
+	## Interceptors 지정시 "/resources/**", "/login/**" 등은 제외하고 선언하여 사용할 것
+	############################################################################################### 
+	-->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/mgr/**" />
+			<bean class="kr.plani.ccis.common.interceptor.AdminLoginCheckInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
+	<!-- 
+	###############################################################################################
+	## DataSource & Transaction Manager
+	############################################################################################### 
+	-->
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="#{jdbc['driverClassName']}" />
+		<property name="url" value="#{jdbc['url']}" />
+		<property name="username" value="#{jdbc['username']}" />
+		<property name="password" value="#{jdbc['password']}" />
+		<property name="maxTotal" value="30" />
+		<property name="maxIdle" value="30" />
+		<property name="maxWaitMillis" value="3000" />
+		<property name="defaultAutoCommit" value="true" />
+	</bean>
+
+	<!-- Transaction Manager & Annotation Driven Transaction-->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<tx:annotation-driven proxy-target-class="true" transaction-manager="transactionManager" />
+	
+	<!-- 
+	###############################################################################################
+	MyBatis & MyBatis Mapper Scan
+	############################################################################################### 
+	-->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mapperLocations" value="classpath*:kr/**/sqlmap/**/*.xml" />
+		<property name="configLocation" value="classpath:mybatisConfig.xml" />
+		<property name="typeAliasesPackage" value="kr.plani.ccis.base.domain, kr.plani.ccis.ips.domain" />
+	</bean>
+	
+	<bean class="egovframework.rte.psl.dataaccess.mapper.MapperConfigurer">
+		<!-- <property name="basePackage" value="kr.plani.ccis.base.mapper, kr.plani.ccis.ips.mapper, kr.plani.ccis.mps.mapper" /> -->
+		<property name="basePackage" value="kr.plani.ccis.**.mapper" />
+		<!-- property name="basePackage" value="classpath*:kr/**/mapper/*" / -->
+	</bean>
+	
+	<!-- 
+	###############################################################################################
+	## MessageSource (Locale) 
+	############################################################################################### 
+	-->
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basename" value="/WEB-INF/locale/messages" />
+		<property name="defaultEncoding" value="UTF-8" />
+		<property name="cacheSeconds" value="60" />
+	</bean>
+	
+	<bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+		<property name="paramName" value="lang" />
+	</bean>
+	
+	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+		<property name="defaultLocale" value="ko" />
+	</bean>
+	
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">	
+		<property name="interceptors">
+			<ref bean="localeChangeInterceptor" />
+		</property>
+	</bean>
+	
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+					<property name="supportedMediaTypes">
+						<list>
+							<value>text/plain;charset=UTF-8</value>	
+							<value>text/html;charset=UTF-8</value>	
+						</list>
+					</property>
+				</bean>
+			</list>
+		</property>	
+	</bean>
+	
+	<!-- 
+	###############################################################################################
+	## eGovFraemwrok 설정 
+	############################################################################################### 
+	-->
+	<bean id="leaveaTrace" class="egovframework.rte.fdl.cmmn.trace.LeaveaTrace"><!-- leavaTrace 설정 -->
+		<property name="traceHandlerServices">
+			<list>
+				<ref bean="traceHandlerService" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="traceHandlerService" class="egovframework.rte.fdl.cmmn.trace.manager.DefaultTraceHandleManager">
+		<property name="reqExpMatcher">
+			<ref bean="antPathMater" />
+		</property>
+		<property name="patterns">
+			<list>
+				<value>*</value>
+			</list>
+		</property>
+		<property name="handlers">
+			<list>
+				<ref bean="defaultTraceHandler" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="antPathMater" class="org.springframework.util.AntPathMatcher" />
+	<bean id="defaultTraceHandler" class="egovframework.rte.fdl.cmmn.trace.handler.DefaultTraceHandler" />
+	
+	<!-- 
+	###############################################################################################
+	## ContentNegotiationView 
+	############################################################################################### 
+	-->
+	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="contentNegotiationManager">
+			<bean class="org.springframework.web.accept.ContentNegotiationManager">
+				<constructor-arg>
+					<bean class="org.springframework.web.accept.PathExtensionContentNegotiationStrategy">
+						<constructor-arg>
+							<map>
+								<entry key="xml" value="application/xml;charset=UTF-8" />
+								<entry key="atom" value="application/atom-xml" />
+								<entry key="html" value="text/html" />
+								<entry key="json" value="application/json;charset=UTF-8" />
+								<entry key="rss" value="application/rss-xml;charset=UTF-8" />
+							</map>
+						</constructor-arg>
+					</bean>
+				</constructor-arg>
+			</bean>
+		</property>
+		<property name="viewResolvers">
+			<list>
+				<bean class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+					<property name="order" value="1" />
+					<property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView" />
+				</bean>
+				<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+					<property name="order" value="2" />
+					<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+					<property name="prefix" value="/WEB-INF/jsp/" />
+					<property name="suffix" value=".jsp" />
+					<property name="redirectHttp10Compatible" value="false" />
+				</bean>
+				<bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
+					<property name="order" value="3" />
+				</bean>
+			</list>
+		</property>
+		<property name="defaultViews">
+			<list>
+			    <!-- JSON View -->
+				<bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>
+				<!-- XML View -->
+                <bean class="org.springframework.web.servlet.view.xml.MarshallingView">
+                    <constructor-arg>
+                        <bean class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+                            <property name="packagesToScan">
+                                <list>
+                                    <value>kr.plani.ccis.ips.domain</value>
+                                </list>
+                            </property>
+                        </bean>
+                    </constructor-arg>
+                </bean>
+			</list>
+		</property>
+		<!-- <property name="ignoreAcceptHeader" value="true" /> -->
+	</bean>	
+	
+	<!-- 
+	###############################################################################################
+	## Tiles3 
+	############################################################################################### 
+	-->
+	<bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+		<property name="definitions" value="/WEB-INF/tiles/*.xml" />
+	</bean>
+	
+	<!-- 
+	###############################################################################################
+	## MultipartResolver
+	## bean id 가 filterMultipartResolver 가 아닌 경우 web.xml 의 multipartFilter 항목의 
+	## multipartResolverBeanName init-param 설정을 해주어야 함
+	## filterMultipartResolver 인 경우는 설정이 필요 없음
+	############################################################################################### 
+	-->
+	<bean id="baseMultipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="utf-8" />
+		<property name="maxUploadSize" value="52428800" />
+		<property name="maxInMemorySize" value="52428800" />
+		<property name="uploadTempDir" ref="uploadDirResource" /> 
+	</bean>
+	 
+	<bean id="uploadDirResource" class="org.springframework.core.io.FileSystemResource">
+		<constructor-arg>
+			<value>/tmp</value>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 
+	###############################################################################################
+	## Validator
+	###############################################################################################
+	-->
+	
+</beans>

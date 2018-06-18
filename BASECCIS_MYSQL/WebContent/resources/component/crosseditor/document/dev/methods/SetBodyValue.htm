@@ -1,0 +1,61 @@
+<html>
+
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>SetBodyValue</title>
+<meta name="author" content="Namo Interactive, Inc.">
+<link rel="stylesheet" href="../images/linkstyle.css">
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="purple" alink="red">
+
+<table border="0" width="640">
+    <tr>
+        <td width="10%" bgcolor="#EEEEEE" bordercolor="#999999">
+            <p align="center" class="pme">Param</p>
+        </td>
+        <td width="10%" bgcolor="#5A7FC1" bordercolor="#999999">
+            <p align="center" class="pme"><font color="white">Method</font></p>
+        </td>
+        <td width="10%" bgcolor="#EEEEEE" bordercolor="#999999">
+            <p align="center" class="pme">Event</p>
+        </td>
+        <td width="10%">
+            <p align="center" class="pme">&nbsp;</p>
+        </td>
+        <td width="50%">
+            <p align="center" class="pme">&nbsp;</p>
+        </td>
+    </tr>
+</table>
+<TABLE width=640 border=0>
+    <TR>
+        <TD width=634>
+            <H2>SetBodyValue</H2>
+            <P class="dscrpt">현재 편집 중인 문서의 HTML body정보(&lt;body&gt;~&lt;/body&gt;)를 설정합니다.</P>
+            <p class="dscrpt">&nbsp;</p>
+            <H4>Syntax</H4>
+            <UL>
+                <PRE>HRESULT <SPAN class="fname">SetBodyValue</SPAN> (<BR>        BSTR <SPAN class="paraname">newVal</SPAN><BR>);</PRE>
+            </UL>
+            <H4>Parameters</H4>
+            <P class="dscrpt"><SPAN class="paraname">newVal</SPAN></P>
+            <P class="paradsc">[in] HTML body 정보에 설정할 내용을 입력합니다.</P>
+            <p class="dscrpt">&nbsp;</p>
+            <H4>Return Values</H4>
+            <p class="dscrpt">없음</p>
+            <p class="dscrpt">&nbsp;</p>
+            <H4>Remarks</H4>
+            <P class="dscrpt">메소드는 Main class 호출 후 에디터가 로드된 다음 실행해야 정상적으로 실행됩니다.</P>
+            <p class="dscrpt">&nbsp;</p>
+            <H4>Sample Codes</H4>
+            <P class="scode">JavaScript</P>
+            <PRE class="scodedsc">var object = new NamoSE(&quot;test&quot;);
+object.editorStart();
+object.<b>SetBodyValue</b>(&quot;SetBodyValue 값 test 입니다.&quot;);</PRE>
+            <P class="dscrpt">&nbsp;</P>
+        </TD>
+    </TR>
+</TABLE>
+</BODY>
+</HTML>

@@ -1,0 +1,530 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.plani.ccis.ips.mapper.site.SurveyMgrMapper">
+	
+	<!-- 설문조사 정보 -->
+	<resultMap id="SURVEY_OUT" type="survey"/>
+	
+	<!-- 설문조사 리스트 -->
+	<select id="list" parameterType="survey" statementType="CALLABLE">
+		{ call PkgQueryServer.ListSurvey
+			( 
+       			#{ inRowsPerPage,			mode=IN,		jdbcType=INTEGER },
+				#{ inTargetPage,			mode=IN,		jdbcType=INTEGER },
+    			#{ siteId,			    	mode=IN,		jdbcType=VARCHAR },
+    			#{ inSchType,			    mode=IN,		jdbcType=INTEGER },
+    			#{ KName,		    		mode=IN,		jdbcType=VARCHAR },
+				
+				#{ inExecMenuId,			mode=IN,		jdbcType=VARCHAR },
+				#{ inBeforeData,			mode=IN,		jdbcType=VARCHAR },
+				#{ inAfterData,				mode=IN,		jdbcType=VARCHAR },
+				#{ inTerminal,				mode=IN,		jdbcType=VARCHAR },
+				#{ inOsUser,				mode=IN,		jdbcType=VARCHAR },
+				#{ inModule,				mode=IN,		jdbcType=VARCHAR },
+				#{ inDMLUserId,				mode=IN,		jdbcType=VARCHAR },
+				#{ inDMLIp,					mode=IN,		jdbcType=VARCHAR },
+				
+				#{ outObjectName,			mode=OUT,		jdbcType=VARCHAR },
+				#{ outResult,				mode=OUT,		jdbcType=VARCHAR },
+				#{ outRowCount,				mode=OUT,		jdbcType=INTEGER },
+				#{ outNotice,				mode=OUT,		jdbcType=VARCHAR },
+				#{ outMaxRow,				mode=OUT,		jdbcType=INTEGER },
+				#{ outMaxPage,				mode=OUT,		jdbcType=INTEGER },
+				#{ outCursor,				mode=OUT,		jdbcType=CURSOR,		javaType=ResultSet,		resultMap=SURVEY_OUT }
+			)
+		}
+	</select>
+	
+	<!-- 설문조사 상세 -->
+	<select id="view" parameterType="survey" statementType="CALLABLE">
+		{ call PkgQueryServer.ReadSurvey
+			(
+				#{ siteId,				    mode=IN,		jdbcType=VARCHAR },
+				#{ surveyId,				mode=IN,		jdbcType=VARCHAR },
+				
+				#{ inExecMenuId,			mode=IN,		jdbcType=VARCHAR },
+				#{ inBeforeData,			mode=IN,		jdbcType=VARCHAR },
+				#{ inAfterData,				mode=IN,		jdbcType=VARCHAR },
+				#{ inTerminal,				mode=IN,		jdbcType=VARCHAR },
+				#{ inOsUser,				mode=IN,		jdbcType=VARCHAR },
+				#{ inModule,				mode=IN,		jdbcType=VARCHAR },
+				#{ inDMLUserId,				mode=IN,		jdbcType=VARCHAR },
+				#{ inDMLIp,					mode=IN,		jdbcType=VARCHAR },
+				
+				#{ outObjectName,			mode=OUT,		jdbcType=VARCHAR },
+				#{ outResult,				mode=OUT,		jdbcType=VARCHAR },
+				#{ outRowCount,				mode=OUT,		jdbcType=INTEGER },
+				#{ outNotice,				mode=OUT,		jdbcType=VARCHAR },
+				#{ outCursor,				mode=OUT,		jdbcType=CURSOR,		javaType=ResultSet,		resultMap=SURVEY_OUT }
+
+			)
+		}
+	</select>
+	
+	<!-- 설문,문항 등록/수정/삭제 -->	 
+	<select id="insert" parameterType="survey" statementType="CALLABLE">
+		{ call PkgDMLServer.Main
+	    	(
+               #{ inWorkName,		mode=IN,	jdbcType=VARCHAR },
+               #{ inCondition,		mode=IN,	jdbcType=VARCHAR },
+               #{ inDMLData,		mode=IN,	jdbcType=VARCHAR },
+               #{ inCLOBData1,		mode=IN,	jdbcType=VARCHAR },
+               #{ inCLOBData2,		mode=IN,	jdbcType=VARCHAR },
+               #{ inExecMenuId,		mode=IN,	jdbcType=VARCHAR },
+               #{ inBeforeData,		mode=IN,	jdbcType=VARCHAR },
+               #{ inAfterData,		mode=IN,	jdbcType=VARCHAR },
+               #{ inTerminal,		mode=IN,	jdbcType=VARCHAR },
+               #{ inOsUser,			mode=IN,	jdbcType=VARCHAR },
+               #{ inModule,			mode=IN,	jdbcType=VARCHAR },
+               #{ inDMLUserId,		mode=IN,	jdbcType=VARCHAR },
+               #{ inDMLIp,			mode=IN,	jdbcType=VARCHAR },
+               #{ outObjectName,	mode=OUT,	jdbcType=VARCHAR },
+               #{ outResult,		mode=OUT,	jdbcType=VARCHAR },
+               #{ outRowCount,		mode=OUT,	jdbcType=INTEGER },  
+               #{ outNotice,		mode=OUT,	jdbcType=VARCHAR }	           
+	    	)
+		}
+	</select>
+	
+	<!-- 문항 목록 -->	 
+	<select id="questionList" parameterType="survey" resultType="java.util.HashMap">
+		SELECT SURVEYID,
+				QUESTIONID,
+				KNAME,
+				ANSWERTYPE,
+				MULTIPLECHOICETYPE,
+				STATE,
+				INSUSERID,
+				INSIP,
+				INSTIME,
+				DMLUSERID,
+				DMLIP,
+				DMLTIME,
+				DMLLOG,
+				ROWNUM AS NO1
+		FROM T_SURVEYQUESTION
+		WHERE SURVEYID = #{surveyId}
+		AND STATE = 'T'
+		<if test="questionId != null and questionId != ''">
+			AND QUESTIONID NOT IN #{questionId}
+		</if>
+	</select>
+	
+	<!-- 문항 상세 -->
+	<select id="questionView" parameterType="survey" statementType="CALLABLE">
+		{ call PkgQueryServer.ReadSurveyQuestion
+			(
+				#{ surveyId,				mode=IN,		jdbcType=VARCHAR },
+				#{ questionId,			    mode=IN,		jdbcType=VARCHAR },
+				
+				#{ inExecMenuId,			mode=IN,		jdbcType=VARCHAR },
+				#{ inBeforeData,			mode=IN,		jdbcType=VARCHAR },
+				#{ inAfterData,				mode=IN,		jdbcType=VARCHAR },
+				#{ inTerminal,				mode=IN,		jdbcType=VARCHAR },
+				#{ inOsUser,				mode=IN,		jdbcType=VARCHAR },
+				#{ inModule,				mode=IN,		jdbcType=VARCHAR },
+				#{ inDMLUserId,				mode=IN,		jdbcType=VARCHAR },
+				#{ inDMLIp,					mode=IN,		jdbcType=VARCHAR },
+				
+				#{ outObjectName,			mode=OUT,		jdbcType=VARCHAR },
+				#{ outResult,				mode=OUT,		jdbcType=VARCHAR },
+				#{ outRowCount,				mode=OUT,		jdbcType=INTEGER },
+				#{ outNotice,				mode=OUT,		jdbcType=VARCHAR },
+				#{ outCursor,				mode=OUT,		jdbcType=CURSOR,		javaType=ResultSet,		resultMap=SURVEY_OUT },
+				#{ outCursor1,				mode=OUT,		jdbcType=CURSOR,		javaType=ResultSet,		resultMap=SURVEY_OUT },
+				#{ outCursor2,				mode=OUT,		jdbcType=CURSOR,		javaType=ResultSet,		resultMap=SURVEY_OUT }
+
+			)
+		}
+	</select>
+	
+	<!-- 답안 파일 목록 -->
+	<select id="getAnswerFileList" parameterType="survey" resultType="java.util.HashMap">
+		SELECT IMAGEFILENAME,
+				IMAGESFILENAME,
+				FILEPATH
+		FROM T_SURVEYANSWER
+		WHERE SURVEYID = #{surveyId} 
+		AND QUESTIONID = #{questionId}
+		AND STATE = 'T'
+		ORDER BY ANSWERID ASC
+	</select>
+	
+	<!-- 미리보기 목록 -->	 
+	<select id="getPreviewList" parameterType="survey" resultType="java.util.HashMap">
+		SELECT A.SURVEYID,
+				A.SITEID,
+		      	D.KNAME AS SITE_NAME,
+		      	A.KNAME,
+		      	A.KHTML,
+		      	A.OPENYN,
+		      	A.SURVEYSTARTTIME,
+		      	A.SURVEYENDTIME,
+		      	A.SURVEYTARGET,
+		      	A.RESULTOPENFORM,
+		      	B.QUESTIONID,
+		      	B.KNAME AS QUESTIONNAME,
+		      	B.ANSWERTYPE,
+		      	B.MULTIPLECHOICETYPE,
+		      	C.ANSWERID,
+		      	C.KNAME AS ANSWERNAME,
+		      	C.IMAGEFILENAME,
+		      	C.IMAGESFILENAME,
+		      	C.FILEPATH
+		FROM T_SURVEY A
+		LEFT OUTER JOIN T_SURVEYQUESTION B
+		ON A.SURVEYID = B.SURVEYID
+		AND B.STATE = 'T'
+		LEFT OUTER JOIN T_SURVEYANSWER C
+		ON B.SURVEYID = C.SURVEYID
+		AND B.QUESTIONID = C.QUESTIONID
+		AND C.STATE = 'T'
+		INNER JOIN T_SITE D
+		ON A.SITEID = D.SITEID
+		AND D.STATE = 'T'
+		WHERE A.SURVEYID = #{surveyId}
+		AND A.STATE = 'T'
+		ORDER BY B.QUESTIONID, C.ANSWERID
+	</select>
+	
+	<!-- 설문 목록 (사용자) -->	 
+	<select id="getSurveyList" parameterType="survey" resultType="java.util.HashMap">
+		SELECT (C.OUTMAXROW - A.RNUM1) +1 AS NO1,
+				C.OUTMAXROW,
+				A.SITEID,
+				B.KNAME AS SITE_NAME,
+				A.SURVEYID,
+				A.KNAME,
+				A.KHTML,
+        		A.OPENYN,
+        		A.SURVEYSTARTTIME,
+        		A.SURVEYENDTIME,
+        		A.SURVEYTARGET,
+        		A.RESULTOPENFORM,
+     			A.STATE,
+     			DECODE(A.STATE, 'T', '사용', 'F', '사용안함')AS STATE_KANME,
+     			A.INSUSERID,
+     			A.INSIP,
+     			A.INSTIME,
+     			A.DMLUSERID,
+     			A.DMLIP,
+     			A.DMLTIME,
+     			A.DMLLOG
+     	FROM
+     	(
+     		SELECT A.*
+     		FROM
+     		(
+     			SELECT ROW_NUMBER() OVER (ORDER BY A.SURVEYID DESC) AS RNUM1,
+     					A.*
+     			FROM
+     			(
+     				SELECT *
+     				FROM T_SURVEY
+     				WHERE OPENYN = 'Y'
+     				AND SITEID = #{siteId}
+     				AND STATE = 'T'
+     				<if test="KName != null and KName != ''">
+						AND KNAME LIKE '%' || #{KName} || '%'
+					</if>
+     				ORDER BY SURVEYID DESC
+     			) A
+     		) A
+     		WHERE A.RNUM1 BETWEEN ((#{inTargetPage} - 1) * #{inRowsPerPage}) + 1 AND #{inTargetPage} * #{inRowsPerPage} 
+     	) A,
+     	(
+     		SELECT * FROM T_SITE WHERE STATE = 'T'
+     	) B,
+     	(
+     		SELECT COUNT(1) AS OUTMAXROW, CEIL(COUNT(1) / #{inRowsPerPage}) AS MAXPAGE, SITEID
+     		FROM T_SURVEY
+     		WHERE OPENYN = 'Y'
+     		AND SITEID = #{siteId}
+     		AND STATE = 'T'
+     		<if test="KName != null and KName != ''">
+				AND KNAME LIKE '%' || #{KName} || '%'
+			</if>
+     		GROUP BY SITEID
+     	) C
+     	WHERE A.SITEID = B.SITEID(+)
+     	AND A.SITEID = C.SITEID(+)
+     	ORDER BY A.RNUM1
+	</select>
+	
+	<!-- 설문참여 가능기간 여부 조회 (사용자) -->
+	<select id="getSurveyTimeCheck" parameterType="survey" resultType="String">
+		SELECT
+			<![CDATA[
+     			CASE WHEN TO_DATE(SURVEYSTARTTIME, 'YYYY-MM-DD') <= SYSDATE AND TO_DATE(SURVEYENDTIME, 'YYYY-MM-DD') +1 >= SYSDATE THEN 'Y' ELSE 'N' END AS SURVEYTIMEYN
+     		]]>
+     	FROM T_SURVEY
+     	WHERE SURVEYID = #{surveyId} 
+     	AND OPENYN = 'Y'
+     	AND STATE = 'T'
+	</select>
+	
+	<!-- 설문참여 중복참여 여부 조회 (사용자) -->
+	<select id="getSurveyParticipationCheck" parameterType="survey" resultType="survey">
+		SELECT A.PARTICIPATIONID,
+				A.STATUS
+		FROM T_SURVEYPARTICIPATION A
+		WHERE A.SURVEYID = #{surveyId}
+		<if test="userId != null and userId != '' and userId != 'guest@khidi.or.kr'">
+			AND A.USERID = #{userId}
+		</if>
+		<if test="userId == 'guest@khidi.or.kr'">
+			AND A.DKEY = #{dkey}
+		</if>
+		AND A.STATE = 'T'
+	</select>
+	
+	<!-- 설문참여 등록 (사용자) -->
+	<insert id="insertSurveyParticipation" parameterType="survey">
+		<selectKey keyProperty="participationId" resultType="String" order="BEFORE">
+			SELECT NVL(MAX(PARTICIPATIONID),0)+1 FROM T_SURVEYPARTICIPATION 
+		</selectKey>
+		INSERT INTO T_SURVEYPARTICIPATION(
+			PARTICIPATIONID,
+			SURVEYID,
+			USERID,
+			USERNAME,
+			DKEY,
+			STATUS,
+			STATE,
+			INSUSERID,
+			INSIP,
+			INSTIME,
+			DMLUSERID,
+			DMLIP,
+			DMLTIME,
+			DMLLOG
+		)VALUES(
+			#{participationId},
+			#{surveyId},
+			#{userId},
+			#{userName},
+			<if test="dkey != null">
+				#{dkey},
+			</if>
+			<if test="dkey == null">
+				'-',
+			</if>
+			#{status},
+			'T',
+			#{inDMLUserId},
+			#{inDMLIp},
+			SYSDATE,
+			#{inDMLUserId},
+			#{inDMLIp},
+			SYSDATE,
+			'-'
+		)
+	</insert>
+	
+	<!-- 등록한 설문참여 아이디 조회 -->
+	<select id="getParticipationId" resultType="String">
+		SELECT MAX(PARTICIPATIONID)
+		FROM T_SURVEYPARTICIPATION
+	</select>
+	
+	<!-- 설문참여 정보 삭제 -->
+	<delete id="deleteSurveyParti" parameterType="survey">
+		DELETE FROM T_SURVEYPARTICIPATION
+		WHERE PARTICIPATIONID = #{participationId}
+	</delete>
+	
+	<!-- 설문참여 답안 삭제 -->
+	<delete id="deleteSurveyReply" parameterType="survey">
+		DELETE FROM T_SURVEYPARTICIPATIONREPLY
+		WHERE PARTICIPATIONID = #{participationId}
+	</delete>
+	
+	<!-- 설문참여 답안 등록 -->
+	<insert id="insertSurveyReply" parameterType="survey">
+		INSERT INTO T_SURVEYPARTICIPATIONREPLY(
+			PARTICIPATIONID,
+			QUESTIONID,
+			ANSWER,
+			INSUSERID,
+			INSIP,
+			INSTIME
+		)VALUES(
+			#{participationId},
+			#{questionId},
+			#{answer},
+			#{inDMLUserId},
+			#{inDMLIp},
+			SYSDATE
+		)
+	</insert>
+	
+	<!-- 설문참여 정보 -->
+	<select id="getSurveyParticipation" parameterType="survey" resultType="survey">
+		SELECT A.PARTICIPATIONID,
+				A.SURVEYID,
+				A.USERID,
+				A.USERNAME,
+				A.DKEY,
+				A.STATUS
+		FROM T_SURVEYPARTICIPATION A
+		WHERE A.PARTICIPATIONID = #{participationId}
+		AND A.SURVEYID = #{surveyId}
+		<if test='userId != null and userId != "" and userId != "guest@khidi.or.kr"'>
+			AND A.USERID = #{userId}
+		</if>
+		<if test='userId == "guest@khidi.or.kr" and dkey != "-"'>
+			AND A.DKEY = #{dkey}
+		</if>
+		AND A.STATE = 'T'
+	</select>
+	
+	<!-- 설문참여 답안 목록 -->
+	<select id="getSurveyReplyList" parameterType="survey" resultType="java.util.HashMap">
+		SELECT A.PARTICIPATIONID,
+				A.QUESTIONID,
+				A.ANSWER
+		FROM T_SURVEYPARTICIPATIONREPLY A
+		WHERE A.PARTICIPATIONID = #{participationId}
+	</select>
+	
+	<!-- 통계 조회 -->
+	<select id="getSurveyStatList" parameterType="survey" resultType="java.util.HashMap">
+		SELECT A.QUESTIONID, 
+		    A.ANSWERTYPE, 
+		    A.ANSWERNAME, 
+		    A.CNT,
+		    DECODE(SUM(A.CNT) OVER (PARTITION BY A.QUESTIONID), 0, 0, ROUND((A.CNT/SUM(A.CNT) OVER (PARTITION BY A.QUESTIONID))*100, 2)) AS RATIO 
+		FROM 
+		(	
+				SELECT A.QUESTIONID,
+					A.ANSWERTYPE,
+					A.ANSWERID,
+					A.ANSWERNAME,
+		        	SUM(A.CNT) AS CNT 
+		    	FROM 
+		    	( 
+						SELECT A.QUESTIONID,
+							A.ANSWERTYPE,  
+				       		<![CDATA[
+							CASE A.ANSWERTYPE WHEN '1' THEN '-' WHEN '2' THEN B.KNAME ELSE B.IMAGEFILENAME || '&systemFileName=' || B.IMAGESFILENAME END AS ANSWERNAME,
+							]]>
+				            SUM(DECODE(B.ANSWERID, NVL(D.ANSWER, 0), 1, 0)) CNT,
+				            B.ANSWERID,
+				            C.PARTICIPATIONID,
+				            D.ANSWER
+						FROM T_SURVEYQUESTION A
+						LEFT OUTER JOIN T_SURVEYANSWER B
+						ON A.SURVEYID = B.SURVEYID
+						AND A.QUESTIONID = B.QUESTIONID
+						AND B.STATE = 'T'
+						LEFT OUTER JOIN T_SURVEYPARTICIPATION C
+						ON A.SURVEYID = C.SURVEYID
+						AND C.STATUS = 'T'
+						AND C.STATE = 'T'
+						LEFT OUTER JOIN T_SURVEYPARTICIPATIONREPLY D
+						ON A.QUESTIONID = D.QUESTIONID
+						AND C.PARTICIPATIONID = D.PARTICIPATIONID
+						WHERE A.SURVEYID = #{surveyId} 
+						AND A.STATE = 'T'
+						GROUP BY A.QUESTIONID, A.ANSWERTYPE, B.KNAME, C.PARTICIPATIONID,
+							D.ANSWER, B.IMAGEFILENAME, B.IMAGESFILENAME, B.ANSWERID
+						ORDER BY A.QUESTIONID, B.ANSWERID ASC
+				)A
+				GROUP BY A.QUESTIONID, A.ANSWERTYPE, A.ANSWERID, A.ANSWERNAME
+				ORDER BY A.QUESTIONID, A.ANSWERID
+		)A
+	</select>
+	
+	<!-- 주관식 답안 목록 -->
+	<select id="getTextAnswerList" parameterType="survey" resultType="java.util.HashMap">
+		SELECT (B.OUTMAXROW - A.RNUM1) + 1 AS NO1,
+			B.OUTMAXROW,
+      		A.SURVEYID,
+      		A.QUESTIONID,
+      		A.KNAME,
+      		A.ANSWERTYPE,
+      		A.PARTICIPATIONID,
+      		A.STATUS,
+      		A.USERNAME,
+      		A.ANSWER
+		FROM
+		(    
+  			SELECT A.*
+  			FROM
+  			(
+    			SELECT ROW_NUMBER() OVER(ORDER BY A.PARTICIPATIONID DESC) AS RNUM1,
+      				A.*
+    			FROM
+    			(
+        			SELECT A.SURVEYID,
+            			A.QUESTIONID,
+            			A.KNAME,
+            			A.ANSWERTYPE,
+            			B.PARTICIPATIONID,
+            			B.STATUS,
+            			B.USERNAME,
+            			C.ANSWER
+        			FROM T_SURVEYQUESTION A
+        			INNER JOIN T_SURVEYPARTICIPATION B
+        			ON A.SURVEYID = B.SURVEYID
+        			AND B.STATUS = 'T'
+        			AND B.STATE = 'T'
+        			LEFT OUTER JOIN T_SURVEYPARTICIPATIONREPLY C
+        			ON B.PARTICIPATIONID = C.PARTICIPATIONID
+        			AND A.QUESTIONID = C.QUESTIONID
+        			WHERE A.SURVEYID = #{surveyId}
+        			AND A.QUESTIONID = #{questionId}
+        			AND A.ANSWERTYPE = '1'
+        			AND A.STATE = 'T'
+        			ORDER BY B.PARTICIPATIONID DESC
+    			)A
+  			)A
+  			WHERE A.RNUM1 BETWEEN ((#{inTargetPage} - 1) * #{inRowsPerPage}) + 1 AND #{inTargetPage} * #{inRowsPerPage}
+		)A,
+		(
+  			SELECT COUNT(1) AS OUTMAXROW, CEIL(COUNT(1) / #{inRowsPerPage}) AS MAXPAGE, A.QUESTIONID
+  			FROM T_SURVEYQUESTION A
+  			INNER JOIN T_SURVEYPARTICIPATION B
+  			ON A.SURVEYID = B.SURVEYID
+  			AND B.STATUS = 'T'
+  			AND B.STATE = 'T'
+  			LEFT OUTER JOIN T_SURVEYPARTICIPATIONREPLY C
+  			ON B.PARTICIPATIONID = C.PARTICIPATIONID
+  			AND A.QUESTIONID = C.QUESTIONID
+  			WHERE A.SURVEYID = #{surveyId}
+  			AND A.QUESTIONID = #{questionId}
+  			AND A.ANSWERTYPE = '1'
+  			AND A.STATE = 'T'
+  			GROUP BY A.QUESTIONID
+		)B
+		WHERE A.QUESTIONID = B.QUESTIONID(+)
+		ORDER BY A.RNUM1
+	</select>
+	
+	<!-- 엑셀용 통계 목록 -->
+	<select id="getSurveyStatExcelList" parameterType="survey" resultType="java.util.HashMap">
+		SELECT A.USERID, 
+			A.USERNAME,
+			A.INSTIME,
+			B.QUESTIONID,
+    		LISTAGG(B.ANSWER, ',') WITHIN GROUP (ORDER BY B.ANSWER) AS ANSWER
+    	FROM T_SURVEYPARTICIPATION A
+    	LEFT OUTER JOIN T_SURVEYPARTICIPATIONREPLY B
+    	ON A.PARTICIPATIONID = B.PARTICIPATIONID
+    	WHERE A.SURVEYID = #{surveyId}
+    	AND A.STATE = 'T'
+    	AND A.STATUS = 'T'
+    	GROUP BY A.USERID, A.USERNAME, A.INSTIME, B.QUESTIONID
+    	ORDER BY A.USERID, B.QUESTIONID
+	</select>
+	
+	<!-- 참여자 수 -->
+	<select id="getSurveyPartiCount" parameterType="survey" resultType="Integer">
+		SELECT COUNT(PARTICIPATIONID)
+		FROM T_SURVEYPARTICIPATION
+		WHERE SURVEYID = #{surveyId}
+		AND STATE = 'T'
+		AND STATUS = 'T'
+	</select>
+</mapper>

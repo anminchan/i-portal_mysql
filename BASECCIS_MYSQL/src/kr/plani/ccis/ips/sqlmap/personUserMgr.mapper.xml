@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.plani.ccis.ips.mapper.system.PersonUserMgrMapper">
+    <!-- 개인회원 정보 -->
+    <resultMap type="personUser" id="PSERSONUSER_OUT" />
+    
+    <!-- 개인회원 추가/수정/삭제 -->
+    <select id="action" parameterType="personUser" resultMap="PSERSONUSER_OUT" statementType="CALLABLE">
+        { call PKGDMLSERVER.Main
+            (
+                 #{ inWorkName,               mode=IN,        jdbcType=VARCHAR },
+                 #{ inCondition,              mode=IN,        jdbcType=VARCHAR },
+                 #{ inDMLData,                mode=IN,        jdbcType=VARCHAR },
+                 #{ inCLOBData1,              mode=IN,        jdbcType=VARCHAR },
+                 #{ inCLOBData2,              mode=IN,        jdbcType=VARCHAR },
+                 #{ inExecMenuId,             mode=IN,        jdbcType=VARCHAR },
+                 #{ inBeforeData,             mode=IN,        jdbcType=VARCHAR },
+                 #{ inAfterData,              mode=IN,        jdbcType=VARCHAR },
+                 #{ inTerminal,               mode=IN,        jdbcType=VARCHAR },
+                 #{ inOsUser,                 mode=IN,        jdbcType=VARCHAR },
+                 #{ inModule,                 mode=IN,        jdbcType=VARCHAR },
+                 #{ inDMLUserId,              mode=IN,        jdbcType=VARCHAR },
+                 #{ inDMLIp,                  mode=IN,        jdbcType=VARCHAR },
+                 
+                 #{ outObjectName,            mode=OUT,       jdbcType=VARCHAR },
+                 #{ outResult,                mode=OUT,       jdbcType=VARCHAR },
+                 #{ outRowCount,              mode=OUT,       jdbcType=INTEGER },
+                 #{ outNotice,                mode=OUT,       jdbcType=VARCHAR }
+            )
+        }
+    </select>
+
+    
+</mapper>

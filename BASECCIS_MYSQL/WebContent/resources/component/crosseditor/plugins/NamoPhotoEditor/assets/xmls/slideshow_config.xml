@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<timeIntervals>
+		<timeInterval>1</timeInterval>
+		<timeInterval>1.5</timeInterval>
+		<timeInterval>2</timeInterval>
+		<timeInterval>2.5</timeInterval>
+		<timeInterval>3</timeInterval>
+	</timeIntervals>
+	<slideshowWidth>640</slideshowWidth>
+	<slideshowHeight>480</slideshowHeight>
+	<maxSlideNum>20</maxSlideNum>
+</config>

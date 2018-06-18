@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>나모 크로스에디터 설치 도움말</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="author" content="namo interactive inc." />
+	<meta name="author" content="namo crosseditor" />
+	<link href="../common.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+	<div id="wrap">
+<!--		<h1 id="logo">CrossEditor</h1> -->
+		<h2><a name="server_guide" id="server_guide">서버 가이드</a></h2>
+			<h3><a name="server_guide_jeus" id="server_guide_jeus">Jeus</a></h3>
+				<h4>1. Jeus 환경설정 MimeType 확인</h4>
+					<div class="contents_box2">
+						<p>&quot;$JEUS_HOME/config/'hostname'/'hostname'_servlet_engine1/webcommon.xml&quot;에 아래 2개의 MimeType이 설정되어 있지 않으면 추가합니다.</p>
+						<div class="contents_code">
+							<p>&lt;mime-mapping&gt;</p>
+							<p class="tab1">&lt;extension&gt;css&lt;/extension&gt;</p>
+							<p class="tab1">&lt;mime-type&gt;text/css&lt;/mime-type&gt;</p>
+							<p>&lt;/mime-mapping&gt;</p>
+							<p>&lt;mime-mapping&gt;</p>
+							<p class="tab1">&lt;extension&gt;xml&lt;/extension&gt;</p>
+							<p class="tab1">&lt;mime-type&gt;text/xml&lt;/mime-type&gt;</p>
+							<p>&lt;/mime-mapping&gt;</p>
+						</div>
+					</div>
+				<h4>2. 웹 서버의 환경설정 MimeType 확인</h4>
+					<h5>2-1. WS Engine을 사용하는 경우</h5>
+						<div class="contents_box2">	
+							<p>&quot;$JEUS_HOME/config/'hostname'/'hostname'_ws_engine1/WSMain.xml&quot;에 아래 2개의 MimeType이 설정되어 있지 않으면 추가합니다.</p>
+							<div class="contents_code">
+								<p>&lt;ext&gt;</p>
+								<p class="tab1">&lt;name&gt;css&lt;/name&gt;</p>
+								<p class="tab1">&lt;mimetype&gt;text/css&lt;/mimetype&gt;</p>
+								<p class="tab1">&lt;svr-type&gt;HTML&lt;/svr-type&gt;</p>
+								<p>&lt;/ext&gt;</p>
+								<p>&lt;ext&gt;</p>
+								<p class="tab1">&lt;name&gt;xml&lt;/name&gt;</p>
+								<p class="tab1">&lt;mimetype&gt;application/xml&lt;/mimetype&gt;</p>
+								<p class="tab1">&lt;svr-type&gt;HTML&lt;/svr-type&gt;</p>
+								<p>&lt;/ext&gt;</p>
+							</div>
+						</div>
+					<h5>2-2. WebtoB를 사용하는 경우</h5>
+						<div class="contents_box2">
+							<p>&quot;webtob/config/http.m&quot;에 아래 2개의 MimeType이 설정되어 있지 않으면 추가합니다.</p>
+							<div class="contents_code">
+								<p>*EXT</p>
+								<p>css&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MimeType = &quot;text/css&quot;, SVRTYPE = HTML</p>
+								<p>xml&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MimeType = &quot;application/xml&quot;, SVRTYPE = HTML</p>
+							</div>
+						</div>
+				<h4>3. 업로드 모듈 등록 확인</h4>
+					<div class="contents_box3">
+        <p>&quot;$WebApplication_Root/WEB-INF/lib/&quot;에 commons-fileupload.jar, commons-io.jar 파일이 없으면 아래의 사이트에서 다운로드 받아 추가합니다.</p>
+		<p class="ctsmall2"><img src="images/icon_list_03.gif" alt="icon_list_03.gif" />commons-fileupload.jar :  <a href="http://commons.apache.org/fileupload/download_fileupload.cgi" target="_blank">http://commons.apache.org/fileupload/download_fileupload.cgi</a></p>
+		<p class="ctsmall2"><img src="images/icon_list_03.gif" alt="icon_list_03.gif" />commons-io.jar : <a href="http://commons.apache.org/io/download_io.cgi" target="_blank">http://commons.apache.org/io/download_io.cgi</a></p>
+		<br />
+        <p>만일 위의 경로에 commons-fileupload.jar, commons-io.jar를 추가하여도 파일업로드가 동작 하지 않거나 시스템 에러가 발생하면 &quot;$JEUS_HOME/lib/system/&quot;에 commons-fileupload.jar, commons-io.jar 파일을 추가합니다.</p>
+					</div>
+				<h4>4. Jeus 재시작</h4>
+					<div class="contents_box2">
+						<p>위의 사항 중 한 가지라도 적용하였으면 Jeus를 재시작해야 합니다.</p>
+					</div>
+			<h3><a name="server_guide_weblogic" id="server_guide_weblogic">WebLogic</a></h3>
+				<h4>1. MimeType 확인</h4>
+					<div class="contents_box2">
+						<p>&quot;$WebApplication_Root/WEB-INF/web.xml&quot;에 아래 2개의 MimeType이 설정되어 있지 않으면 추가합니다.</p>
+						<div class="contents_code">
+							<p>&lt;mime-mapping&gt;</p>
+							<p class="tab1">&lt;extension&gt;css&lt;/extension&gt;</p>
+							<p class="tab1">&lt;mime-type&gt;text/css&lt;/mime-type&gt;</p>
+							<p>&lt;/mime-mapping&gt;</p>
+							<p>&lt;mime-mapping&gt;</p>
+							<p class="tab1">&lt;extension&gt;xml&lt;/extension&gt;</p>
+							<p class="tab1">&lt;mime-type&gt;text/xml&lt;/mime-type&gt;</p>
+							<p>&lt;/mime-mapping&gt;</p>
+						</div>
+					</div>
+				<h4>2. 업로드 모듈 등록 확인</h4>
+					<div class="contents_box3">
+        <p>&quot;$WebApplication_Root/WEB-INF/lib/&quot;에 commons-fileupload.jar, commons-io.jar 파일이 없으면 아래의 사이트에서 다운로드 받아 추가합니다.</p>
+        <p class="ctsmall2"><img src="images/icon_list_03.gif" alt="icon_list_03.gif" />commons-fileupload.jar :  <a href="http://commons.apache.org/fileupload/download_fileupload.cgi" target="_blank">http://commons.apache.org/fileupload/download_fileupload.cgi</a></p>
+       <p class="ctsmall2"><img src="images/icon_list_03.gif" alt="icon_list_03.gif" />commons-io.jar : <a href="http://commons.apache.org/io/download_io.cgi" target="_blank">http://commons.apache.org/io/download_io.cgi</a> </p>
+					</div>
+				<h4>3. WebLogic 재시작</h4>
+					<div class="contents_box2">
+						<p>위의 사항 중 한 가지라도 적용하였으면 WebLogic을 재시작해야 합니다.</p>
+					</div>
+			<h3><a name="server_guide_websphere" id="server_guide_websphere">WebSphere</a></h3>
+				<h4>1. MimeType 확인</h4>
+					<div class="contents_box2">
+						<p>WebSphere 관리자 페이지에서 아래 2개의 MimeType이 설정되어 있지 않으면 추가합니다.</p>
+						<div class="contents_code">
+							<p>extension : css</p>
+							<p>mime-type : text/css</p>
+							<p><br /></p>
+							<p>extension : xml</p>
+							<p>mime-type : text/xml</p>
+						</div>
+					</div>
+				<h4>2. 업로드 모듈 등록 확인</h4>
+					<div class="contents_box3">
+        <p>&quot;$WebApplication_Root/WEB-INF/lib/&quot;에 commons-fileupload.jar, commons-io.jar 파일이 없으면 아래의 사이트에서 다운로드 받아 추가합니다.</p>
+        <p class="ctsmall2"><img src="images/icon_list_03.gif" alt="icon_list_03.gif" />commons-fileupload.jar :  <a href="http://commons.apache.org/fileupload/download_fileupload.cgi" target="_blank">http://commons.apache.org/fileupload/download_fileupload.cgi</a></p>
+        <p class="ctsmall2"><img src="images/icon_list_03.gif" alt="icon_list_03.gif" /> commons-io.jar : <a href="http://commons.apache.org/io/download_io.cgi" target="_blank">http://commons.apache.org/io/download_io.cgi</a> </p>
+					</div>
+				<h4>3. WebSphere 재시작</h4>
+					<div class="contents_box2">
+						<p>위의 사항 중 한 가지라도 적용하였으면 WebSphere를 재시작해야 합니다.</p>
+					</div>
+			<h3><a name="server_guide_iplanet" id="server_guide_iplanet">iPlanet</a></h3>
+				<h4>1. MimeType 확인</h4>
+					<div class="contents_box2">
+						<p>&quot;$WebServer 설치 폴더/https-xxx/config/mime.conf&quot;에 아래 2개의 MimeType이 설정되어 있지 않으면 추가합니다.</p>
+						<div class="contents_code">
+							<p>type=text/css&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exts=css</p>
+							<p>type=text/xml&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exts=xml</p>
+						</div>
+					</div>
+				<h4>2. 업로드 모듈 등록 확인</h4>
+					<div class="contents_box3">
+        <p>&quot;$WebApplication_Root/WEB-INF/lib/&quot;에 commons-fileupload.jar, commons-io.jar 파일이 없으면 아래의 사이트에서 다운로드 받아 추가합니다.</p>
+        <p class="ctsmall2"><img src="images/icon_list_03.gif" alt="icon_list_03.gif" />commons-fileupload.jar : <a href="http://commons.apache.org/fileupload/download_fileupload.cgi" target="_blank">http://commons.apache.org/fileupload/download_fileupload.cgi</a></p>
+        <p class="ctsmall2"><img src="images/icon_list_03.gif" alt="icon_list_03.gif" />commons-io.jar : <a href="http://commons.apache.org/io/download_io.cgi" target="_blank">http://commons.apache.org/io/download_io.cgi</a> </p>
+					</div>
+				<h4>3. iPlanet 재시작</h4>
+					<div class="contents_box2">
+						<p>위의 사항 중 한 가지라도 적용하였으면 iPlanet을 재시작해야 합니다.</p>
+					</div>
+					
+			<h3><a name="server_guide_iplanet" id="server_guide_struts">Struts</a></h3>
+				<h4>1. 문제점</h4>
+					<div class="contents_box2">
+						<p>Struts에서는 자체적으로 이미지 업로드 기능이 있어, Struts filter에서 멀티파트 파싱을 실행하기 때문에 에디터에서 구현된 업로드 부분에서 오류가 발생합니다.</p>
+					</div>
+				<h4>2. 수정 요청</h4>
+					<div class="contents_box3">
+        <p>Struts에서 web.xml을 열람하면 다음과 같은 소스를 확인할 수 있습니다.</p>
+			<div class="contents_code">
+				<p><filter-mapping>&lt;filter-mapping&gt;</p>
+            <p>&nbsp;&nbsp;&lt;filter-name&gt;struts2&lt;/filter-name&gt;</p>
+            <p><font color="red">&nbsp;&nbsp;&lt;url-pattern&gt;/*&lt;/url-pattern&gt;</font></p>
+            <p>&lt;/filter-mapping&gt;</p>
+			</div>
+		<p>위 소스에서 url-pattern을 *.action 등과 같이 실제 사용되는 패턴만 정의하여, Crosseditor의 ImageUpload 파일에 영향을 주지 않는 방법을 권장합니다.</p>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.plani.ccis.ips.mapper.site.DoodlesMgrMapper">
+	
+	<!-- 두들설정 정보 -->
+	<resultMap id="DOODLES_OUT" type="doodles"/>
+	
+	<!-- 두들 리스트 -->
+	<select id="list" parameterType="doodles" resultType="doodles">
+		<![CDATA[
+		SELECT A.RNUM2 AS NO1, A.SITEID, B.KNAME AS SITE_NAME, A.DOODLESID, A.KNAME, A.KDESC, A.IMAGEFILENAME, A.IMAGESFILENAME,
+             A.FILEPATH, A.LINKURL, A.SORT, A.STARTTIME, 
+             TO_DATE(A.STARTTIME, 'YYYY-MM-DD HH') AS CSTARTTIME, A.ENDTIME, 
+             TO_DATE(A.ENDTIME, 'YYYY-MM-DD HH') AS CENDTIME, A.NEWWINDOWYN, 
+             (CASE WHEN A.EndTime < SYSDATE THEN 'N' ELSE A.STATE END) AS STATE, 
+             DECODE(A.STATE, 'T', '사용', '사용안함')AS STATE_KANME, 
+             A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG]]>
+        FROM (
+        	 <include refid="common.pageHeader"/>
+                      SELECT A.*
+                        FROM (SELECT * FROM T_DOODLES WHERE SiteID LIKE '%' || #{siteId} || '%'
+                                                          AND KName LIKE '%' || #{KName} || '%'
+                                                          <if test="state == null and state == ''">
+	                                                          AND STATE LIKE '%' || #{state} || '%'
+                                                          </if>
+                                                          <if test='state == "Y"'>
+	                                                          AND STATE LIKE '%' || #{state} || '%'
+                                                          	  <![CDATA[AND ENDTIME >= SYSDATE]]>
+                                                          </if>
+                                                          <if test='state == "N"'>
+                                                          	  <![CDATA[AND ENDTIME < SYSDATE]]>
+                                                          </if>
+                                                        ORDER BY SITEID, Sort DESC) A
+               
+              <include refid="common.pageFooter"/>
+              ) A
+         LEFT JOIN (SELECT * FROM T_SITE WHERE State = 'T') B
+     	 ON A.SITEID = B.SITEID
+	</select>
+	
+	<select id="listCnt" parameterType="doodles" resultType="int">
+		SELECT COUNT(*) 
+		FROM T_DOODLES 
+		WHERE SITEID LIKE '%' || #{siteId} || '%'
+       	AND KNAME LIKE '%' || #{KName} || '%'
+        <if test="state == null and state == ''">
+        	<![CDATA[AND STATE LIKE '%' || #{state} || '%'
+        </if>
+        <if test='state == "Y"'>
+        	AND STATE LIKE LIKE '%' || #{state} || '%'
+       		<![CDATA[AND ENDTIME >= SYSDATE]]>
+        </if>
+        <if test='state == "N"'>
+       		<![CDATA[AND ENDTIME < SYSDATE]]>
+        </if>
+	</select>
+	
+	<!-- 두들 상세 -->
+	<select id="view" parameterType="doodles" resultType="doodles">
+		
+		SELECT A.SITEID, A.DOODLESID, A.KNAME, A.KDESC, B.KNAME AS SITE_NAME, A.IMAGEFILENAME, A.IMAGESFILENAME,
+	           A.FILEPATH, A.LINKURL, A.SORT, TO_CHAR(A.STARTTIME, 'YYYYMMDDHH24') AS STARTTIME, TO_CHAR(A.ENDTIME, 'YYYYMMDDHH24') AS ENDTIME, A.NEWWINDOWYN,
+	           A.STATE, A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG
+	    FROM (SELECT * FROM T_DOODLES WHERE DoodlesID = #{doodlesId}) A
+        LEFT JOIN(SELECT * FROM T_SITE WHERE SiteID = #{siteId}) B
+        ON A.SiteID = B.SiteID
+	</select>
+	
+	<!-- 두들 추가/수정/삭제 -->	 
+	<insert id="insert" parameterType="doodles">
+		
+	    <selectKey keyProperty="doodlesId" resultType="java.lang.String" order="BEFORE">
+			SELECT NVL(MAX(DOODLESID), 0) + 1 FROM T_DOODLES
+		</selectKey>
+		
+		INSERT INTO T_DOODLES(SITEID, DOODLESID,
+                               KNAME, KDESC, IMAGEFILENAME, IMAGESFILENAME,
+                               FILEPATH, LINKURL, SORT, STARTTIME, ENDTIME, NEWWINDOWYN,
+                               STATE, INSUSERID, INSIP, INSTIME, DMLUSERID, DMLIP, DMLTIME, DMLLOG)
+            VALUES (#{siteId}, #{doodlesId},
+                    #{KName}, #{inCLOBData1}, #{imageFileName}, #{imageSFileName},
+                    #{filePath}, #{linkURL}, #{sort}, TO_DATE(#{startTime},'YYYY-MM-DD HH24'), TO_DATE(#{endTime},'YYYY-MM-DD HH24'), #{newWindowYn},
+                    #{state}, #{inDMLUserId}, #{inDMLIp}, SYSDATE, #{inDMLUserId}, #{inDMLIp}, SYSDATE, '-')
+	</insert>
+	
+	<update id="update" parameterType="doodles">
+		UPDATE T_DOODLES
+            SET SITEID = #{siteId}, KNAME=#{KName},KDESC=#{inCLOBData1}, IMAGEFILENAME=#{imageFileName}, IMAGESFILENAME=#{imageSFileName},
+                FILEPATH=#{filePath}, LINKURL=#{linkURL}, SORT=#{sort},
+                STARTTIME= TO_DATE(#{startTime},'YYYY-MM-DD HH24'), ENDTIME= TO_DATE(#{endTime},'YYYY-MM-DD HH24'), NEWWINDOWYN=#{newWindowYn},
+                STATE=#{state}, DMLUSERID=#{inDMLUserId}, DMLIP=#{inDMLIp}, DMLTIME=SYSDATE
+            WHERE DOODLESID = #{doodlesId}
+	</update>
+	
+	<delete id="delete" parameterType="doodles">
+		DELETE FROM T_DOODLES WHERE DOODLESID = #{doodlesId}
+	</delete>
+</mapper>

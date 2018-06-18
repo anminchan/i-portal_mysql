@@ -1,0 +1,1756 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.plani.ccis.base.mapper.BaseMapper">
+	<!-- ips에서 사용된 패키지 사용 -->
+	
+	<!-- 로케이션 정보 -->
+    <select id="readLocation" parameterType="defaultDomain" resultType="defaultDomain">
+		SELECT MAX(SITEID)AS MYSITEID, A.MENUID AS MENUID, A.MENUNAME, 
+	  <![CDATA[FN_MENUNAMEPATH(#{menuId}, '>')]]> AS NAVIGATION
+        FROM   (
+            SELECT  SITEID, #{menuId} AS MENUID, KNAME AS MENUNAME, NULL AS SITE
+            FROM T_MENU
+            WHERE STATE = 'T'
+            AND MENUID = #{menuId}
+            UNION ALL
+            SELECT SITEID, #{menuId} AS MENUID, NULL AS MENUNAME, KNAME AS SITE
+            FROM T_SITE
+            WHERE SITEID = (SELECT SITEID FROM T_MENU WHERE MENUID = #{menuId})
+        ) A
+        GROUP BY A.MENUID
+    </select>
+	
+	<!-- 공통코드 -->
+	<select id="listCode" parameterType="defaultDomain" statementType="CALLABLE">
+	{ call PkgQueryServer.ListCodeCombo
+		(
+			#{ menuId,					mode=IN,	jdbcType=VARCHAR },
+			#{ inExecMenuId,			mode=IN,	jdbcType=VARCHAR },
+			#{ inBeforeData,			mode=IN,	jdbcType=VARCHAR },
+			#{ inAfterData,				mode=IN,	jdbcType=VARCHAR },
+			#{ inTerminal,				mode=IN,	jdbcType=VARCHAR },
+			#{ inOsUser,				mode=IN,	jdbcType=VARCHAR },
+			#{ inModule,				mode=IN,	jdbcType=VARCHAR },
+			#{ inDMLUserId,				mode=IN,	jdbcType=VARCHAR },
+			#{ inDMLIp,					mode=IN,	jdbcType=VARCHAR },
+			#{ outObjectName,			mode=OUT,	jdbcType=VARCHAR },
+			#{ outResult,				mode=OUT,	jdbcType=VARCHAR },
+			#{ outRowCount,				mode=OUT,	jdbcType=INTEGER },
+			#{ outNotice,				mode=OUT,	jdbcType=VARCHAR },
+			#{ menuId,					mode=OUT,	jdbcType=VARCHAR },
+			#{ menuName,				mode=OUT,	jdbcType=VARCHAR },
+			#{ navigation,				mode=OUT,	jdbcType=VARCHAR }
+		)
+	}
+    </select>
+	
+	<!-- 사용자별메뉴리스트 -->
+	<!-- <select id="listUserMenu" parameterType="defaultDomain" statementType="CALLABLE">
+		{ call PkgQueryServer.ListUserMenu
+			(
+				#{ mySiteId,		    mode=IN,		jdbcType=VARCHAR },
+				#{ myId,		        mode=IN,		jdbcType=VARCHAR },
+				#{ inExecMenuId,        mode=IN,		jdbcType=VARCHAR },
+				#{ inBeforeData,        mode=IN,		jdbcType=VARCHAR },
+				#{ inAfterData,         mode=IN,        jdbcType=VARCHAR },
+				#{ inTerminal,          mode=IN,		jdbcType=VARCHAR },
+				#{ inOsUser,            mode=IN,		jdbcType=VARCHAR },
+				#{ inModule,            mode=IN,		jdbcType=VARCHAR },
+				#{ inDMLUserId,         mode=IN,		jdbcType=VARCHAR },
+				#{ inDMLIp,             mode=IN,		jdbcType=VARCHAR },
+				#{ outObjectName,       mode=OUT,		jdbcType=VARCHAR },
+				#{ outResult,           mode=OUT,		jdbcType=VARCHAR },
+				#{ outRowCount,         mode=OUT,		jdbcType=INTEGER },
+				#{ outNotice,           mode=OUT,       jdbcType=VARCHAR },
+				#{ outUserMenuCursor,	mode=OUT,       jdbcType=CURSOR,      javaType=ResultSet,     resultMap=MAP_OUT }
+			)
+		}
+	</select> -->
+	<select id="listUserMenu" parameterType="defaultDomain" resultType="java.util.HashMap">
+		SELECT A.*
+		  FROM(
+				SELECT A.MENUID, A.SITEID, A.KNAME, A.DEPTH, A.SORT, A.HIGHERID, A.IMAGEPATH, A.IMAGEFILE, A.PROGRAMURL, A.CHARGEUSERID,
+					   A.TABYN, B.KNAME AS TABYN_NAME, A.USERGRADEYN, C.KNAME AS USERGRADEYN_NAME, A.DISPLAYYN, E.KNAME AS DISPLAYYN_NAME, A.MENUTYPE, D.KNAME AS MENUTYPE_NAME, 
+					   A.NEWMENUYN, A.IMGKIND, A.MENUKIND,
+					   A.ROLE_NAME_1, A.ROLETYPE_1, A.ROLE_NAME_2, A.ROLETYPE_2, A.ROLE_NAME_3, A.ROLETYPE_3, A.ROLE_NAME_4, A.ROLETYPE_4, A.ROLE_NAME_5, A.ROLETYPE_5,
+					   FN_MENUIDPATH(A.MENUID, '>') AS IDPATH, CONCAT('HOME', '>', FN_MENUNAMEPATH(A.MENUID, '>')) AS NAMEPATH,
+				       IFNULL(FUNPARSING(FN_MENUIDPATH(A.MENUID, '>'), '>', 0, 1), A.MENUID) AS PARENTMENUID,
+				       IFNULL(FUNPARSING(FN_MENUNAMEPATH(A.MENUID, '>'), '>', 0, 1), A.KNAME) AS PARENTMENUNAME
+				FROM (SELECT A.MENUID, B.SITEID, B.KNAME, B.DEPTH, B.SORT, B.HIGHERID, B.IMAGEPATH, B.IMAGEFILE, B.PROGRAMURL, B.CHARGEUSERID, 
+				             B.NEWMENUYN, B.IMGKIND, B.MENUKIND, 
+							 B.TABYN, B.USERGRADEYN, B.DISPLAYYN, B.MENUTYPE,
+				       		 B.ROLE_NAME_1, B.ROLE_NAME_2, B.ROLE_NAME_3, B.ROLE_NAME_4, B.ROLE_NAME_5, 
+							 B.ROLETYPE_1, B.ROLETYPE_2, B.ROLETYPE_3, B.ROLETYPE_4, B.ROLETYPE_5 
+					  FROM(SELECT MENUID
+						   FROM (SELECT  FN_MENUTREE('-', #{mySiteId}) AS MENUID, @level AS level
+						   FROM    (SELECT  @start_with := '-', @id := @start_with, @level := 0) vars, T_MENU
+				           WHERE   @id IS NOT NULL) A WHERE A.MENUID IS NOT NULL) A
+				           LEFT JOIN (SELECT A.MENUID, A.SITEID, A.KNAME, A.DEPTH, A.SORT, A.HIGHERID, A.IMAGEPATH, A.IMAGEFILE, A.PROGRAMURL, A.CHARGEUSERID,
+											 A.TABYN, A.USERGRADEYN, A.DISPLAYYN, A.MENUTYPE, A.NEWMENUYN, A.IMGKIND, A.MENUKIND,
+										 	 MAX(IF(A.ROLE_NAME = '관리', A.ROLE_NAME, NULL)) AS ROLE_NAME_1, MAX(IF(A.ROLETYPE = 'ADMIN', A.ROLETYPE, NULL)) AS ROLETYPE_1,
+											 MAX(IF(A.ROLE_NAME = '등록', A.ROLE_NAME, NULL)) AS ROLE_NAME_2, MAX(IF(A.ROLETYPE = 'WRITE', A.ROLETYPE, NULL)) AS ROLETYPE_2,
+											 MAX(IF(A.ROLE_NAME = '수정', A.ROLE_NAME, NULL)) AS ROLE_NAME_3, MAX(IF(A.ROLETYPE = 'MODIFY', A.ROLETYPE, NULL)) AS ROLETYPE_3,
+											 MAX(IF(A.ROLE_NAME = '삭제', A.ROLE_NAME, NULL)) AS ROLE_NAME_4, MAX(IF(A.ROLETYPE = 'DELETE', A.ROLETYPE, NULL)) AS ROLETYPE_4,
+											 MAX(IF(A.ROLE_NAME = '읽기', A.ROLE_NAME, NULL)) AS ROLE_NAME_5, MAX(IF(A.ROLETYPE = 'READ', A.ROLETYPE, NULL)) AS ROLETYPE_5
+									  FROM (SELECT A.MENUID, A.SITEID, A.KNAME, A.DEPTH, A.SORT, A.HIGHERID, A.IMAGEPATH, A.IMAGEFILE, A.PROGRAMURL, A.CHARGEUSERID,
+									  			   A.NEWMENUYN, A.IMGKIND, A.MENUKIND,
+												   A.TABYN, A.USERGRADEYN, A.DISPLAYYN, A.MENUTYPE, B.KNAME AS ROLE_NAME, B.ROLETYPE
+											FROM (SELECT * FROM T_MENU WHERE SITEID = #{mySiteId} AND STATE = 'T') A
+											JOIN (SELECT * FROM T_ROLE WHERE STATE = 'T') B
+											ON A.MENUID = B.MENUID
+											JOIN (SELECT * FROM T_GROUPROLE WHERE STATE = 'T') C
+											ON B.ROLEID = C.ROLEID
+											JOIN (SELECT * FROM T_USERGROUP WHERE USERID = #{myId} AND STATE = 'T') D
+											ON C.GROUPID = D.GROUPID
+											GROUP BY A.MENUID, A.SITEID, A.KNAME, A.DEPTH, A.SORT, A.HIGHERID, A.IMAGEPATH, A.IMAGEFILE, A.PROGRAMURL, A.CHARGEUSERID, A.NEWMENUYN,
+											A.TABYN, A.USERGRADEYN, A.DISPLAYYN, A.MENUTYPE, B.KNAME, B.ROLETYPE) A
+											GROUP BY A.MENUID, A.SITEID, A.KNAME, A.DEPTH, A.SORT, A.HIGHERID, A.IMAGEPATH, A.IMAGEFILE, A.PROGRAMURL, A.CHARGEUSERID, A.NEWMENUYN,
+											A.TABYN, A.USERGRADEYN, A.DISPLAYYN, A.MENUTYPE) B
+							ON A.MENUID = B.MENUID)A
+				LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'TabYN') B
+				ON A.TABYN = B.CODE
+				LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'UserGradeYN') C
+				ON A.USERGRADEYN = C.CODE
+				LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'MenuType') D	             
+				ON A.MENUTYPE = D.CODE
+				LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'DisplayYN') E
+				ON A.DISPLAYYN = E.CODE
+			)A
+		WHERE A.SITEID IS NOT NULL
+	</select>
+	
+	<!-- 사이트 리스트 -->
+    <select id="listSite" parameterType="site" resultType="java.util.HashMap">
+    	SELECT A.RNUM1 AS NO1, A.RNUM2 AS NO2, A.SITEID, A.KNAME, A.KDESC,
+               A.URL, A.IP, A.SOURCEPATH, A.SITETYPE, C.KNAME AS SITETYPE_NAME,
+               A.SITELANGUAGE, D.KNAME AS SITELANGUAGE_NAME, A.SITEKEY, A.STARTTIME, A.ENDTIME,
+               A.STATE, A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG
+            FROM (
+                SELECT A.*
+                FROM (
+                	SELECT (@ROWNUM2 := @ROWNUM2 - 1) AS RNUM2, A.*
+                	FROM
+                	(
+	                	SELECT (@ROWNUM := @ROWNUM + 1) AS RNUM1, A.*, IFNULL(B.CNT, 0) AS CNT
+	                    FROM(SELECT * 
+	                    	   FROM T_SITE WHERE State = 'T'
+		                       AND KNAME LIKE CONCAT('%',#{inSchText},'%')
+		                       AND URL LIKE CONCAT('%',#{inSchText},'%')
+		                       AND SITEID LIKE CONCAT('%',#{inSchText},'%') ORDER BY SITEID) A
+						LEFT JOIN (SELECT SITEID, COUNT(*) AS CNT
+		                   		   FROM T_SITE WHERE State = 'T'
+		                           AND KNAME LIKE CONCAT('%',#{inSchText},'%')
+		                           AND URL LIKE CONCAT('%',#{inSchText},'%')
+		                           AND SITEID LIKE CONCAT('%',#{inSchText},'%') ORDER BY SITEID) B
+		                ON A.SITEID = B.SITEID
+	                    JOIN (SELECT @ROWNUM := 0) AS R
+                    ) A
+				    JOIN (SELECT @ROWNUM2 := @ROWNUM + 1) AS R2
+                 ) A
+                 WHERE A.RNUM1 BETWEEN ((#{inTargetPage}-1) * #{inRowsPerPage}) + 1 AND #{inTargetPage} * #{inRowsPerPage}
+             )A
+            LEFT JOIN (SELECT * FROM T_CODE WHERE State = 'T' AND HigherCode = 'SiteType') C
+            ON A.SiteType = C.Code
+            LEFT JOIN (SELECT * FROM T_CODE WHERE State = 'T' AND HigherCode = 'SiteLanguage') D
+            ON A.SiteLanguage = D.Code
+            ORDER BY A.RNUM2 DESC
+    </select>
+    
+    
+    <select id="selectGroupId" parameterType="defaultDomain" resultType="string">
+    	SELECT MIN(GROUPID) 
+	    FROM T_USERGROUP 
+	    WHERE USERID = #{inDMLUserId} 
+	    AND STATE = 'T'
+    </select>
+    
+	<!-- 사이트 리스트 -->
+    <select id="listAdminSite" parameterType="site" resultType="java.util.HashMap">
+        <choose>
+			<when test="inDMLUserId == '' or inDMLUserId == null or inGubun == 'all'">
+				SELECT B.SITEID, B.KNAME, B.KDESC,
+		               B.URL, B.IP, B.SOURCEPATH, B.SITETYPE, D.KNAME AS SITETYPE_NAME,
+		               B.SITELANGUAGE, E.KNAME AS SITELANGUAGE_NAME, B.STARTTIME, B.ENDTIME,
+		               B.STATE, B.INSUSERID, B.INSIP, B.INSTIME, B.DMLUSERID, B.DMLIP, B.DMLTIME, B.DMLLOG
+		        FROM (SELECT * FROM T_SITE WHERE STATE = 'T') B
+		             LEFT JOIN (SELECT * FROM T_CODE WHERE State = 'T' AND HigherCode = 'SiteType') D
+		             ON B.SiteType = D.Code 
+		             LEFT JOIN (SELECT * FROM T_CODE WHERE State = 'T' AND HigherCode = 'SiteLanguage') E
+		             ON B.SiteLanguage = E.Code 
+		        ORDER BY B.SITEID
+			</when>
+			<otherwise>
+		        SELECT B.SITEID, B.KNAME, B.KDESC,
+		               B.URL, B.IP, B.SOURCEPATH, B.SITETYPE, D.KNAME AS SITETYPE_NAME,
+		               B.SITELANGUAGE, E.KNAME AS SITELANGUAGE_NAME, B.STARTTIME, B.ENDTIME,
+		               B.STATE, B.INSUSERID, B.INSIP, B.INSTIME, B.DMLUSERID, B.DMLIP, B.DMLTIME, B.DMLLOG
+		        FROM (SELECT E.SITEID
+		              FROM (SELECT * FROM T_USERGROUP WHERE USERID = #{inDMLUserId} AND STATE = 'T') A
+		                   JOIN (SELECT * FROM T_GROUP WHERE STATE = 'T') B
+		              	   ON A.GROUPID = B.GROUPID
+		                   JOIN (SELECT * FROM T_GROUPROLE WHERE STATE = 'T') C
+		                   ON B.GROUPID = C.GROUPID
+		                   JOIN (SELECT * FROM T_ROLE WHERE ROLETYPE = 'ADMIN' AND STATE = 'T') D
+		                   ON C.ROLEID = D.ROLEID
+		                   JOIN (SELECT * FROM T_MENU WHERE STATE = 'T') E
+		                   ON D.MENUID = E.MENUID
+		             GROUP BY E.SITEID) A
+		             JOIN (SELECT * FROM T_SITE WHERE STATE = 'T') B
+		             ON A.SITEID = B.SITEID
+		             LEFT JOIN (SELECT * FROM T_CODE WHERE State = 'T' AND HigherCode = 'SiteType') D
+		             ON B.SiteType = D.Code
+		             LEFT JOIN (SELECT * FROM T_CODE WHERE State = 'T' AND HigherCode = 'SiteLanguage') E
+		             ON B.SiteLanguage = E.Code
+		        ORDER BY B.SITEID
+			</otherwise>
+		</choose>
+    </select>
+    
+	<!-- 카테고리 리스트 -->
+    <select id="listCate" parameterType="category" resultType="java.util.HashMap">
+        SELECT *
+        FROM T_CATEGORY
+        WHERE STATE = 'T'
+        <if test="menuId != null and menuId != ''">
+	        AND BOARDID = (SELECT BOARDID FROM T_BOARD B WHERE MENUID = #{menuId})
+        </if>
+    </select>
+	
+    <select id="selectFiles" parameterType="files" resultType="files">
+		SELECT *
+		  FROM T_FILES
+		 WHERE TITLEID = #{titleId}
+		   AND FILEID = #{fileId}
+		   <!-- AND STATE = 'T' -->
+	</select>
+
+    <select id="selectContentsFile" parameterType="files" resultType="files">
+		SELECT IMAGEFILENAME userFileName
+		     , IMAGESFILENAME systemFileName
+		     , filePath
+		  FROM T_CONTENTS
+		 WHERE TITLEID = #{titleId}
+		   AND STATE = 'T'
+	</select>
+	
+	<!-- 해당 메뉴가 포함됨 사이트 정보 받아오기 -->
+    <select id="selectSite" parameterType="menu" resultType="hashmap">
+	    SELECT A.SITEID, A.KNAME, A.KDESC,
+	           A.URL, A.IP, A.SOURCEPATH, A.SITETYPE, C.KNAME AS SITETYPE_NAME,
+	           A.SITELANGUAGE, D.KNAME AS SITELANGUAGE_NAME, A.SITEKEY, A.STARTTIME, A.ENDTIME,
+	           A.STATE, A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG
+	    FROM (SELECT * FROM T_SITE WHERE State = 'T') A
+			 JOIN (SELECT * FROM T_MENU WHERE MenuID = #{menuId} AND State = 'T') M
+			   ON A.SITEID = M.SITEID 
+	         LEFT JOIN (SELECT * FROM T_CODE WHERE State = 'T' AND HigherCode = 'SiteType') C
+	           ON A.SiteType = C.Code 
+	         LEFT JOIN (SELECT * FROM T_CODE WHERE State = 'T' AND HigherCode = 'SiteLanguage') D
+	           ON A.SiteLanguage = D.Code
+	</select>
+	
+    <select id="selectSiteInfo" parameterType="menu" resultType="hashmap">
+	    SELECT A.SITEID, A.KNAME, A.KDESC,
+	           A.URL, A.IP, A.SOURCEPATH, A.SITETYPE, C.KNAME AS SITETYPE_NAME,
+	           A.SITELANGUAGE, D.KNAME AS SITELANGUAGE_NAME, A.SITEKEY, A.STARTTIME, A.ENDTIME,
+	           A.STATE, A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG
+	    FROM (SELECT * FROM T_SITE WHERE SiteID = #{mySiteId} AND State = 'T') A
+	         LEFT JOIN (SELECT * FROM T_CODE WHERE State = 'T' AND HigherCode = 'SiteType') C
+    		   ON A.SiteType = C.Code
+	         LEFT JOIN (SELECT * FROM T_CODE WHERE State = 'T' AND HigherCode = 'SiteLanguage') D
+	    	   ON A.SiteLanguage = D.Code
+	</select>
+	
+	<select id="selectSiteKeyInfo" parameterType="defaultDomain" resultType="hashmap">
+	    SELECT A.SITEID, A.KNAME, A.KDESC,
+	           A.URL, A.IP, A.SOURCEPATH, A.SITETYPE, C.KNAME AS SITETYPE_NAME,
+	           A.SITELANGUAGE, D.KNAME AS SITELANGUAGE_NAME, A.SITEKEY, A.STARTTIME, A.ENDTIME,
+	           A.STATE, A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG
+	    FROM (SELECT * FROM T_SITE WHERE SiteKey = #{mySiteKey} AND State = 'T') A
+	         LEFT JOIN (SELECT * FROM T_CODE WHERE State = 'T' AND HigherCode = 'SiteType') C
+	    	   ON A.SiteType = C.Code
+	         LEFT JOIN (SELECT * FROM T_CODE WHERE State = 'T' AND HigherCode = 'SiteLanguage') D
+	    	   ON A.SiteLanguage = D.Code
+	</select>
+	
+    <select id="selectMenuInfo" parameterType="menu" resultType="hashmap">
+    SELECT A.*, B.CHARGEUSER_NAME, B.PHONE, B.DEPT_NAME
+      FROM (
+			    SELECT A.MENUID, A.SITEID, A.KNAME, A.DEPTH, A.SORT, A.HIGHERID, A.IMAGEPATH, A.IMAGEFILE, A.PROGRAMURL, A.CHARGEUSERID,
+			           A.TABYN, A.TABYN_NAME, A.USERGRADEYN, A.USERGRADEYN_NAME, A.MENUTYPE, A.MENUTYPE_NAME, A.IMGKIND, A.MENUKIND,
+			           A.ROLE_NAME_1, A.ROLETYPE_1, A.ROLE_NAME_2, A.ROLETYPE_2, A.ROLE_NAME_3, A.ROLETYPE_3, A.ROLE_NAME_4, A.ROLETYPE_4, A.ROLE_NAME_5, A.ROLETYPE_5,
+			           SUBSTR(SYS_CONNECT_BY_PATH(A.MENUID, '>'), 2) AS IDPATH, 'HOME'||SYS_CONNECT_BY_PATH(A.KNAME, '>') AS NAMEPATH,
+			           NVL(FUNPARSING(SUBSTR(SYS_CONNECT_BY_PATH(A.MENUID, '>'), 2), '>', 0, 1), A.MENUID) AS PARENTMENUID,
+			           NVL(FUNPARSING(SUBSTR(SYS_CONNECT_BY_PATH(A.KNAME, '>'), 2), '>', 0, 1), A.KNAME) AS PARENTMENUNAME
+			    FROM (
+			        SELECT A.MENUID, A.SITEID, A.KNAME, A.DEPTH, A.SORT, A.HIGHERID, A.IMAGEPATH, A.IMAGEFILE, A.PROGRAMURL, A.CHARGEUSERID,
+			               A.TABYN, B.KNAME AS TABYN_NAME, A.USERGRADEYN, C.KNAME AS USERGRADEYN_NAME, A.MENUTYPE, D.KNAME AS MENUTYPE_NAME, A.IMGKIND, A.MENUKIND,
+			               A.ROLE_NAME_1, A.ROLETYPE_1, A.ROLE_NAME_2, A.ROLETYPE_2, A.ROLE_NAME_3, A.ROLETYPE_3, A.ROLE_NAME_4, A.ROLETYPE_4, A.ROLE_NAME_5, A.ROLETYPE_5
+			        FROM (
+			            SELECT A.MENUID, A.SITEID, A.KNAME, A.DEPTH, A.SORT, A.HIGHERID, A.IMAGEPATH, A.IMAGEFILE, A.PROGRAMURL, A.CHARGEUSERID,
+			                   A.TABYN, A.USERGRADEYN, A.MENUTYPE, A.IMGKIND, A.MENUKIND,
+			                   MAX(DECODE(A.ROLE_NAME, '관리', A.ROLE_NAME, NULL)) AS ROLE_NAME_1, MAX(DECODE(A.ROLETYPE, 'ADMIN', A.ROLETYPE, NULL)) AS ROLETYPE_1,
+			                   MAX(DECODE(A.ROLE_NAME, '등록', A.ROLE_NAME, NULL)) AS ROLE_NAME_2, MAX(DECODE(A.ROLETYPE, 'WRITE', A.ROLETYPE, NULL)) AS ROLETYPE_2,
+			                   MAX(DECODE(A.ROLE_NAME, '수정', A.ROLE_NAME, NULL)) AS ROLE_NAME_3, MAX(DECODE(A.ROLETYPE, 'MODIFY', A.ROLETYPE, NULL)) AS ROLETYPE_3,
+			                   MAX(DECODE(A.ROLE_NAME, '삭제', A.ROLE_NAME, NULL)) AS ROLE_NAME_4, MAX(DECODE(A.ROLETYPE, 'DELETE', A.ROLETYPE, NULL)) AS ROLETYPE_4,
+			                   MAX(DECODE(A.ROLE_NAME, '읽기', A.ROLE_NAME, NULL)) AS ROLE_NAME_5, MAX(DECODE(A.ROLETYPE, 'READ', A.ROLETYPE, NULL)) AS ROLETYPE_5
+			            FROM (
+			                SELECT A.MENUID, A.SITEID, A.KNAME, A.DEPTH, A.SORT, A.HIGHERID, A.IMAGEPATH, A.IMAGEFILE, A.PROGRAMURL, A.CHARGEUSERID,
+			                       A.TABYN, A.USERGRADEYN, A.MENUTYPE, A.IMGKIND, A.MENUKIND, B.KNAME AS ROLE_NAME, B.ROLETYPE
+			                FROM (SELECT * FROM T_MENU WHERE STATE = 'T' AND SITEID = #{mySiteId}) A,
+			                     (SELECT * FROM T_ROLE WHERE STATE = 'T') B,
+			                     (SELECT * FROM T_GROUPROLE WHERE STATE = 'T') C,
+			                     (SELECT * FROM T_USERGROUP WHERE USERID = #{myId} AND STATE = 'T') D
+			                WHERE A.MENUID = B.MENUID
+			                AND B.ROLEID = C.ROLEID
+			                AND C.GROUPID = D.GROUPID
+			                GROUP BY A.MENUID, A.SITEID, A.KNAME, A.DEPTH, A.SORT, A.HIGHERID, A.IMAGEPATH, A.IMAGEFILE, A.PROGRAMURL, A.CHARGEUSERID,
+			                         A.TABYN, A.USERGRADEYN, A.MENUTYPE, A.IMGKIND, A.MENUKIND, B.KNAME, B.ROLETYPE
+			            ) A
+			            GROUP BY A.MENUID, A.SITEID, A.KNAME, A.DEPTH, A.SORT, A.HIGHERID, A.IMAGEPATH, A.IMAGEFILE, A.PROGRAMURL, A.CHARGEUSERID,
+			                     A.TABYN, A.USERGRADEYN, A.MENUTYPE, A.IMGKIND, A.MENUKIND
+			        ) A, (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'TabYN') B,
+			             (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'UserGradeYN') C,
+			             (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'MenuType') D
+			        WHERE A.TabYN = B.CODE(+)
+			        AND A.UserGradeYN = C.CODE(+)
+			        AND A.MenuType = D.CODE(+)
+			    ) A
+			    START WITH A.HIGHERID = '-'
+			    CONNECT BY PRIOR A.MENUID = A.HIGHERID
+           ) A,
+           (
+            SELECT A.USERID, A.KNAME CHARGEUSER_NAME, B.PHONE, C.KNAME DEPT_NAME
+              FROM (SELECT * FROM T_USER WHERE STATE = 'T' AND KIND = 'K') A, 
+                   (SELECT * FROM T_TEAM WHERE STATE = 'T' AND DEPTSEQ IN (SELECT MAX(DEPTSEQ) FROM T_TEAM WHERE STATE = 'T')) B,
+                   (SELECT * FROM T_DEPARTMENT WHERE STATE = 'T' AND DEPTSEQ IN (SELECT MAX(DEPTSEQ) FROM T_DEPARTMENT WHERE STATE = 'T')) C
+             WHERE A.USERID = B.USERID
+               AND B.DEPTID = C.DEPTID(+)
+           ) B
+     WHERE A.MENUID = #{menuId}
+       AND A.CHARGEUSERID = B.USERID(+)
+	</select>
+	
+	<!-- 현재 메뉴의 하위 메뉴 목록 -->
+    <select id="selectMenuInfoList" parameterType="menu" resultType="hashmap">
+	    SELECT A.MENUID, A.SITEID, A.KNAME, A.DEPTH, A.SORT, A.HIGHERID, A.IMAGEPATH, A.IMAGEFILE, A.PROGRAMURL, A.CHARGEUSERID,
+               A.TABYN, A.TABYN_NAME, A.USERGRADEYN, A.USERGRADEYN_NAME, A.DISPLAYYN, A.DISPLAYYN_NAME, A.MENUTYPE, A.MENUTYPE_NAME, A.NEWMENUYN,
+               A.ROLE_NAME_1, A.ROLETYPE_1, A.ROLE_NAME_2, A.ROLETYPE_2, A.ROLE_NAME_3, A.ROLETYPE_3, A.ROLE_NAME_4, A.ROLETYPE_4, A.ROLE_NAME_5, A.ROLETYPE_5,
+			   FN_MENUIDPATH(A.MENUID, '>') AS IDPATH, CONCAT('HOME', '>', FN_MENUNAMEPATH(A.MENUID, '>')) AS NAMEPATH,
+		       IFNULL(FUNPARSING(FN_MENUIDPATH(A.MENUID, '>'), '>', 0, 1), A.MENUID) AS PARENTMENUID,
+		       IFNULL(FUNPARSING(FN_MENUNAMEPATH(A.MENUID, '>'), '>', 0, 1), A.KNAME) AS PARENTMENUNAME
+		FROM(      
+		    SELECT A.MENUID, A.SITEID, A.KNAME, A.DEPTH, A.SORT, A.HIGHERID, A.IMAGEPATH, A.IMAGEFILE, A.PROGRAMURL, A.CHARGEUSERID,
+	               A.TABYN, B.KNAME AS TABYN_NAME, A.USERGRADEYN, C.KNAME AS USERGRADEYN_NAME, A.DISPLAYYN, E.KNAME AS DISPLAYYN_NAME, A.MENUTYPE, D.KNAME AS MENUTYPE_NAME, A.NEWMENUYN,
+	               A.ROLE_NAME_1, A.ROLETYPE_1, A.ROLE_NAME_2, A.ROLETYPE_2, A.ROLE_NAME_3, A.ROLETYPE_3, A.ROLE_NAME_4, A.ROLETYPE_4, A.ROLE_NAME_5, A.ROLETYPE_5
+	        FROM (SELECT A.MENUID, A.SITEID, A.KNAME, A.DEPTH, A.SORT, A.HIGHERID, A.IMAGEPATH, A.IMAGEFILE, A.PROGRAMURL, A.CHARGEUSERID,
+	                   A.TABYN, A.USERGRADEYN, A.DISPLAYYN, A.MENUTYPE, A.NEWMENUYN,
+	                   MAX(IF(A.ROLE_NAME = '관리', A.ROLE_NAME, NULL)) AS ROLE_NAME_1, MAX(IF(A.ROLETYPE = 'ADMIN', A.ROLETYPE, NULL)) AS ROLETYPE_1,
+	                   MAX(IF(A.ROLE_NAME = '등록', A.ROLE_NAME, NULL)) AS ROLE_NAME_2, MAX(IF(A.ROLETYPE = 'WRITE', A.ROLETYPE, NULL)) AS ROLETYPE_2,
+	                   MAX(IF(A.ROLE_NAME = '수정', A.ROLE_NAME, NULL)) AS ROLE_NAME_3, MAX(IF(A.ROLETYPE = 'MODIFY', A.ROLETYPE, NULL)) AS ROLETYPE_3,
+	                   MAX(IF(A.ROLE_NAME = '삭제', A.ROLE_NAME, NULL)) AS ROLE_NAME_4, MAX(IF(A.ROLETYPE = 'DELETE', A.ROLETYPE, NULL)) AS ROLETYPE_4,
+	                   MAX(IF(A.ROLE_NAME = '읽기', A.ROLE_NAME, NULL)) AS ROLE_NAME_5, MAX(IF(A.ROLETYPE = 'READ', A.ROLETYPE, NULL)) AS ROLETYPE_5
+	            FROM (SELECT A.MENUID, A.SITEID, A.KNAME, A.DEPTH, A.SORT, A.HIGHERID, A.IMAGEPATH, A.IMAGEFILE, A.PROGRAMURL, A.CHARGEUSERID, A.NEWMENUYN,
+	                       A.TABYN, A.USERGRADEYN, A.DISPLAYYN, A.MENUTYPE, B.KNAME AS ROLE_NAME, B.ROLETYPE
+	                FROM (SELECT * FROM T_MENU WHERE STATE = 'T' AND MENUID = #{menuId}) A
+		          	JOIN (SELECT * FROM T_ROLE WHERE STATE = 'T') B
+		          	ON A.MENUID = B.MENUID
+		          	JOIN (SELECT * FROM T_GROUPROLE WHERE STATE = 'T') C
+		          	ON B.ROLEID = C.ROLEID
+		          	JOIN (SELECT * FROM T_USERGROUP WHERE USERID = #{myId} AND STATE = 'T') D
+		          	ON C.GROUPID = D.GROUPID
+	                GROUP BY A.MENUID, A.SITEID, A.KNAME, A.DEPTH, A.SORT, A.HIGHERID, A.IMAGEPATH, A.IMAGEFILE, A.PROGRAMURL, A.CHARGEUSERID, A.NEWMENUYN,
+	                         A.TABYN, A.USERGRADEYN, A.DISPLAYYN, A.MENUTYPE, B.KNAME, B.ROLETYPE) A
+	            GROUP BY A.MENUID, A.SITEID, A.KNAME, A.DEPTH, A.SORT, A.HIGHERID, A.IMAGEPATH, A.IMAGEFILE, A.PROGRAMURL, A.CHARGEUSERID, A.NEWMENUYN,
+	                     A.TABYN, A.USERGRADEYN, A.DISPLAYYN, A.MENUTYPE) A
+	           LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'TabYN') B
+		       ON A.TABYN = B.CODE
+		       LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'UserGradeYN') C
+		       ON A.USERGRADEYN = C.CODE
+		       LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'MenuType') D	             
+		       ON A.MENUTYPE = D.CODE
+		       LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'DisplayYN') E
+		       ON A.DISPLAYYN = E.CODE
+	        UNION ALL
+	    	SELECT  A.MENUID, A.SITEID, A.KNAME, A.DEPTH, A.SORT, A.HIGHERID, A.IMAGEPATH, A.IMAGEFILE, A.PROGRAMURL, A.CHARGEUSERID,
+				    A.TABYN, A.TABYN_NAME, A.USERGRADEYN, A.USERGRADEYN_NAME, A.DISPLAYYN, A.DISPLAYYN_NAME, A.MENUTYPE, A.MENUTYPE_NAME, A.NEWMENUYN,
+				    A.ROLE_NAME_1, A.ROLETYPE_1, A.ROLE_NAME_2, A.ROLETYPE_2, A.ROLE_NAME_3, A.ROLETYPE_3, A.ROLE_NAME_4, A.ROLETYPE_4, A.ROLE_NAME_5, A.ROLETYPE_5
+			FROM    (
+			SELECT  FN_MENUTREE('', #{mySiteId}) AS MENUID, @level AS level
+			FROM    (SELECT  @start_with := #{menuId}, @id := @start_with, @level := 0) vars, T_MENU
+			WHERE   @id IS NOT NULL
+			) FN
+			JOIN    (SELECT A.MENUID, A.SITEID, A.KNAME, A.DEPTH, A.SORT, A.HIGHERID, A.IMAGEPATH, A.IMAGEFILE, A.PROGRAMURL, A.CHARGEUSERID,
+			                A.TABYN, B.KNAME AS TABYN_NAME, A.USERGRADEYN, C.KNAME AS USERGRADEYN_NAME, A.DISPLAYYN, E.KNAME AS DISPLAYYN_NAME, A.MENUTYPE, D.KNAME AS MENUTYPE_NAME, A.NEWMENUYN,
+			                A.ROLE_NAME_1, A.ROLETYPE_1, A.ROLE_NAME_2, A.ROLETYPE_2, A.ROLE_NAME_3, A.ROLETYPE_3, A.ROLE_NAME_4, A.ROLETYPE_4, A.ROLE_NAME_5, A.ROLETYPE_5
+				        FROM (SELECT A.MENUID, A.SITEID, A.KNAME, A.DEPTH, A.SORT, A.HIGHERID, A.IMAGEPATH, A.IMAGEFILE, A.PROGRAMURL, A.CHARGEUSERID,
+				                   A.TABYN, A.USERGRADEYN, A.DISPLAYYN, A.MENUTYPE, A.NEWMENUYN,
+				                   MAX(IF(A.ROLE_NAME = '관리', A.ROLE_NAME, NULL)) AS ROLE_NAME_1, MAX(IF(A.ROLETYPE = 'ADMIN', A.ROLETYPE, NULL)) AS ROLETYPE_1,
+				                   MAX(IF(A.ROLE_NAME = '등록', A.ROLE_NAME, NULL)) AS ROLE_NAME_2, MAX(IF(A.ROLETYPE = 'WRITE', A.ROLETYPE, NULL)) AS ROLETYPE_2,
+				                   MAX(IF(A.ROLE_NAME = '수정', A.ROLE_NAME, NULL)) AS ROLE_NAME_3, MAX(IF(A.ROLETYPE = 'MODIFY', A.ROLETYPE, NULL)) AS ROLETYPE_3,
+				                   MAX(IF(A.ROLE_NAME = '삭제', A.ROLE_NAME, NULL)) AS ROLE_NAME_4, MAX(IF(A.ROLETYPE = 'DELETE', A.ROLETYPE, NULL)) AS ROLETYPE_4,
+				                   MAX(IF(A.ROLE_NAME = '읽기', A.ROLE_NAME, NULL)) AS ROLE_NAME_5, MAX(IF(A.ROLETYPE = 'READ', A.ROLETYPE, NULL)) AS ROLETYPE_5
+				            FROM (SELECT A.MENUID, A.SITEID, A.KNAME, A.DEPTH, A.SORT, A.HIGHERID, A.IMAGEPATH, A.IMAGEFILE, A.PROGRAMURL, A.CHARGEUSERID, A.NEWMENUYN,
+				                       A.TABYN, A.USERGRADEYN, A.DISPLAYYN, A.MENUTYPE, B.KNAME AS ROLE_NAME, B.ROLETYPE
+				                FROM (SELECT * FROM T_MENU WHERE STATE = 'T') A
+			                	JOIN (SELECT * FROM T_ROLE WHERE STATE = 'T') B
+			                	ON A.MENUID = B.MENUID
+			                	JOIN (SELECT * FROM T_GROUPROLE WHERE STATE = 'T') C
+			                	ON B.ROLEID = C.ROLEID
+			                	JOIN (SELECT * FROM T_USERGROUP WHERE USERID = #{myId} AND STATE = 'T') D
+			                	ON C.GROUPID = D.GROUPID
+				                GROUP BY A.MENUID, A.SITEID, A.KNAME, A.DEPTH, A.SORT, A.HIGHERID, A.IMAGEPATH, A.IMAGEFILE, A.PROGRAMURL, A.CHARGEUSERID, A.NEWMENUYN,
+				                         A.TABYN, A.USERGRADEYN, A.DISPLAYYN, A.MENUTYPE, B.KNAME, B.ROLETYPE) A
+				            GROUP BY A.MENUID, A.SITEID, A.KNAME, A.DEPTH, A.SORT, A.HIGHERID, A.IMAGEPATH, A.IMAGEFILE, A.PROGRAMURL, A.CHARGEUSERID, A.NEWMENUYN,
+				                     A.TABYN, A.USERGRADEYN, A.DISPLAYYN, A.MENUTYPE) A
+	                    LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'TabYN') B
+				        ON A.TABYN = B.CODE
+				        LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'UserGradeYN') C
+				        ON A.USERGRADEYN = C.CODE
+				        LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'MenuType') D	             
+				        ON A.MENUTYPE = D.CODE
+				        LEFT JOIN (SELECT * FROM T_CODE WHERE STATE = 'T' AND HIGHERCODE = 'DisplayYN') E
+				        ON A.DISPLAYYN = E.CODE) A
+			ON      FN.MENUID = A.MENUID
+		)A
+	</select>
+
+    <select id="getLogin" parameterType="user" statementType="CALLABLE">
+        { call PKGSSOSERVER.Login
+           (
+                #{ userId,          		mode=IN,        jdbcType=VARCHAR },
+                #{ password,            	mode=IN,        jdbcType=VARCHAR },
+                
+                #{ inExecMenuId,            mode=IN,        jdbcType=VARCHAR },
+                #{ inBeforeData,            mode=IN,        jdbcType=VARCHAR },
+                #{ inAfterData,             mode=IN,        jdbcType=VARCHAR },
+                #{ inTerminal,              mode=IN,        jdbcType=VARCHAR },
+                #{ inOsUser,                mode=IN,        jdbcType=VARCHAR },
+                #{ inModule,                mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLUserId,             mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLIp,                 mode=IN,        jdbcType=VARCHAR },
+                
+                #{ outObjectName,           mode=OUT,       jdbcType=VARCHAR },
+                #{ outResult,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outRowCount,             mode=OUT,       jdbcType=INTEGER },
+                #{ outNotice,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outCursor,               mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=USER_OUT }
+           )
+        }
+    </select>
+
+	<!-- contentMgr.mapper.xml -->
+	<!-- 정적콘텐츠 조회 -->
+    <select id="viewContent" parameterType="content" statementType="CALLABLE">
+        { call PKGQUERYSERVER.ReadContents
+            (
+                #{ menuId, 		            mode=IN,        jdbcType=VARCHAR },
+                
+                #{ inExecMenuId,            mode=IN,        jdbcType=VARCHAR },
+                #{ inBeforeData,            mode=IN,        jdbcType=VARCHAR },
+                #{ inAfterData,             mode=IN,        jdbcType=VARCHAR },
+                #{ inTerminal,              mode=IN,        jdbcType=VARCHAR },
+                #{ inOsUser,                mode=IN,        jdbcType=VARCHAR },
+                #{ inModule,                mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLUserId,             mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLIp,                 mode=IN,        jdbcType=VARCHAR },
+                
+                #{ outObjectName,           mode=OUT,       jdbcType=VARCHAR },
+                #{ outResult,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outRowCount,             mode=OUT,       jdbcType=DOUBLE },
+                #{ outNotice,               mode=OUT,       jdbcType=VARCHAR },                
+                #{ outCursor,               mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=CONTENT_OUT }
+            )
+        }
+    </select>
+    
+    <!-- 콘텐츠설정 상세 -->
+	<select id="viewBoard" parameterType="contentSet" statementType="CALLABLE">
+		{ call PkgQueryServer.ReadBoard
+			(    
+				#{ paramMenuId,				mode=IN,		jdbcType=VARCHAR },
+				
+				#{ inExecMenuId,			mode=IN,		jdbcType=VARCHAR },
+				#{ inBeforeData,			mode=IN,		jdbcType=VARCHAR },
+				#{ inAfterData,				mode=IN,		jdbcType=VARCHAR },
+				#{ inTerminal,				mode=IN,		jdbcType=VARCHAR },
+				#{ inOsUser,				mode=IN,		jdbcType=VARCHAR },
+				#{ inModule,				mode=IN,		jdbcType=VARCHAR },
+				#{ inDMLUserId,				mode=IN,		jdbcType=VARCHAR },
+				#{ inDMLIp,					mode=IN,		jdbcType=VARCHAR },
+				
+				#{ outObjectName,			mode=OUT,		jdbcType=VARCHAR },
+				#{ outResult,				mode=OUT,		jdbcType=VARCHAR },
+				#{ outRowCount,				mode=OUT,		jdbcType=INTEGER },
+				#{ outNotice,				mode=OUT,		jdbcType=VARCHAR },
+				#{ outCursor,			    mode=OUT,		jdbcType=CURSOR,		javaType=ResultSet,		resultMap=CONTENTSET_OUT },
+				#{ outCursor1,			    mode=OUT,		jdbcType=CURSOR,		javaType=ResultSet,		resultMap=MAP_OUT },
+				#{ outCursor2,			    mode=OUT,		jdbcType=CURSOR,		javaType=ResultSet,		resultMap=MAP_OUT },
+				#{ outCursor3,			    mode=OUT,		jdbcType=CURSOR,		javaType=ResultSet,		resultMap=MAP_OUT }
+			)
+		}
+	</select>
+	
+	<!-- 게시판 통합 Start -->
+	<select id="listBoardCnt" parameterType="title" resultType="java.lang.Integer">
+          SELECT COUNT(1)
+	         FROM (SELECT A.*,B.BOARDID,B.BOARDKIND FROM T_LINK A LEFT OUTER JOIN T_BOARD B ON(A.MENUID=B.MENUID) WHERE A.MENUID = #{menuId} AND A.Depth = 1 AND A.State = 'T') A,
+	              (SELECT * FROM T_TITLE WHERE State = 'T' AND StateYn = 'Y' AND OpenYN = 'Y') B,
+	              (SELECT * FROM T_CONTENTS WHERE State = 'T') G,
+	              T_User D,
+	              (SELECT 'guest' AS USERID, A.* FROM T_GUESTINFO A) E
+	         WHERE A.TITLEID = B.TITLEID
+	         AND B.TITLEID = G.TITLEID(+)
+	         AND B.USERID = D.USERID
+	         AND B.TITLEID = E.TITLEID(+)
+	         AND B.USERID = E.USERID(+)
+	         <if test="inSchText != '' and inSchText != null">
+				<if test="schType == 1">
+					AND NVL(B.KNAME, ' ') LIKE '%'||#{inSchText}||'%'
+				</if>
+				<if test="schType == 2">
+					AND NVL(G.KHTML, ' ') LIKE '%'||#{inSchText}||'%'
+				</if>
+				<if test="schType == 3">
+					AND NVL(DECODE(B.USERID, 'guest', E.GUESTNAME, B.USERNAME), ' ') LIKE '%'||#{inSchText}||'%'
+				</if>
+			</if>
+			<if test="country != null and country != ''">
+		        AND NVL(B.COUNTRY, ' ') LIKE '%'||#{country}||'%'
+			</if>
+			<if test="continent != null and continent != ''">
+		        AND NVL(B.CONTINENT, ' ') LIKE '%'||#{continent}||'%'
+			</if>
+			<if test="categoryId != null and categoryId != ''">
+	        	AND NVL(A.CATEGORYID, ' ') LIKE '%'||#{categoryId}||'%'
+			</if>
+			<if test="yearMonth != null and yearMonth != ''">
+				AND TO_CHAR(CONTENTS4, 'YYYYMM') = #{yearMonth}
+			</if>
+    </select>
+
+    <select id="listBoard" parameterType="title" resultType="java.util.HashMap">
+    	SELECT A.NUM1, A.LinkID, A.TitleID, A.MinIndex, A.MaxIndex, A.KName, A.UserID, A.UserName, A.Depth, A.ParentIndex,
+             A.State, A.HitCount, A.OpenYN, A.NoticeTitleYN, A.SecretTitleYN, A.Keyword1, A.Keyword2, A.Keyword3, A.Keyword4, A.Keyword5, A.Keyword6, A.Keyword7, A.Keyword8, A.Keyword9, A.Keyword10,
+             A.Contents1, A.Contents2, A.Contents3, A.Contents4, A.Contents5, A.Contents6, A.Continent, A.Country, 
+             DECODE(A.Continent, '-', '', FUNCODENAME(A.Continent, 'country'))AS ContinentName, DECODE(A.Continent, '-', '', FUNCODENAME(A.Country, A.Continent))AS CountryName, 
+             A.Origin, A.ReportTime, A.Process, A.InsTime, A.DmlTime, A.HigherID, A.FileYN, A.PARENTUSERID, A.MENUID, A.BOARDID, A.LINKURL, A.CATEGORYID, A.CATEGORYNAME,
+             A.IMAGEFILENAME, A.IMAGESFILENAME, A.FILEPATH, A.ALTINFO, dbms_lob.substr(A.KHTML, 1000, 1)AS KHTML, A.APPEALUSERID
+    	  FROM (SELECT 9999999999-ROW_NUMBER() OVER (ORDER BY B.INSTIME DESC) AS NUM1,
+                   A.LinkID, A.TitleID, '99999999999999' AS MinIndex, '99999999999999' AS MaxIndex, B.KName, B.UserID,
+                   DECODE(b.userid, 'guest', E.GUESTNAME, B.USERNAME) AS UserName,
+                   A.Depth, lpad (to_char(A.ParentLinkID),10,'0')||to_char(9999-1) as ParentIndex,
+                   B.State, B.HitCount, B.OpenYN, B.NoticeTitleYN, B.SecretTitleYN, B.Keyword1, B.Keyword2, B.Keyword3, B.Keyword4, B.Keyword5, B.Keyword6, B.Keyword7, B.Keyword8, B.Keyword9, B.Keyword10,
+                   B.Contents1, B.Contents2, B.Contents3, B.Contents4, B.Contents5, B.Contents6, B.Continent, B.Country, B.Origin, TO_CHAR(B.ReportTime,'YYYYMMDD') AS REPORTTIME, 
+                   DECODE(A.Depth, 1, DECODE(B.Process, '-', '접수', 'R', '처리중', 'C', '답변완료'), '') AS Process,
+                   TO_CHAR(B.InsTime,'YYYYMMDD') AS InsTime, TO_CHAR(B.DmlTime,'YYYYMMDD') AS DmlTime, A.HigherID, DECODE(C.Cnt, NULL, 'N', 'Y') AS FileYN,
+                   (SELECT DMLUSERID FROM T_LINK WHERE LINKID = A.PARENTLINKID) AS PARENTUSERID, A.MENUID, A.BOARDID, B.LINKURL, A.CATEGORYID,
+                   (SELECT CATEGORYNAME FROM T_CATEGORY AB LEFT OUTER JOIN T_BOARD B ON (AB.BOARDID = B.BOARDID) LEFT OUTER JOIN  T_LINK C ON (B.MENUID = C.MENUID) WHERE AB.CATEGORYID = A.CATEGORYID AND C.LINKID = A.LINKID) AS CATEGORYNAME,
+                   G.IMAGEFILENAME, G.IMAGESFILENAME, G.FILEPATH, G.ALTINFO, G.KHTML, F.USERID AS APPEALUSERID
+            FROM (SELECT A.*,B.BOARDID,B.BOARDKIND FROM T_LINK A LEFT OUTER JOIN T_BOARD B ON(A.MENUID=B.MENUID) WHERE A.MENUID = #{menuId} AND A.State = 'T' AND #{pageNum} = 1 ORDER BY LINKID DESC) A,
+                 (SELECT * FROM T_TITLE WHERE STATE = 'T' AND STATEYN='Y' AND NOTICETITLEYN = 'Y' AND SYSDATE BETWEEN NoticeStartTime AND NoticeEndTime AND OpenYN = 'Y') B,
+                 (SELECT * FROM T_CONTENTS WHERE State = 'T') G,
+                 (SELECT TitleID, COUNT(*) AS CNT FROM T_Files WHERE State = 'T' GROUP BY TitleID) C,
+                 T_User D,
+                 (SELECT 'guest' AS USERID, A.* FROM T_GUESTINFO A) E,
+                 T_APPEALUSER F
+            WHERE A.TITLEID = B.TITLEID
+            AND B.TitleID = C.TitleID(+)
+            AND B.UserID = D.UserID
+            AND B.TITLEID = E.TITLEID(+)
+            AND B.USERID = E.USERID(+)
+            AND B.TITLEID = G.TITLEID(+)
+            AND B.TITLEID = F.TITLEID(+)
+            UNION ALL
+            SELECT A.NUM1, A.LinkID, A.TitleID, A.MinIndex, A.MaxIndex, A.KName, A.UserID, A.UserName,
+                   A.Depth, A.ParentIndex, A.State, A.HitCount, A.OpenYN, A.NoticeTitleYN, A.SecretTitleYN, A.Keyword1, A.Keyword2, A.Keyword3, A.Keyword4, A.Keyword5, A.Keyword6, A.Keyword7, A.Keyword8, A.Keyword9, A.Keyword10,
+                   A.Contents1, A.Contents2, A.Contents3, A.Contents4, A.Contents5, A.Contents6, A.Continent, A.Country, A.Origin, A.ReportTime,
+                   A.Process, A.INSTIME, A.DMLTIME, A.HigherID, A.FileYN,
+                   (SELECT DMLUSERID FROM T_LINK WHERE LINKID = A.PARENTLINKID) AS PARENTUSERID, A.MENUID, A.BOARDID, A.LINKURL, A.CATEGORYID,
+                   (SELECT CATEGORYNAME FROM T_CATEGORY WHERE BOARDID = A.BOARDID AND CATEGORYID = A.CATEGORYID) AS CATEGORYNAME,
+                   A.IMAGEFILENAME, A.IMAGESFILENAME, A.FILEPATH, A.ALTINFO, A.KHTML, A.APPEALUSERID
+            FROM (SELECT A.NUM1, A.PARENTINDEX, A.MENUID, A.TITLEID, A.LINKID, A.KNAME, A.USERID, A.DEPTH, A.STATE, A.HITCOUNT, A.OPENYN,
+                         A.NOTICETITLEYN, A.SECRETTITLEYN, A.KEYWORD1, A.KEYWORD2, A.KEYWORD3, A.KEYWORD4, A.KEYWORD5, A.KEYWORD6, A.KEYWORD7, A.KEYWORD8, A.KEYWORD9, A.KEYWORD10, A.Origin, A.ReportTime, 
+                         A.CONTENTS1, A.CONTENTS2, A.CONTENTS3, A.CONTENTS4, A.CONTENTS5, A.CONTENTS6, A.PROCESS, A.CONTINENT, A.COUNTRY,
+                         A.INSTIME, A.DMLTIME, A.HIGHERID, A.PARENTLINKID, A.REPLYNO, count(*) over () as CNT, ROWNUM RNUM, A.MININDEX, A.MAXINDEX, A.UserName, A.FileYN,
+                         A.BOARDID, A.LINKURL, A.CATEGORYID, A.IMAGEFILENAME, A.IMAGESFILENAME, A.FILEPATH, A.ALTINFO, A.KHTML, A.APPEALUSERID
+                  FROM (SELECT A.TOTAL_CNT - ((#{rowCnt}*10*TO_NUMBER(SUBSTR(LPAD(1-1, 10, '0'), 1, 9))-1+ROWNUM)) AS NUM1,
+                               A.PARENTINDEX, A.MENUID, A.TITLEID, A.LINKID, A.KNAME, A.USERID, A.DEPTH, A.STATE, A.HITCOUNT, A.OPENYN,
+                               A.NOTICETITLEYN, A.SECRETTITLEYN, A.KEYWORD1, A.KEYWORD2, A.KEYWORD3, A.KEYWORD4, A.KEYWORD5, A.KEYWORD6, A.KEYWORD7, A.KEYWORD8, A.KEYWORD9, A.KEYWORD10, A.Origin, A.ReportTime, 
+                               A.CONTENTS1, A.CONTENTS2, A.CONTENTS3, A.CONTENTS4, A.CONTENTS5, A.CONTENTS6, A.PROCESS, A.CONTINENT, A.COUNTRY,
+                               A.INSTIME, A.DMLTIME, A.HIGHERID, A.PARENTLINKID, A.REPLYNO, count(*) over () as CNT, ROWNUM RNUM,
+                               MIN(LPAD (to_char(A.ParentLinkID),10,'0')||to_char(9999-A.ReplyNo)) over () as MinIndex,
+                               MAX(LPAD (to_char(A.ParentLinkID),10,'0')||to_char(9999-A.ReplyNo)) over () as MaxIndex,
+                               A.UserName, A.FileYN, A.BOARDID, A.LINKURL, A.CATEGORYID, A.IMAGEFILENAME, A.IMAGESFILENAME, A.FILEPATH, A.ALTINFO, A.KHTML, A.APPEALUSERID
+                        FROM (SELECT COUNT(1) OVER() AS TOTAL_CNT,
+  									 lpad(to_char(A.ParentLinkID),10,'0')||to_char (9999-1) AS PARENTINDEX,
+                                     lpad(to_char(A.ParentLinkID),10,'0')||to_char (9999-ReplyNO) AS CURINDEX,
+                                     A.MENUID, A.TITLEID, A.LINKID, B.KNAME, B.USERID, A.DEPTH, B.STATE, B.HITCOUNT, B.OPENYN,
+                                     B.NOTICETITLEYN, B.SECRETTITLEYN, B.KEYWORD1, B.KEYWORD2, B.KEYWORD3, B.KEYWORD4, B.KEYWORD5, B.KEYWORD6, B.KEYWORD7, B.KEYWORD8, B.KEYWORD9, B.KEYWORD10, B.ORIGIN, TO_CHAR(B.REPORTTIME,'YYYYMMDD') AS REPORTTIME,
+                                     B.CONTENTS1, B.CONTENTS2, B.CONTENTS3, B.CONTENTS4, B.CONTENTS5, B.CONTENTS6, B.CONTINENT, B.COUNTRY,
+                                     TO_CHAR(B.INSTIME,'YYYYMMDD') AS INSTIME, TO_CHAR(B.DMLTIME,'YYYYMMDD') AS DMLTIME, A.HIGHERID, A.PARENTLINKID, A.REPLYNO,
+                                     DECODE(B.userid, 'guest', E.GUESTNAME, B.USERNAME) AS UserName,
+                                     DECODE(A.Depth, 1, DECODE(B.Process, '-', '접수', 'R', '처리중', 'C', '답변완료'), '') AS Process,
+                                     DECODE(C.Cnt, NULL, 'N', 'Y') AS FileYN, B.BOARDID, B.LINKURL, A.CATEGORYID,
+                                     G.IMAGEFILENAME, G.IMAGESFILENAME, G.FILEPATH, G.ALTINFO, G.KHTML, F.USERID AS APPEALUSERID
+                              FROM (SELECT A.*,B.BOARDID,B.BOARDKIND FROM T_LINK A LEFT OUTER JOIN T_BOARD B ON(A.MENUID=B.MENUID) WHERE A.MENUID = #{menuId} AND A.Depth = 1 AND A.State = 'T') A,
+                                   (SELECT * FROM T_TITLE WHERE State = 'T' AND StateYn = 'Y' AND OpenYN = 'Y') B,
+                                   (SELECT * FROM T_CONTENTS WHERE State = 'T') G,
+                                   (SELECT TitleID, COUNT(*) AS CNT FROM T_Files WHERE State = 'T' GROUP BY TitleID) C,
+                                   T_User D,
+                                   (SELECT 'guest' AS USERID, A.* FROM T_GUESTINFO A) E,
+                                   T_APPEALUSER F
+                              WHERE A.TITLEID = B.TITLEID
+                              AND B.TITLEID = C.TITLEID(+)
+                              AND B.TITLEID = G.TITLEID(+)
+                              AND B.USERID = D.USERID
+                              AND B.TITLEID = E.TITLEID(+)
+                              AND B.USERID = E.USERID(+)
+                              AND B.TITLEID = F.TITLEID(+)
+                               <if test="inSchText != '' and inSchText != null">
+							    <if test="schType == 1">
+							    AND NVL(B.KNAME, ' ') LIKE '%'||#{inSchText}||'%'
+							    </if>
+							    <if test="schType == 2">
+							    AND NVL(G.KHTML, ' ') LIKE '%'||#{inSchText}||'%'
+							    </if>
+							    <if test="schType == 3">
+							    AND NVL(DECODE(B.USERID, 'guest', E.GUESTNAME, B.USERNAME), ' ') LIKE '%'||#{inSchText}||'%'
+							    </if>
+							</if>
+							<if test="country != null and country != ''">
+					            AND NVL(B.COUNTRY, ' ') LIKE '%'||#{country}||'%'
+							</if>
+							<if test="continent != null and continent != ''">
+					            AND NVL(B.CONTINENT, ' ') LIKE '%'||#{continent}||'%'
+							</if>
+							<if test="categoryId != null and categoryId != ''">
+					            AND NVL(A.CATEGORYID, ' ') LIKE '%'||#{categoryId}||'%'
+							</if>
+							ORDER BY B.INSTIME DESC
+                            ) A
+                        ) A
+             	   ) A
+			WHERE <![CDATA[ RNUM >= (((#{pageNum}-1) * #{rowCnt}) + 1) AND ROWNUM <= #{rowCnt}]]>
+       ) A
+    </select>
+    <!-- 게시판 통합  End -->
+    
+    <!-- 자유형 게시판 리스트 -->
+    <select id="listFreeBoard" parameterType="title" statementType="CALLABLE">
+        { call PKGQUERYSERVER.ListUFreeBoard
+            (
+                #{ menuId,                  mode=IN,        jdbcType=VARCHAR },
+                #{ pageNum,                 mode=IN,        jdbcType=INTEGER },
+                #{ upDown,                  mode=IN,        jdbcType=INTEGER },
+                #{ categoryId,              mode=IN,        jdbcType=INTEGER },
+                #{ continent,               mode=IN,        jdbcType=VARCHAR },
+                #{ country,                 mode=IN,        jdbcType=VARCHAR },
+                #{ schType,                 mode=IN,        jdbcType=INTEGER },
+                #{ schText,                 mode=IN,        jdbcType=VARCHAR },
+                #{ minIndex,                mode=IN,        jdbcType=VARCHAR },
+                #{ maxIndex,                mode=IN,        jdbcType=VARCHAR },
+                
+                #{ inExecMenuId,            mode=IN,        jdbcType=VARCHAR },
+                #{ inBeforeData,            mode=IN,        jdbcType=VARCHAR },
+                #{ inAfterData,             mode=IN,        jdbcType=VARCHAR },
+                #{ inTerminal,              mode=IN,        jdbcType=VARCHAR },
+                #{ inOsUser,                mode=IN,        jdbcType=VARCHAR },
+                #{ inModule,                mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLUserId,             mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLIp,                 mode=IN,        jdbcType=VARCHAR },
+                
+                #{ outObjectName,           mode=OUT,       jdbcType=VARCHAR },
+                #{ outResult,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outRowCount,             mode=OUT,       jdbcType=DOUBLE },
+                #{ outNotice,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outMenuTitle,            mode=OUT,       jdbcType=VARCHAR },
+                #{ outMenuDesc,             mode=OUT,       jdbcType=VARCHAR },
+                #{ outMaxRow,               mode=OUT,       jdbcType=INTEGER },
+                #{ outCursor,               mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=MAP_OUT }
+            )
+        }
+    </select>    
+
+    <!-- 자유형 게시판 상세조회 -->
+    <select id="viewFreeBoard" parameterType="link" statementType="CALLABLE">
+        { call PKGQUERYSERVER.ReadUFreeBoard
+            (
+                #{ menuId,                  mode=IN,        jdbcType=VARCHAR },
+                #{ linkId,                  mode=IN,        jdbcType=INTEGER },
+                #{ categoryId,              mode=IN,        jdbcType=VARCHAR },
+                #{ schType,                 mode=IN,        jdbcType=INTEGER },
+                #{ schText,                 mode=IN,        jdbcType=VARCHAR },
+                
+                #{ inExecMenuId,            mode=IN,        jdbcType=VARCHAR },
+                #{ inBeforeData,            mode=IN,        jdbcType=VARCHAR },
+                #{ inAfterData,             mode=IN,        jdbcType=VARCHAR },
+                #{ inTerminal,              mode=IN,        jdbcType=VARCHAR },
+                #{ inOsUser,                mode=IN,        jdbcType=VARCHAR },
+                #{ inModule,                mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLUserId,             mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLIp,                 mode=IN,        jdbcType=VARCHAR },
+                
+                #{ outObjectName,           mode=OUT,       jdbcType=VARCHAR },
+                #{ outResult,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outRowCount,             mode=OUT,       jdbcType=DOUBLE },
+                #{ outNotice,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outCursor,               mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=getBulletinMap },
+                #{ outCursor1,              mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=MAP_OUT },
+                #{ outCursor2,              mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=MAP_OUT }
+            )
+        }
+    </select>
+    
+    <!-- 게시판 입력/등록 -->
+    <select id="actBoard" parameterType="content" statementType="CALLABLE">
+        { call PKGDMLSERVER.Main
+            (
+                #{ inWorkName,               mode=IN,        jdbcType=VARCHAR },
+                #{ inCondition,              mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLData,                mode=IN,        jdbcType=VARCHAR },
+                #{ inCLOBData1,              mode=IN,        jdbcType=VARCHAR },
+                #{ inCLOBData2,              mode=IN,        jdbcType=VARCHAR },
+                #{ inExecMenuId,             mode=IN,        jdbcType=VARCHAR },
+                #{ inBeforeData,             mode=IN,        jdbcType=VARCHAR },
+                #{ inAfterData,              mode=IN,        jdbcType=VARCHAR },
+                #{ inTerminal,               mode=IN,        jdbcType=VARCHAR },
+                #{ inOsUser,                 mode=IN,        jdbcType=VARCHAR },
+                #{ inModule,                 mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLUserId,              mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLIp,                  mode=IN,        jdbcType=VARCHAR },
+                
+                #{ outObjectName,            mode=OUT,       jdbcType=VARCHAR },
+                #{ outResult,                mode=OUT,       jdbcType=VARCHAR },
+                #{ outRowCount,              mode=OUT,       jdbcType=INTEGER },
+                #{ outNotice,                mode=OUT,       jdbcType=VARCHAR }
+            )
+        }
+    </select>
+    
+    <!-- 공지형 게시판 리스트 -->
+    <select id="listNoticeBoard" parameterType="title" statementType="CALLABLE">
+        { call PKGQUERYSERVER.ListUNoticeBoard
+            (
+                #{ menuId,                  mode=IN,        jdbcType=VARCHAR },
+                #{ pageNum,                 mode=IN,        jdbcType=INTEGER },
+                #{ upDown,                  mode=IN,        jdbcType=INTEGER },
+                #{ categoryId,              mode=IN,        jdbcType=INTEGER },
+                #{ continent,               mode=IN,        jdbcType=VARCHAR },
+                #{ country,                 mode=IN,        jdbcType=VARCHAR },
+                #{ schType,                 mode=IN,        jdbcType=INTEGER },
+                #{ schText,                 mode=IN,        jdbcType=VARCHAR },
+                #{ minIndex,                mode=IN,        jdbcType=VARCHAR },
+                #{ maxIndex,                mode=IN,        jdbcType=VARCHAR },
+                
+                #{ inExecMenuId,            mode=IN,        jdbcType=VARCHAR },
+                #{ inBeforeData,            mode=IN,        jdbcType=VARCHAR },
+                #{ inAfterData,             mode=IN,        jdbcType=VARCHAR },
+                #{ inTerminal,              mode=IN,        jdbcType=VARCHAR },
+                #{ inOsUser,                mode=IN,        jdbcType=VARCHAR },
+                #{ inModule,                mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLUserId,             mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLIp,                 mode=IN,        jdbcType=VARCHAR },
+                
+                #{ outObjectName,           mode=OUT,       jdbcType=VARCHAR },
+                #{ outResult,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outRowCount,             mode=OUT,       jdbcType=DOUBLE },
+                #{ outNotice,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outMenuTitle,            mode=OUT,       jdbcType=VARCHAR },
+                #{ outMenuDesc,             mode=OUT,       jdbcType=VARCHAR },
+                #{ outMaxRow,               mode=OUT,       jdbcType=INTEGER },
+                #{ outCursor,               mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=MAP_OUT }
+            )
+        }
+    </select>  
+        
+    <!-- 게시판 리스트 -->
+    <select id="listCalendarBoard" parameterType="title" statementType="CALLABLE">
+        { call PKGQUERYSERVER.ListCalendarBoard
+            (
+                #{ menuId,                  mode=IN,        jdbcType=VARCHAR },
+                #{ yearMonth,               mode=IN,        jdbcType=VARCHAR },
+                
+                #{ inExecMenuId,            mode=IN,        jdbcType=VARCHAR },
+                #{ inBeforeData,            mode=IN,        jdbcType=VARCHAR },
+                #{ inAfterData,             mode=IN,        jdbcType=VARCHAR },
+                #{ inTerminal,              mode=IN,        jdbcType=VARCHAR },
+                #{ inOsUser,                mode=IN,        jdbcType=VARCHAR },
+                #{ inModule,                mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLUserId,             mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLIp,                 mode=IN,        jdbcType=VARCHAR },
+                
+                #{ outObjectName,           mode=OUT,       jdbcType=VARCHAR },
+                #{ outResult,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outRowCount,             mode=OUT,       jdbcType=DOUBLE },
+                #{ outNotice,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outMenuTitle,            mode=OUT,       jdbcType=VARCHAR },
+                #{ outMenuDesc,             mode=OUT,       jdbcType=VARCHAR },
+                #{ outMaxRow,               mode=OUT,       jdbcType=INTEGER },
+                #{ outCursor,               mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=MAP_OUT }
+            )
+        }
+    </select>   
+
+    <!-- 공지형 게시판 상세조회 -->
+    <select id="viewNoticeBoard" parameterType="link" statementType="CALLABLE">
+        { call PKGQUERYSERVER.ReadUNoticeBoard
+            (
+                #{ menuId,                  mode=IN,        jdbcType=VARCHAR },
+                #{ linkId,                  mode=IN,        jdbcType=INTEGER },
+                #{ categoryId,              mode=IN,        jdbcType=VARCHAR },
+                #{ schType,               	mode=IN,        jdbcType=INTEGER },
+                #{ schText,              	mode=IN,        jdbcType=VARCHAR },
+                
+                #{ inExecMenuId,            mode=IN,        jdbcType=VARCHAR },
+                #{ inBeforeData,            mode=IN,        jdbcType=VARCHAR },
+                #{ inAfterData,             mode=IN,        jdbcType=VARCHAR },
+                #{ inTerminal,              mode=IN,        jdbcType=VARCHAR },
+                #{ inOsUser,                mode=IN,        jdbcType=VARCHAR },
+                #{ inModule,                mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLUserId,             mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLIp,                 mode=IN,        jdbcType=VARCHAR },
+                
+                #{ outObjectName,           mode=OUT,       jdbcType=VARCHAR },
+                #{ outResult,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outRowCount,             mode=OUT,       jdbcType=DOUBLE },
+                #{ outNotice,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outCursor,               mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=getBulletinMap },
+                #{ outCursor1,              mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=MAP_OUT },
+                #{ outCursor2,              mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=MAP_OUT }                
+            )
+        }
+    </select>
+    
+    <!-- 썸네일형 게시판 리스트 -->
+    <select id="listThumbnailBoard" parameterType="title" statementType="CALLABLE">
+        { call PKGQUERYSERVER.ListUThumbnailBoard
+            (
+                #{ menuId,                  mode=IN,        jdbcType=VARCHAR },
+                #{ pageNum,                 mode=IN,        jdbcType=INTEGER },
+                #{ rowCnt,                  mode=IN,        jdbcType=INTEGER },
+                #{ upDown,                  mode=IN,        jdbcType=INTEGER },
+                #{ categoryId,              mode=IN,        jdbcType=INTEGER },
+                #{ continent,               mode=IN,        jdbcType=VARCHAR },
+                #{ country,                 mode=IN,        jdbcType=VARCHAR },
+                #{ schType,                 mode=IN,        jdbcType=INTEGER },
+                #{ schText,                 mode=IN,        jdbcType=VARCHAR },
+                #{ minIndex,                mode=IN,        jdbcType=VARCHAR },
+                #{ maxIndex,                mode=IN,        jdbcType=VARCHAR },
+                
+                #{ inExecMenuId,            mode=IN,        jdbcType=VARCHAR },
+                #{ inBeforeData,            mode=IN,        jdbcType=VARCHAR },
+                #{ inAfterData,             mode=IN,        jdbcType=VARCHAR },
+                #{ inTerminal,              mode=IN,        jdbcType=VARCHAR },
+                #{ inOsUser,                mode=IN,        jdbcType=VARCHAR },
+                #{ inModule,                mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLUserId,             mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLIp,                 mode=IN,        jdbcType=VARCHAR },
+                
+                #{ outObjectName,           mode=OUT,       jdbcType=VARCHAR },
+                #{ outResult,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outRowCount,             mode=OUT,       jdbcType=DOUBLE },
+                #{ outNotice,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outMenuTitle,            mode=OUT,       jdbcType=VARCHAR },
+                #{ outMenuDesc,             mode=OUT,       jdbcType=VARCHAR },
+                #{ outMaxRow,               mode=OUT,       jdbcType=INTEGER },
+                #{ outCursor,               mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=getBulletinMap }
+            )
+        }
+    </select>
+    
+    <!-- 썸네일형 게시판 상세조회 -->
+    <select id="viewThumbnailBoard" parameterType="link" statementType="CALLABLE">
+        { call PKGQUERYSERVER.ReadUThumbnailBoard
+            (
+                #{ menuId,                  mode=IN,        jdbcType=VARCHAR },
+                #{ linkId,                  mode=IN,        jdbcType=INTEGER },
+                #{ categoryId,              mode=IN,        jdbcType=VARCHAR },
+                #{ schType,                 mode=IN,        jdbcType=INTEGER },
+                #{ schText,                 mode=IN,        jdbcType=VARCHAR },
+                
+                #{ inExecMenuId,            mode=IN,        jdbcType=VARCHAR },
+                #{ inBeforeData,            mode=IN,        jdbcType=VARCHAR },
+                #{ inAfterData,             mode=IN,        jdbcType=VARCHAR },
+                #{ inTerminal,              mode=IN,        jdbcType=VARCHAR },
+                #{ inOsUser,                mode=IN,        jdbcType=VARCHAR },
+                #{ inModule,                mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLUserId,             mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLIp,                 mode=IN,        jdbcType=VARCHAR },
+                
+                #{ outObjectName,           mode=OUT,       jdbcType=VARCHAR },
+                #{ outResult,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outRowCount,             mode=OUT,       jdbcType=DOUBLE },
+                #{ outNotice,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outCursor,               mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=getBulletinMap },
+                #{ outCursor1,              mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=MAP_OUT },
+                #{ outCursor2,              mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=MAP_OUT }
+            )
+        }
+    </select>
+    
+    <!-- 링크형 게시판 리스트 -->
+    <select id="listLinkBoard" parameterType="title" statementType="CALLABLE">
+        { call PKGQUERYSERVER.ListULinkBoard
+            (
+                #{ menuId,                  mode=IN,        jdbcType=VARCHAR },
+                #{ pageNum,                 mode=IN,        jdbcType=INTEGER },
+                #{ upDown,                  mode=IN,        jdbcType=INTEGER },
+                #{ categoryId,              mode=IN,        jdbcType=INTEGER },
+                #{ continent,               mode=IN,        jdbcType=VARCHAR },
+                #{ country,                 mode=IN,        jdbcType=VARCHAR },
+                #{ schType,                 mode=IN,        jdbcType=INTEGER },
+                #{ schText,                 mode=IN,        jdbcType=VARCHAR },
+                #{ minIndex,                mode=IN,        jdbcType=VARCHAR },
+                #{ maxIndex,                mode=IN,        jdbcType=VARCHAR },
+                
+                #{ inExecMenuId,            mode=IN,        jdbcType=VARCHAR },
+                #{ inBeforeData,            mode=IN,        jdbcType=VARCHAR },
+                #{ inAfterData,             mode=IN,        jdbcType=VARCHAR },
+                #{ inTerminal,              mode=IN,        jdbcType=VARCHAR },
+                #{ inOsUser,                mode=IN,        jdbcType=VARCHAR },
+                #{ inModule,                mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLUserId,             mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLIp,                 mode=IN,        jdbcType=VARCHAR },
+                
+                #{ outObjectName,           mode=OUT,       jdbcType=VARCHAR },
+                #{ outResult,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outRowCount,             mode=OUT,       jdbcType=DOUBLE },
+                #{ outNotice,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outMenuTitle,            mode=OUT,       jdbcType=VARCHAR },
+                #{ outMenuDesc,             mode=OUT,       jdbcType=VARCHAR },
+                #{ outMaxRow,               mode=OUT,       jdbcType=INTEGER },
+                #{ outCursor,               mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=MAP_OUT }
+            )
+        }
+    </select>
+        
+    <!-- 링크형 게시판 상세조회 -->
+    <select id="viewLinkBoard" parameterType="link" statementType="CALLABLE">
+        { call PKGQUERYSERVER.ReadULinkBoard
+            (
+                #{ menuId,                  mode=IN,        jdbcType=VARCHAR },
+                #{ linkId,                  mode=IN,        jdbcType=INTEGER },
+                #{ categoryId,              mode=IN,        jdbcType=VARCHAR },
+                #{ schType,               	mode=IN,        jdbcType=INTEGER },
+                #{ schText,              	mode=IN,        jdbcType=VARCHAR },
+                
+                #{ inExecMenuId,            mode=IN,        jdbcType=VARCHAR },
+                #{ inBeforeData,            mode=IN,        jdbcType=VARCHAR },
+                #{ inAfterData,             mode=IN,        jdbcType=VARCHAR },
+                #{ inTerminal,              mode=IN,        jdbcType=VARCHAR },
+                #{ inOsUser,                mode=IN,        jdbcType=VARCHAR },
+                #{ inModule,                mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLUserId,             mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLIp,                 mode=IN,        jdbcType=VARCHAR },
+                
+                #{ outObjectName,           mode=OUT,       jdbcType=VARCHAR },
+                #{ outResult,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outRowCount,             mode=OUT,       jdbcType=DOUBLE },
+                #{ outNotice,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outCursor,               mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=getBulletinMap },
+                #{ outCursor1,              mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=MAP_OUT },
+                #{ outCursor2,              mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=MAP_OUT }                
+            )
+        }
+    </select>
+    
+    <!-- 클리핑형 게시판 리스트 -->
+    <select id="listClippingBoard" parameterType="title" statementType="CALLABLE">
+        { call PKGQUERYSERVER.ListUClippingBoard
+            (
+                #{ menuId,                  mode=IN,        jdbcType=VARCHAR },
+                #{ pageNum,                 mode=IN,        jdbcType=INTEGER },
+                #{ upDown,                  mode=IN,        jdbcType=INTEGER },
+                #{ categoryId,              mode=IN,        jdbcType=INTEGER },
+                #{ continent,               mode=IN,        jdbcType=VARCHAR },
+                #{ country,                 mode=IN,        jdbcType=VARCHAR },
+                #{ schType,                 mode=IN,        jdbcType=INTEGER },
+                #{ schText,                 mode=IN,        jdbcType=VARCHAR },
+                #{ minIndex,                mode=IN,        jdbcType=VARCHAR },
+                #{ maxIndex,                mode=IN,        jdbcType=VARCHAR },
+                
+                #{ inExecMenuId,            mode=IN,        jdbcType=VARCHAR },
+                #{ inBeforeData,            mode=IN,        jdbcType=VARCHAR },
+                #{ inAfterData,             mode=IN,        jdbcType=VARCHAR },
+                #{ inTerminal,              mode=IN,        jdbcType=VARCHAR },
+                #{ inOsUser,                mode=IN,        jdbcType=VARCHAR },
+                #{ inModule,                mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLUserId,             mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLIp,                 mode=IN,        jdbcType=VARCHAR },
+                
+                #{ outObjectName,           mode=OUT,       jdbcType=VARCHAR },
+                #{ outResult,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outRowCount,             mode=OUT,       jdbcType=DOUBLE },
+                #{ outNotice,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outMenuTitle,            mode=OUT,       jdbcType=VARCHAR },
+                #{ outMenuDesc,             mode=OUT,       jdbcType=VARCHAR },
+                #{ outMaxRow,               mode=OUT,       jdbcType=INTEGER },
+                #{ outCursor,               mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=MAP_OUT }
+            )
+        }
+    </select>    
+
+    <!-- 클리핑형 게시판 상세조회 -->
+    <select id="viewClippingBoard" parameterType="link" statementType="CALLABLE">
+        { call PKGQUERYSERVER.ReadUClippingBoard
+            (
+                #{ menuId,                  mode=IN,        jdbcType=VARCHAR },
+                #{ linkId,                  mode=IN,        jdbcType=INTEGER },
+                #{ categoryId,              mode=IN,        jdbcType=VARCHAR },
+                #{ schType,               	mode=IN,        jdbcType=INTEGER },
+                #{ schText,              	mode=IN,        jdbcType=VARCHAR },
+                
+                #{ inExecMenuId,            mode=IN,        jdbcType=VARCHAR },
+                #{ inBeforeData,            mode=IN,        jdbcType=VARCHAR },
+                #{ inAfterData,             mode=IN,        jdbcType=VARCHAR },
+                #{ inTerminal,              mode=IN,        jdbcType=VARCHAR },
+                #{ inOsUser,                mode=IN,        jdbcType=VARCHAR },
+                #{ inModule,                mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLUserId,             mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLIp,                 mode=IN,        jdbcType=VARCHAR },
+                
+                #{ outObjectName,           mode=OUT,       jdbcType=VARCHAR },
+                #{ outResult,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outRowCount,             mode=OUT,       jdbcType=DOUBLE },
+                #{ outNotice,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outCursor,               mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=getBulletinMap },
+                #{ outCursor1,              mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=MAP_OUT },
+                #{ outCursor2,              mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=MAP_OUT }                
+            )
+        }
+    </select>
+    
+    <!-- 동영상형 게시판 리스트 -->
+    <select id="listVodBoard" parameterType="content" statementType="CALLABLE">
+        { call PKGQUERYSERVER.ListUVodBoard
+            (
+                #{ menuId,                  mode=IN,        jdbcType=VARCHAR },
+                #{ pageNum,                 mode=IN,        jdbcType=INTEGER },
+                #{ rowCnt,                  mode=IN,        jdbcType=INTEGER },
+                #{ upDown,                  mode=IN,        jdbcType=INTEGER },
+                #{ categoryId,              mode=IN,        jdbcType=INTEGER },
+                #{ continent,               mode=IN,        jdbcType=VARCHAR },
+                #{ country,                 mode=IN,        jdbcType=VARCHAR },
+                #{ schType,                 mode=IN,        jdbcType=INTEGER },
+                #{ schText,                 mode=IN,        jdbcType=VARCHAR },
+                #{ minIndex,                mode=IN,        jdbcType=VARCHAR },
+                #{ maxIndex,                mode=IN,        jdbcType=VARCHAR },
+                
+                #{ inExecMenuId,            mode=IN,        jdbcType=VARCHAR },
+                #{ inBeforeData,            mode=IN,        jdbcType=VARCHAR },
+                #{ inAfterData,             mode=IN,        jdbcType=VARCHAR },
+                #{ inTerminal,              mode=IN,        jdbcType=VARCHAR },
+                #{ inOsUser,                mode=IN,        jdbcType=VARCHAR },
+                #{ inModule,                mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLUserId,             mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLIp,                 mode=IN,        jdbcType=VARCHAR },
+                
+                #{ outObjectName,           mode=OUT,       jdbcType=VARCHAR },
+                #{ outResult,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outRowCount,             mode=OUT,       jdbcType=DOUBLE },
+                #{ outNotice,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outMenuTitle,            mode=OUT,       jdbcType=VARCHAR },
+                #{ outMenuDesc,             mode=OUT,       jdbcType=VARCHAR },
+                #{ outMaxRow,               mode=OUT,       jdbcType=INTEGER },
+                #{ outCursor,               mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=getBulletinMap }
+            )
+        }
+    </select>    
+    
+    <!-- 동영상형 게시판 상세조회 -->
+    <select id="viewVodBoard" parameterType="link" statementType="CALLABLE">
+        { call PKGQUERYSERVER.ReadUVodBoard
+            (
+                #{ menuId,                  mode=IN,        jdbcType=VARCHAR },
+                #{ linkId,                  mode=IN,        jdbcType=INTEGER },
+                #{ categoryId,              mode=IN,        jdbcType=VARCHAR },
+                #{ schType,                 mode=IN,        jdbcType=INTEGER },
+                #{ schText,                 mode=IN,        jdbcType=VARCHAR },
+                
+                #{ inExecMenuId,            mode=IN,        jdbcType=VARCHAR },
+                #{ inBeforeData,            mode=IN,        jdbcType=VARCHAR },
+                #{ inAfterData,             mode=IN,        jdbcType=VARCHAR },
+                #{ inTerminal,              mode=IN,        jdbcType=VARCHAR },
+                #{ inOsUser,                mode=IN,        jdbcType=VARCHAR },
+                #{ inModule,                mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLUserId,             mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLIp,                 mode=IN,        jdbcType=VARCHAR },
+                
+                #{ outObjectName,           mode=OUT,       jdbcType=VARCHAR },
+                #{ outResult,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outRowCount,             mode=OUT,       jdbcType=DOUBLE },
+                #{ outNotice,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outCursor,               mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=getBulletinMap },
+                #{ outCursor1,              mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=MAP_OUT },
+                #{ outCursor2,              mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=MAP_OUT }             
+            )
+        }
+    </select>
+    
+    <!-- 민원형 게시판 리스트 -->
+    <select id="listAppealBoard" parameterType="title" statementType="CALLABLE">
+        { call PKGQUERYSERVER.ListUAppealBoard
+            (
+                #{ menuId,                  mode=IN,        jdbcType=VARCHAR },
+                #{ pageNum,                 mode=IN,        jdbcType=INTEGER },
+                #{ upDown,                  mode=IN,        jdbcType=INTEGER },
+                #{ categoryId,              mode=IN,        jdbcType=INTEGER },
+                #{ schType,                 mode=IN,        jdbcType=INTEGER },
+                #{ schText,                 mode=IN,        jdbcType=VARCHAR },
+                #{ minIndex,                mode=IN,        jdbcType=VARCHAR },
+                #{ maxIndex,                mode=IN,        jdbcType=VARCHAR },
+                
+                #{ inExecMenuId,            mode=IN,        jdbcType=VARCHAR },
+                #{ inBeforeData,            mode=IN,        jdbcType=VARCHAR },
+                #{ inAfterData,             mode=IN,        jdbcType=VARCHAR },
+                #{ inTerminal,              mode=IN,        jdbcType=VARCHAR },
+                #{ inOsUser,                mode=IN,        jdbcType=VARCHAR },
+                #{ inModule,                mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLUserId,             mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLIp,                 mode=IN,        jdbcType=VARCHAR },
+                
+                #{ outObjectName,           mode=OUT,       jdbcType=VARCHAR },
+                #{ outResult,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outRowCount,             mode=OUT,       jdbcType=DOUBLE },
+                #{ outNotice,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outMenuTitle,            mode=OUT,       jdbcType=VARCHAR },
+                #{ outMenuDesc,             mode=OUT,       jdbcType=VARCHAR },
+                #{ outMaxRow,               mode=OUT,       jdbcType=INTEGER },
+                #{ outCursor,               mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=getBulletinMap }
+            )
+        }
+    </select>
+
+    <!-- 민원형 게시판 상세조회 -->
+    <select id="viewAppealBoard" parameterType="link" statementType="CALLABLE">
+        { call PKGQUERYSERVER.ReadUAppealBoard
+            (
+                #{ menuId,                  mode=IN,        jdbcType=VARCHAR },
+                #{ linkId,                  mode=IN,        jdbcType=INTEGER },
+                #{ categoryId,              mode=IN,        jdbcType=VARCHAR },
+                #{ schType,                 mode=IN,        jdbcType=INTEGER },
+                #{ schText,                 mode=IN,        jdbcType=VARCHAR },
+                
+                #{ inExecMenuId,            mode=IN,        jdbcType=VARCHAR },
+                #{ inBeforeData,            mode=IN,        jdbcType=VARCHAR },
+                #{ inAfterData,             mode=IN,        jdbcType=VARCHAR },
+                #{ inTerminal,              mode=IN,        jdbcType=VARCHAR },
+                #{ inOsUser,                mode=IN,        jdbcType=VARCHAR },
+                #{ inModule,                mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLUserId,             mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLIp,                 mode=IN,        jdbcType=VARCHAR },
+                
+                #{ outObjectName,           mode=OUT,       jdbcType=VARCHAR },
+                #{ outResult,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outRowCount,             mode=OUT,       jdbcType=DOUBLE },
+                #{ outNotice,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outCursor,               mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=getBulletinMap },
+                #{ outCursor3,              mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=getBulletinMap },
+                #{ outCursor1,              mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=MAP_OUT },
+                #{ outCursor2,              mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=MAP_OUT }
+            )
+        }
+    </select>
+
+    <!-- 관리자답변형 게시판 리스트 -->
+    <select id="listReplyBoard" parameterType="title" statementType="CALLABLE">
+        { call PKGQUERYSERVER.ListUReplyBoard
+            (
+                #{ menuId,                  mode=IN,        jdbcType=VARCHAR },
+                #{ pageNum,                 mode=IN,        jdbcType=INTEGER },
+                #{ upDown,                  mode=IN,        jdbcType=INTEGER },
+                #{ categoryId,              mode=IN,        jdbcType=INTEGER },
+                #{ schType,                 mode=IN,        jdbcType=INTEGER },
+                #{ schText,                 mode=IN,        jdbcType=VARCHAR },
+                #{ minIndex,                mode=IN,        jdbcType=VARCHAR },
+                #{ maxIndex,                mode=IN,        jdbcType=VARCHAR },
+                
+                #{ inExecMenuId,            mode=IN,        jdbcType=VARCHAR },
+                #{ inBeforeData,            mode=IN,        jdbcType=VARCHAR },
+                #{ inAfterData,             mode=IN,        jdbcType=VARCHAR },
+                #{ inTerminal,              mode=IN,        jdbcType=VARCHAR },
+                #{ inOsUser,                mode=IN,        jdbcType=VARCHAR },
+                #{ inModule,                mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLUserId,             mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLIp,                 mode=IN,        jdbcType=VARCHAR },
+                
+                #{ outObjectName,           mode=OUT,       jdbcType=VARCHAR },
+                #{ outResult,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outRowCount,             mode=OUT,       jdbcType=DOUBLE },
+                #{ outNotice,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outMenuTitle,            mode=OUT,       jdbcType=VARCHAR },
+                #{ outMenuDesc,             mode=OUT,       jdbcType=VARCHAR },
+                #{ outMaxRow,               mode=OUT,       jdbcType=INTEGER },
+                #{ outCursor,               mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=getBulletinMap }
+            )
+        }
+    </select>
+
+    <!-- 관리자답변형 게시판 상세조회 -->
+    <select id="viewReplyBoard" parameterType="link" statementType="CALLABLE">
+        { call PKGQUERYSERVER.ReadUReplyBoard
+            (
+                #{ menuId,                  mode=IN,        jdbcType=VARCHAR },
+                #{ linkId,                  mode=IN,        jdbcType=INTEGER },
+                #{ categoryId,              mode=IN,        jdbcType=VARCHAR },
+                #{ schType,                 mode=IN,        jdbcType=INTEGER },
+                #{ schText,                 mode=IN,        jdbcType=VARCHAR },
+                
+                #{ inExecMenuId,            mode=IN,        jdbcType=VARCHAR },
+                #{ inBeforeData,            mode=IN,        jdbcType=VARCHAR },
+                #{ inAfterData,             mode=IN,        jdbcType=VARCHAR },
+                #{ inTerminal,              mode=IN,        jdbcType=VARCHAR },
+                #{ inOsUser,                mode=IN,        jdbcType=VARCHAR },
+                #{ inModule,                mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLUserId,             mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLIp,                 mode=IN,        jdbcType=VARCHAR },
+                
+                #{ outObjectName,           mode=OUT,       jdbcType=VARCHAR },
+                #{ outResult,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outRowCount,             mode=OUT,       jdbcType=DOUBLE },
+                #{ outNotice,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outCursor,               mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=getBulletinMap },
+                #{ outCursor3,              mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=getBulletinMap },
+                #{ outCursor1,              mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=MAP_OUT },
+                #{ outCursor2,              mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=MAP_OUT }
+            )
+        }
+    </select>
+
+    <!-- 댓글 리스트 -->
+    <select id="listReply" parameterType="reply" statementType="CALLABLE">
+        { call PKGQUERYSERVER.ListReply
+            (
+                #{ linkId,                  mode=IN,        jdbcType=VARCHAR },
+                #{ inExecMenuId,            mode=IN,        jdbcType=VARCHAR },
+                #{ inBeforeData,            mode=IN,        jdbcType=VARCHAR },
+                #{ inAfterData,             mode=IN,        jdbcType=VARCHAR },
+                #{ inTerminal,              mode=IN,        jdbcType=VARCHAR },
+                #{ inOsUser,                mode=IN,        jdbcType=VARCHAR },
+                #{ inModule,                mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLUserId,             mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLIp,                 mode=IN,        jdbcType=VARCHAR },
+                
+                #{ outObjectName,           mode=OUT,       jdbcType=VARCHAR },
+                #{ outResult,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outRowCount,             mode=OUT,       jdbcType=INTEGER },
+                #{ outNotice,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outCursor,               mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=REPLY_OUT }
+            )
+        }
+    </select>
+    
+    <!-- 댓글 입력/수정/삭제 -->
+    <select id="actReply" parameterType="reply" statementType="CALLABLE">
+        { call PKGDMLSERVER.Main
+            (
+                #{ inWorkName,               mode=IN,        jdbcType=VARCHAR },
+                #{ inCondition,              mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLData,                mode=IN,        jdbcType=VARCHAR },
+                #{ inCLOBData1,              mode=IN,        jdbcType=VARCHAR },
+                #{ inCLOBData2,              mode=IN,        jdbcType=VARCHAR },
+                #{ inExecMenuId,             mode=IN,        jdbcType=VARCHAR },
+                #{ inBeforeData,             mode=IN,        jdbcType=VARCHAR },
+                #{ inAfterData,              mode=IN,        jdbcType=VARCHAR },
+                #{ inTerminal,               mode=IN,        jdbcType=VARCHAR },
+                #{ inOsUser,                 mode=IN,        jdbcType=VARCHAR },
+                #{ inModule,                 mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLUserId,              mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLIp,                  mode=IN,        jdbcType=VARCHAR },
+                
+                #{ outObjectName,            mode=OUT,       jdbcType=VARCHAR },
+                #{ outResult,                mode=OUT,       jdbcType=VARCHAR },
+                #{ outRowCount,              mode=OUT,       jdbcType=INTEGER },
+                #{ outNotice,                mode=OUT,       jdbcType=VARCHAR }
+            )
+        }
+    </select>
+
+    <!-- 콘텐츠설정 상세 -->
+	<select id="listFiles" parameterType="link" statementType="CALLABLE">
+		{ call PkgQueryServer.ListBoardFile
+			(    
+				#{ menuId,					mode=IN,		jdbcType=VARCHAR },
+                #{ linkId,                  mode=IN,        jdbcType=VARCHAR },
+				#{ inExecMenuId,			mode=IN,		jdbcType=VARCHAR },
+				#{ inBeforeData,			mode=IN,		jdbcType=VARCHAR },
+				#{ inAfterData,				mode=IN,		jdbcType=VARCHAR },
+				#{ inTerminal,				mode=IN,		jdbcType=VARCHAR },
+				#{ inOsUser,				mode=IN,		jdbcType=VARCHAR },
+				#{ inModule,				mode=IN,		jdbcType=VARCHAR },
+				#{ inDMLUserId,				mode=IN,		jdbcType=VARCHAR },
+				#{ inDMLIp,					mode=IN,		jdbcType=VARCHAR },
+				
+				#{ outObjectName,			mode=OUT,		jdbcType=VARCHAR },
+				#{ outResult,				mode=OUT,		jdbcType=VARCHAR },
+				#{ outRowCount,				mode=OUT,		jdbcType=INTEGER },
+				#{ outNotice,				mode=OUT,		jdbcType=VARCHAR },
+				#{ outCursor,			    mode=OUT,		jdbcType=CURSOR,		javaType=ResultSet,		resultMap=MAP_OUT }
+			)
+		}
+	</select>
+    
+    <!-- 팝업존 리스트 -->
+	<select id="listPopupZone" parameterType="popupZone" resultType="popupZone">
+	    SELECT   A.SITEID, B.KNAME AS SITE_NAME, A.POPUPZONEID, A.KNAME, A.KDESC, A.IMAGEFILENAME, A.IMAGESFILENAME,
+	            A.FILEPATH, A.LINKURL, A.SORT, TO_CHAR(A.SORT)AS CSORT, A.STARTTIME, TO_CHAR(A.STARTTIME, 'yyyy-MM-dd')AS CSTARTTIME, 
+	            A.ENDTIME, TO_CHAR(A.ENDTIME, 'yyyy-MM-dd')AS CENDTIME, A.NEWWINDOWYN, A.STATE, DECODE(A.STATE, 'T', '사용', 'F', '사용안함')AS STATE_KANME,
+				A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG
+	    FROM T_PopupZone A,
+	         (SELECT * FROM T_Site WHERE State = 'T' and SiteID = #{siteId}) B
+	    WHERE A.SiteID = B.SiteID
+	      AND A.STATE = 'T'
+	    AND SYSDATE BETWEEN A.STARTTIME AND A.ENDTIME
+	    ORDER BY SORT
+	</select>
+	
+	<!-- 비주얼존 리스트 -->
+	<select id="listVisualZone_" parameterType="visualZone" statementType="CALLABLE">
+		{ call PkgQueryServer.ListVisualZone
+			( 	
+       			#{ inRowsPerPage,			mode=IN,		jdbcType=INTEGER },
+				#{ inTargetPage,			mode=IN,		jdbcType=INTEGER },
+    			#{ siteId,			    	mode=IN,		jdbcType=VARCHAR },
+    			#{ KName,			    	mode=IN,		jdbcType=VARCHAR },
+				
+				#{ inExecMenuId,			mode=IN,		jdbcType=VARCHAR },
+				#{ inBeforeData,			mode=IN,		jdbcType=VARCHAR },
+				#{ inAfterData,				mode=IN,		jdbcType=VARCHAR },
+				#{ inTerminal,				mode=IN,		jdbcType=VARCHAR },
+				#{ inOsUser,				mode=IN,		jdbcType=VARCHAR },
+				#{ inModule,				mode=IN,		jdbcType=VARCHAR },
+				#{ inDMLUserId,				mode=IN,		jdbcType=VARCHAR },
+				#{ inDMLIp,					mode=IN,		jdbcType=VARCHAR },
+				
+				#{ outObjectName,			mode=OUT,		jdbcType=VARCHAR },
+				#{ outResult,				mode=OUT,		jdbcType=VARCHAR },
+				#{ outRowCount,				mode=OUT,		jdbcType=INTEGER },
+				#{ outNotice,				mode=OUT,		jdbcType=VARCHAR },
+				#{ outMaxRow,				mode=OUT,		jdbcType=INTEGER },
+				#{ outMaxPage,				mode=OUT,		jdbcType=INTEGER },
+				
+				#{ outCursor,				mode=OUT,		jdbcType=CURSOR,		javaType=ResultSet,		resultMap=VISUALZONE_OUT }
+			)
+		}
+	</select>
+	
+	 <!-- 비주얼존 리스트 -->
+	<select id="listVisualZone" parameterType="visualZone" resultType="visualZone" >
+	    SELECT   A.SITEID, B.KNAME AS SITE_NAME, A.VISUALZONEID, A.KNAME, A.KDESC, A.IMAGEFILENAME, A.IMAGESFILENAME,
+	            A.FILEPATH, A.LINKURL, A.SORT, TO_CHAR(A.SORT)AS CSORT, A.STARTTIME, TO_CHAR(A.STARTTIME, 'yyyy-MM-dd')AS CSTARTTIME, 
+	            A.ENDTIME, TO_CHAR(A.ENDTIME, 'yyyy-MM-dd')AS CENDTIME, A.NEWWINDOWYN, A.STATE, DECODE(A.STATE, 'T', '사용', 'F', '사용안함')AS STATE_KANME,
+				A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG
+	    FROM T_VisualZone A,
+	         (SELECT * FROM T_Site WHERE State = 'T' and SiteID = #{siteId}) B
+	    WHERE A.SiteID = B.SiteID
+	    AND A.STATE = 'T'
+	    AND SYSDATE BETWEEN A.STARTTIME AND A.ENDTIME
+	    ORDER BY A.SORT
+	</select>
+	
+    <!-- 베너 리스트 -->
+	<select id="listBanner_" parameterType="banner" statementType="CALLABLE">
+		{ call PkgQueryServer.ListBanner
+			( 
+       			#{ inRowsPerPage,			mode=IN,		jdbcType=INTEGER },
+				#{ inTargetPage,			mode=IN,		jdbcType=INTEGER },
+    			#{ siteId,			    	mode=IN,		jdbcType=VARCHAR },
+    			#{ KName,			    	mode=IN,		jdbcType=VARCHAR },
+				
+				#{ inExecMenuId,			mode=IN,		jdbcType=VARCHAR },
+				#{ inBeforeData,			mode=IN,		jdbcType=VARCHAR },
+				#{ inAfterData,				mode=IN,		jdbcType=VARCHAR },
+				#{ inTerminal,				mode=IN,		jdbcType=VARCHAR },
+				#{ inOsUser,				mode=IN,		jdbcType=VARCHAR },
+				#{ inModule,				mode=IN,		jdbcType=VARCHAR },
+				#{ inDMLUserId,				mode=IN,		jdbcType=VARCHAR },
+				#{ inDMLIp,					mode=IN,		jdbcType=VARCHAR },
+				
+				#{ outObjectName,			mode=OUT,		jdbcType=VARCHAR },
+				#{ outResult,				mode=OUT,		jdbcType=VARCHAR },
+				#{ outRowCount,				mode=OUT,		jdbcType=INTEGER },
+				#{ outNotice,				mode=OUT,		jdbcType=VARCHAR },
+				#{ outMaxRow,				mode=OUT,		jdbcType=INTEGER },
+				#{ outMaxPage,				mode=OUT,		jdbcType=INTEGER },
+				
+				#{ outCursor,				mode=OUT,		jdbcType=CURSOR,		javaType=ResultSet,		resultMap=BANNER_OUT }
+			)
+		}
+	</select>
+	
+	 <!-- 베너 리스트 -->
+	<select id="listBanner" parameterType="banner" resultType="banner" >
+	    SELECT   A.SITEID, B.KNAME AS SITE_NAME, A.BANNERID, A.KNAME, A.KDESC, A.IMAGEFILENAME, A.IMAGESFILENAME,
+	            A.FILEPATH, A.LINKURL, A.SORT, TO_CHAR(A.SORT)AS CSORT, A.STARTTIME, TO_CHAR(A.STARTTIME, 'yyyy-MM-dd')AS CSTARTTIME, 
+	            A.ENDTIME, TO_CHAR(A.ENDTIME, 'yyyy-MM-dd')AS CENDTIME, A.NEWWINDOWYN, A.STATE, DECODE(A.STATE, 'T', '사용', 'F', '사용안함')AS STATE_KANME,
+				A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG
+	    FROM T_Banner A,
+	         (SELECT * FROM T_Site WHERE State = 'T' and SiteID = #{siteId}) B
+	    WHERE A.SiteID = B.SiteID
+	      AND A.STATE = 'T'
+	      AND SYSDATE BETWEEN A.STARTTIME AND A.ENDTIME
+	    ORDER BY SORT
+	</select>
+	
+	<!-- 추천사이트 리스트 -->
+	<select id="listFamilySite_" parameterType="FamilySite" statementType="CALLABLE">
+		{ call PkgQueryServer.ListSiteLink
+			( 
+       			#{ inRowsPerPage,			mode=IN,		jdbcType=INTEGER },
+				#{ inTargetPage,			mode=IN,		jdbcType=INTEGER },
+    			#{ siteId,			    	mode=IN,		jdbcType=VARCHAR },
+    			#{ KName,			    	mode=IN,		jdbcType=VARCHAR },
+				
+				#{ inExecMenuId,			mode=IN,		jdbcType=VARCHAR },
+				#{ inBeforeData,			mode=IN,		jdbcType=VARCHAR },
+				#{ inAfterData,				mode=IN,		jdbcType=VARCHAR },
+				#{ inTerminal,				mode=IN,		jdbcType=VARCHAR },
+				#{ inOsUser,				mode=IN,		jdbcType=VARCHAR },
+				#{ inModule,				mode=IN,		jdbcType=VARCHAR },
+				#{ inDMLUserId,				mode=IN,		jdbcType=VARCHAR },
+				#{ inDMLIp,					mode=IN,		jdbcType=VARCHAR },
+				
+				#{ outObjectName,			mode=OUT,		jdbcType=VARCHAR },
+				#{ outResult,				mode=OUT,		jdbcType=VARCHAR },
+				#{ outRowCount,				mode=OUT,		jdbcType=INTEGER },
+				#{ outNotice,				mode=OUT,		jdbcType=VARCHAR },
+				#{ outMaxRow,				mode=OUT,		jdbcType=INTEGER },
+				#{ outMaxPage,				mode=OUT,		jdbcType=INTEGER },
+				
+				#{ outCursor,				mode=OUT,		jdbcType=CURSOR,		javaType=ResultSet,		resultMap=FAMILYSITE_OUT }
+			)
+		}
+	</select>
+	
+	<!-- 추천사이트 리스트 -->
+	<select id="listFamilySite" parameterType="FamilySite" resultType="FamilySite" >
+		SELECT A.SITEID, B.KNAME AS SITE_NAME, A.SITELINKID, A.KNAME, A.KDESC,
+             A.LINKURL, A.SORT, TO_CHAR(A.SORT)AS CSORT, A.NEWWINDOWYN, A.STATE, DECODE(A.STATE, 'T', '사용', 'F', '사용안함')AS STATE_KANME,
+             A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG
+	    FROM T_SiteLink A,
+	         (SELECT * FROM T_Site WHERE State = 'T' and SiteID = #{siteId}) B
+	    WHERE A.SiteID = B.SiteID
+	      AND A.STATE = 'T'
+	</select>
+	
+	<!-- 추천사이트 리스트 -->	
+	
+	 <!-- 만족도 등록 -->	 
+	 <select id="insertSatisfaction" parameterType="userGrade" statementType="CALLABLE">
+	   { call PkgDMLServer.Main
+	       (
+               #{ inWorkName,		mode=IN,	jdbcType=VARCHAR },
+               #{ inCondition,		mode=IN,	jdbcType=VARCHAR },
+               #{ inDMLData,		mode=IN,	jdbcType=VARCHAR },
+               #{ inCLOBData1,		mode=IN,	jdbcType=VARCHAR },
+               #{ inCLOBData2,		mode=IN,	jdbcType=VARCHAR },
+               #{ inExecMenuId,		mode=IN,	jdbcType=VARCHAR },
+               #{ inBeforeData,		mode=IN,	jdbcType=VARCHAR },
+               #{ inAfterData,		mode=IN,	jdbcType=VARCHAR },
+               #{ inTerminal,		mode=IN,	jdbcType=VARCHAR },
+               #{ inOsUser,			mode=IN,	jdbcType=VARCHAR },
+               #{ inModule,			mode=IN,	jdbcType=VARCHAR },
+               #{ inDMLUserId,		mode=IN,	jdbcType=VARCHAR },
+               #{ inDMLIp,			mode=IN,	jdbcType=VARCHAR },
+               #{ outObjectName,	mode=OUT,	jdbcType=VARCHAR },
+               #{ outResult,		mode=OUT,	jdbcType=VARCHAR },
+               #{ outRowCount,		mode=OUT,	jdbcType=INTEGER },  
+               #{ outNotice,		mode=OUT,	jdbcType=VARCHAR }   
+	       )
+	   }
+	</select>
+	 
+	<select id="listPopupWindow" parameterType="popupWindow" resultType="java.util.HashMap">
+    SELECT A.SITEID, A.POPUPID, A.KNAME, A.KDESC, B.KNAME AS SITE_NAME, A.IMAGEFILENAME, A.IMAGESFILENAME,
+           A.FILEPATH, A.LINKURL, A.SORT, A.POSITIONX, A.POSITIONY, A.POPUPWIDTH, A.POPUPHEIGHT,
+           TO_CHAR(A.STARTTIME, 'YYYY-MM-DD') AS STARTTIME, TO_CHAR(A.ENDTIME, 'YYYY-MM-DD') AS ENDTIME, A.NEWWINDOWYN, A.DAYSESSIONYN,
+           A.STATE, A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG
+    FROM T_Popup A,
+         (SELECT * FROM T_Site WHERE SiteID = #{siteId}) B
+    WHERE A.SiteID = B.SiteID
+      AND A.STATE = 'T'
+    AND SYSDATE BETWEEN A.STARTTIME AND A.ENDTIME
+	</select>
+	 
+	<select id="getChkGroupRole" parameterType="java.util.HashMap" resultType="int">
+	SELECT COUNT(*)
+	FROM T_TITLE A, T_ROLE B, T_GROUPROLE C, T_USERGROUP D
+	WHERE A.MENUID = B.MENUID
+	AND B.ROLEID = C.ROLEID
+	AND C.GROUPID = D.GROUPID
+	AND A.TITLEID = #{TITLEID}
+	AND D.USERID = #{USERID}
+	</select>
+	
+	<select id="selectAutonomyPersonCnt" parameterType="defaultDomain" resultType="int">
+		SELECT COUNT(*) AS CNT 
+		  FROM T_MANAGEUSER A, T_BOARD B 
+		 WHERE A.BOARDID = B.BOARDID(+)
+		   AND B.MENUID = #{menuId}
+	</select>
+	
+	<select id="selectAutonomyPersonList" parameterType="title" resultType="java.util.HashMap">
+		SELECT A.USERID ,
+			   A.MANAGETYPE , 
+		       C.KNAME AS NAME , 
+		       E.PHONE , 
+		       F.KNAME AS DUTYNAME
+		FROM T_MANAGEUSER A, 
+		       T_BOARD B, 
+		       T_USER C,
+		       T_PERSONUSER D ,
+		       T_TEAM E ,
+		       T_DUTY F
+		 WHERE A.BOARDID = B.BOARDID(+) 
+		       AND B.MENUID = #{menuId} 
+		       AND A.USERID = C.USERID(+) 
+		       AND A.USERID = D.USERID(+) 
+		       AND A.USERID = E.USERID(+)
+		       AND E.DEPTSEQ =  (SELECT MAX(DEPTSEQ) FROM T_TEAM WHERE USERID = A.USERID AND SORT = '1') 
+		       AND E.DUTYID = F.DUTYID(+)
+	</select>
+
+	<select id="getOriginalInfo" parameterType="link" resultType="java.util.HashMap">
+	<!-- 
+		SELECT *
+		FROM T_LINK
+		WHERE TITLEID = #{titleId}
+		AND MENUID != #{menuId}
+	 -->
+		SELECT A.* 
+		  FROM T_LINK A, T_TITLE B 
+		 WHERE A.TITLEID = #{titleId} 
+		   AND A.MENUID = B.MENUID 
+		   AND A.TITLEID = B.TITLEID
+	</select>
+	
+	<select id="getOriginalLoc" parameterType="link" resultType="java.util.HashMap">
+		SELECT MAX(SiteID), a.MenuID, MAX(Site)||DECODE(MAX(Kname1), null, null, ' > '||MAX(Kname1))||DECODE(MAX(Kname2), null, null, ' > '||MAX(Kname2))
+               ||DECODE(MAX(Kname3), null, null, ' > '||MAX(Kname3))||DECODE(MAX(Kname4), null, null, ' > '||MAX(Kname4))
+               ||DECODE(MAX(Kname5), null, null, ' > '||MAX(Kname5))||DECODE(MAX(Kname6), null, null, ' > '||MAX(Kname6))
+               ||DECODE(MAX(Kname7), null, null, ' > '||MAX(Kname7))||DECODE(MAX(Kname8), null, null, ' > '||MAX(Kname8))
+               ||DECODE(MAX(Kname9), null, null, ' > '||MAX(Kname9))||DECODE(MAX(Kname10), null, null, ' > '||MAX(Kname10)) AS Navigation
+        FROM   (
+            SELECT  SiteID, #{menuId} AS MenuID, NULL as Site, DECODE(Depth, 1, TRIM(Kname), null) Kname1, DECODE(Depth, 2, TRIM(Kname), null) Kname2,
+                    DECODE(Depth, 3, TRIM(Kname), null) Kname3, DECODE(Depth, 4, TRIM(Kname), null) Kname4, DECODE(Depth, 5, TRIM(Kname), null) Kname5,
+                    DECODE(Depth, 6, TRIM(Kname), null) Kname6, DECODE(Depth, 7, TRIM(Kname), null) Kname7, DECODE(Depth, 8, TRIM(Kname), null) Kname8,
+                    DECODE(Depth, 9, TRIM(Kname), null) Kname9, DECODE(Depth, 10, TRIM(Kname), null) Kname10
+            FROM T_Menu
+            WHERE State = 'T'
+            CONNECT BY PRIOR HigherID = MenuID
+            START WITH MenuID = #{menuId}
+            UNION ALL
+            SELECT SiteID, #{menuId} AS MenuID, Kname AS Site, NULL AS Kname1, NULL AS Kname2, NULL AS Kname3, NULL AS Kname4, NULL AS Kname5, NULL AS Kname6,
+                   NULL AS Kname7, NULL AS Kname8, NULL AS Kname9, NULL AS Kname10
+            FROM T_Site
+            WHERE SiteID = (SELECT SiteID FROM T_Menu WHERE MenuID = #{menuId})
+        ) a
+        GROUP BY a.MenuID
+	</select>
+	
+	<resultMap id="rss_Out" type="hashmap">
+	    <result property="KHTML" column="KHTML" javaType="java.lang.String" jdbcType="CLOB"/>
+	</resultMap>
+	<select id="selectRssList" parameterType="title" resultMap="rss_Out">
+	<![CDATA[
+		SELECT ROWNUM, 
+		       T.TITLEID, 
+		       L.LINKID, 
+		       L.MENUID, 
+		       T.BOARDID, 
+		       T.KNAME, 
+		       T.USERID, 
+		       T.LINKURL, 
+		       T.CREATETIME, 
+		       TO_CHAR(T.DMLTIME, 'YYYY.MM.DD')AS DMLTIME, 
+		       TO_CHAR(T.INSTIME, 'YYYY.MM.DD')AS INSTIME, 
+		       C.KHTML
+		  FROM T_TITLE T, 
+		       T_LINK L, 
+		       T_CONTENTS C 
+		 WHERE T.TITLEID = L.TITLEID 
+		       AND T.TITLEID = C.TITLEID(+) 
+		       AND L.MENUID = #{menuId} 
+		       AND T.STATE = 'T' 
+		       AND ROWNUM <= #{rowCnt}
+		ORDER BY L.LINKID DESC 
+	]]>
+	</select>
+	
+	<select id="getChkMenuId" parameterType="java.util.HashMap" resultType="java.lang.String">
+		SELECT A.MENUID 
+		  FROM T_TITLE A 
+		 WHERE A.TITLEID = #{TITLEID}
+	</select>
+
+	<insert id="insertChangeLog" parameterType="defaultDomain">
+		 INSERT INTO T_CHANGELOG
+		(
+			NO, DBNAME, CURRENTSCHEMA, SESSIONID, OBJECTTYPE, OBJECTNAME, OBJECTCOMMENT, STARTTIME, ENDTIME, EXECMENUID, DMLTYPE, 
+			BEFOREDATA, AFTERDATA, NOTICE, DMLUSERID, DMLIP, DMLTIME
+		)
+		VALUES
+		(
+			NEXTVAL('SEQT_CHANGELOGNO'), 'DATABASE', 'PLANI', NULL,
+			#{objectType}, #{objectName}, FUNMENUNAME(#{inExecMenuId}), DATE_FORMAT(NOW(), '%y/%m%d'), DATE_FORMAT(NOW(), '%y/%m/%d'), #{inExecMenuId}, #{dmlType}, 
+			#{inBeforeData},#{inAfterData}, #{dmlNotice}, #{inDMLUserId}, #{inDMLIp}, NOW()
+		 )
+	</insert>
+	
+	<!-- FILE 다운로드 Count -->
+	<select id="fileHitLog" parameterType="files" statementType="CALLABLE">
+		{ call PkgLogServer.FilesHitLog
+	       (
+               #{ titleId,		  mode=IN,	jdbcType=VARCHAR },
+               #{ fileId,		  mode=IN,	jdbcType=VARCHAR },
+               #{ userFileName,	  mode=IN,	jdbcType=VARCHAR },
+               #{ systemFileName, mode=IN,	jdbcType=VARCHAR },
+               #{ fileGubun,      mode=IN,	jdbcType=VARCHAR },
+               #{ menuId,         mode=IN,	jdbcType=VARCHAR },
+               #{ inExecMenuId,	  mode=IN,	jdbcType=VARCHAR },
+               #{ inDMLUserId,	  mode=IN,	jdbcType=VARCHAR },
+               #{ inDMLIp,		  mode=IN,	jdbcType=VARCHAR }  
+	       )
+	   }
+	</select>	
+	
+	<select id="linkUrl" parameterType="content" resultType="String">
+		SELECT NVL(B.LINKURL, '')
+		FROM T_LINK A
+		INNER JOIN T_TITLE B
+		ON A.TITLEID = B.TITLEID
+		WHERE A.LINKID = #{linkId}
+	</select>
+	
+	<!-- 카드형 게시판 리스트 -->
+    <select id="listCardBoard" parameterType="title" statementType="CALLABLE">
+        { call PKGQUERYSERVER.ListUCardBoard
+            (
+                #{ menuId,                  mode=IN,        jdbcType=VARCHAR },
+                #{ pageNum,                 mode=IN,        jdbcType=INTEGER },
+                #{ rowCnt,                  mode=IN,        jdbcType=INTEGER },
+                #{ upDown,                  mode=IN,        jdbcType=INTEGER },
+                #{ categoryId,              mode=IN,        jdbcType=INTEGER },
+                #{ continent,               mode=IN,        jdbcType=VARCHAR },
+                #{ country,                 mode=IN,        jdbcType=VARCHAR },
+                #{ schType,                 mode=IN,        jdbcType=INTEGER },
+                #{ schText,                 mode=IN,        jdbcType=VARCHAR },
+                #{ minIndex,                mode=IN,        jdbcType=VARCHAR },
+                #{ maxIndex,                mode=IN,        jdbcType=VARCHAR },
+                
+                #{ inExecMenuId,            mode=IN,        jdbcType=VARCHAR },
+                #{ inBeforeData,            mode=IN,        jdbcType=VARCHAR },
+                #{ inAfterData,             mode=IN,        jdbcType=VARCHAR },
+                #{ inTerminal,              mode=IN,        jdbcType=VARCHAR },
+                #{ inOsUser,                mode=IN,        jdbcType=VARCHAR },
+                #{ inModule,                mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLUserId,             mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLIp,                 mode=IN,        jdbcType=VARCHAR },
+                
+                #{ outObjectName,           mode=OUT,       jdbcType=VARCHAR },
+                #{ outResult,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outRowCount,             mode=OUT,       jdbcType=DOUBLE },
+                #{ outNotice,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outMenuTitle,            mode=OUT,       jdbcType=VARCHAR },
+                #{ outMenuDesc,             mode=OUT,       jdbcType=VARCHAR },
+                #{ outMaxRow,               mode=OUT,       jdbcType=INTEGER },
+                #{ outCursor,               mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=getBulletinMap }
+            )
+        }
+    </select>
+    
+    <!-- 카드형 게시판 상세조회 -->
+    <select id="viewCardBoard" parameterType="link" statementType="CALLABLE">
+        { call PKGQUERYSERVER.ReadUCardBoard
+            (
+                #{ menuId,                  mode=IN,        jdbcType=VARCHAR },
+                #{ linkId,                  mode=IN,        jdbcType=INTEGER },
+                #{ categoryId,              mode=IN,        jdbcType=VARCHAR },
+                #{ schType,                 mode=IN,        jdbcType=INTEGER },
+                #{ schText,                 mode=IN,        jdbcType=VARCHAR },
+                
+                #{ inExecMenuId,            mode=IN,        jdbcType=VARCHAR },
+                #{ inBeforeData,            mode=IN,        jdbcType=VARCHAR },
+                #{ inAfterData,             mode=IN,        jdbcType=VARCHAR },
+                #{ inTerminal,              mode=IN,        jdbcType=VARCHAR },
+                #{ inOsUser,                mode=IN,        jdbcType=VARCHAR },
+                #{ inModule,                mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLUserId,             mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLIp,                 mode=IN,        jdbcType=VARCHAR },
+                
+                #{ outObjectName,           mode=OUT,       jdbcType=VARCHAR },
+                #{ outResult,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outRowCount,             mode=OUT,       jdbcType=DOUBLE },
+                #{ outNotice,               mode=OUT,       jdbcType=VARCHAR },
+                #{ outCursor,               mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=getBulletinMap },
+                #{ outCursor1,              mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=MAP_OUT },
+                #{ outCursor2,              mode=OUT,       jdbcType=CURSOR,        javaType=ResultSet,     resultMap=MAP_OUT }
+            )
+        }
+    </select>
+	
+	<!-- <insert id="setTotalCount" parameterType="java.lang.String">
+		INSERT INTO T_VISITLOG (V_DATE) VALUES (SYSDATE)
+	</insert>
+	
+	<select id="getTotalCount" parameterType="java.lang.String" resultType="int">
+		SELECT COUNT(*) AS TotalCnt FROM T_VISITLOG
+
+	</select>
+	
+	<select id="getTodayCount" parameterType="java.lang.String" resultType="int">
+		SELECT COUNT(*) AS TodayCnt 
+		FROM T_VISITLOG
+        WHERE TO_DATE(V_DATE, 'YYYY-MM-DD') = TO_DATE(sysdate, 'YYYY-MM-DD')
+	</select> -->
+	
+	<select id="fileViewerInfo" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT VIEWER
+		  FROM T_FILEVIEWER
+		 WHERE SYSTEMFILENAME = #{SYSTEMFILENAME}
+	</select>
+
+	<insert id="fileViewerLog" parameterType="java.util.HashMap">
+		INSERT INTO T_FILEVIEWER
+		(SYSTEMFILENAME, ID, VIEWER) VALUES
+		(#{SYSTEMFILENAME}, #{ID}, #{VIEWER})
+	</insert>
+	
+	<!-- 게시판 형태 목록 -->
+	<select id="selectBoardListSet" parameterType="title" resultType="java.util.HashMap">
+		SELECT A.*
+		FROM
+		(
+		SELECT A.*, REGEXP_SUBSTR(A.INFO, '[^§§]+', 1, 2) AS SETSTATE
+		FROM T_DBOARDLIST A
+		WHERE A.BOARDID = #{boardId}
+		ORDER BY SORT
+		) A
+		WHERE STATE = 'Y'
+	</select>
+	
+	 <!-- 두들 리스트 -->
+	<select id="listDoodles" parameterType="doodles" resultType="doodles">
+	    SELECT   A.SITEID, B.KNAME AS SITE_NAME, A.DOODLESID, A.KNAME, A.KDESC, A.IMAGEFILENAME, A.IMAGESFILENAME,
+	            A.FILEPATH, A.LINKURL, A.SORT, A.STARTTIME,
+	            A.ENDTIME, A.NEWWINDOWYN, A.STATE, (CASE A.STATE WHEN 'T' THEN '사용' WHEN 'F' THEN '사용안함' END )AS STATE_KANME,
+				A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG
+	    FROM T_DOODLES A,
+	         (SELECT * FROM T_SITE T WHERE STATE = 'T' AND SITEID = #{siteId}) B
+	    WHERE A.SITEID = B.SITEID
+	      AND A.STATE = 'T'
+	    AND SYSDATE BETWEEN A.STARTTIME AND A.ENDTIME
+	    ORDER BY SORT DESC
+	</select>
+	
+	<insert id="connectLog" parameterType="defaultDomain">
+    	INSERT INTO T_CONNECTLOG
+		    (   NO, USERID, SITEID, MENUID, CONNECTTIME,
+		        MODULE, TERMINAL, DMLUSERID, DMLIP, DMLTIME)
+		    VALUES
+		    (   NEXTVAL('SEQT_CONNECTLOGNO'), #{inDMLUserId}, (SELECT SITEID FROM T_MENU WHERE MENUID = #{menuId} AND STATE = 'T'), #{menuId}, NOW(),
+		        #{inModule}, #{inTerminal}, #{inDMLUserId}, #{inDMLIp}, NOW())
+    </insert>
+	
+</mapper>

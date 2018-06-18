@@ -1,0 +1,88 @@
+<html>
+
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Width</title>
+<meta name="author" content="Namo Interactive, Inc.">
+<link rel="stylesheet" href="../images/linkstyle.css">
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="purple" alink="red">
+
+<table border="0" width="640">
+    <tr>
+        <td width="10%" bgcolor="#5A7FC1" bordercolor="#999999">
+            <p align="center" class="pme"><font color="white">Param</font></p>
+        </td>
+        <td width="10%" bgcolor="#EEEEEE" bordercolor="#999999">
+            <p align="center" class="pme">Method</p>
+        </td>
+        <td width="10%" bgcolor="#EEEEEE" bordercolor="#999999">
+            <p align="center" class="pme">Event</p>
+        </td>
+        <td width="10%">
+            <p align="center" class="pme">&nbsp;</p>
+        </td>
+        <td width="50%">
+            <p align="center" class="pme">&nbsp;</p>
+        </td>
+    </tr>
+</table>
+<table border="0" width="640">
+    <tr>
+        <td>
+            <H2>Width</H2>
+            <P class="dscrpt">크로스에디터의 전체 넓이를 설정합니다.<br></P>
+            
+			<p class="dscrpt"><b>&nbsp;</b>
+            
+            <h4>Syntax</h4>
+            <UL>
+                <PRE>[get] HRESULT <SPAN class="fname">Width</SPAN> (<BR>      long* <SPAN class="paraname">pVal</SPAN><BR>);</PRE>
+            </UL>
+            <UL>
+                <PRE>[put] HRESULT <SPAN class="fname">Width</SPAN> (<BR>      long <SPAN class="paraname">newVal</SPAN><BR>);</PRE>
+            </UL>
+            
+			<h4>Parameters</h4>
+            <p class="dscrpt">[get] <SPAN class="para">pVal</SPAN></p>
+            <P class="paradsc">[out, retval] 설정된 에디터의 넓이를 돌려줍니다.</P>
+            <p class="dscrpt">[put] <SPAN class="para">newVal</SPAN></p>
+            <P class="paradsc">[in] 사용할 에디터의 넓이를 설정합니다.</P>
+            
+			<p class="dscrpt"><b>&nbsp;</b>
+            
+            <h4>Return Values</h4>
+            <p class="dscrpt">현재 설정된 값을 돌려줍니다.</p>
+            
+			<p class="dscrpt"><b>&nbsp;</b>
+            
+            <h4>Remarks</h4>
+            <p class="dscrpt">Width 값을 설정하기 위해서는 에디터의 MainClass가 호출된 후, 에디터가 로드되기 전에 적용시켜 주어야 합니다. 호출은 생성된 MainClass 객체의 &quot;params&quot;을 통하여 할 수 있습니다.</p>
+            <p class="dscrpt">넓이의 입력은 <span class="paraname">long</span> 타입으로 입력하며 단위는 픽셀(pixel)입니다.</p>
+            <p class="dscrpt"><span class="paraname">Width</span> 값을 설정하지 않는 경우, 기본값은 &quot;500px&quot;이며 1.1 버전 이하는 &quot;600px&quot;입니다. 1.1 버전 이후부터는 String Type으로 퍼센트(%) 단위가 지원됩니다.</p>
+            
+			<p class="dscrpt"><b>&nbsp;</b>
+            
+            <h4>Sample Codes</h4>
+            <P class="scode">JavaScript [get]</P>
+            <pre class="scodedsc">var object = new NamoSE(&quot;test&quot;);
+var edit = object.params.<b>Width</b>;</pre>
+            <p class="dscrpt"><b>&nbsp;</b>
+            
+            <P class="scode">JavaScript [put]</P>
+            <pre class="scodedsc">[픽셀(pixel)] 
+var object = new NamoSE(&quot;test&quot;); 
+object.params.<b>Width</b> = 800; 
+object.editorStart();
+
+[퍼센트(%)]
+var object = new NamoSE(&quot;test&quot;);
+object.params.<b>Width</b> = &quot;50%&quot;;
+object.editorStart(); </pre>
+            <p class="dscrpt"><b>&nbsp;</b>
+			</td>
+    </tr>
+</table>
+</body>
+</html>

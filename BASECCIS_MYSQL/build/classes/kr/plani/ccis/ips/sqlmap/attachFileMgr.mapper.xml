@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.plani.ccis.ips.mapper.site.AttachFileMgrMapper">
+	<resultMap id="ATTACHFILE_OUT" type="hashmap">
+	    <result property="KHTML" column="KHTML" javaType="java.lang.String" jdbcType="CLOB"/>
+	</resultMap>
+	
+	<select id="selectAttachFileList" parameterType="attachFile" resultType="java.util.HashMap">
+	<include refid="common.pageHeader"/>
+		SELECT  A.ATTACHFILEID, 
+				A.USERID,
+				A.USERNAME, 
+				A.KNAME, 
+				A.KHTML, 
+				A.STATE, 
+				A.INSUSERID, 
+				A.INSIP, 
+				A.INSTIME,
+		        CASE
+		          WHEN (SELECT COUNT(*) FROM T_ATTACHFILEFILES WHERE ATTACHFILEID = A.ATTACHFILEID AND STATE = 'T') > 0 THEN 'Y'
+		          WHEN (SELECT COUNT(*) FROM T_ATTACHFILEFILES WHERE ATTACHFILEID = A.ATTACHFILEID AND STATE = 'T') = 0 THEN 'N'
+		        END AS FILEYN
+			FROM T_ATTACHFILE A
+			WHERE A.STATE = 'T'
+         <if test="schText != '' and schText != null">
+         	<if test="schType == 0">
+         	AND A.KNAME LIKE '%' || #{schText} || '%'
+         	</if> 
+         	<if test="schType == 1">
+         	AND A.KHTML LIKE '%' || #{schText} || '%'
+         	</if>
+         </if>
+		 ORDER BY ATTACHFILEID DESC
+	<include refid="common.pageFooter"/>
+	</select>
+
+	<select id="selectAttachFileView" parameterType="attachFile" resultMap="ATTACHFILE_OUT">
+		SELECT ATTACHFILEID,
+			   USERID,
+			   USERNAME,
+			   KNAME,
+			   KHTML,
+			   STATE,
+			   INSUSERID,
+			   INSIP,
+			   INSTIME
+		  FROM T_ATTACHFILE 
+		 WHERE ATTACHFILEID = #{attachFileId}
+	</select>
+	
+	<select id="selectAttachFiles" parameterType="attachFile" resultType="java.util.HashMap">
+		SELECT ATTACHFILEID
+			 , FILEID
+			 , USERFILENAME
+			 , SYSTEMFILENAME
+			 , FILEPATH
+			 , FILEEXTENSION
+			 , FILESIZE
+		FROM T_ATTACHFILEFILES 
+		WHERE ATTACHFILEID = #{attachFileId}
+		  AND STATE = 'T'
+	</select>
+	
+	<insert id="insertAttachFile" parameterType="attachFile">
+	<selectKey keyProperty="attachFileId" resultType="int" order="BEFORE">
+		SELECT SEQT_ATTACHFILEATTACHFILEID.NEXTVAL FROM DUAL
+	</selectKey>
+	INSERT 
+	  INTO T_ATTACHFILE 
+	       (
+	           ATTACHFILEID, 
+	           USERID,  
+	           USERNAME,
+	           KNAME,
+	           KHTML,
+	           STATE, 
+	           INSUSERID, 
+	           INSIP, 
+	           INSTIME,
+			   DMLUSERID,
+			   DMLIP,
+			   DMLTIME,
+			   DMLLOG         
+	       ) 
+	       VALUES 
+	       (
+	           #{attachFileId} ,
+	           #{userId} ,
+	           #{userName} ,
+	           #{KName} ,
+	           #{KHtml} ,
+	           'T' ,
+	           #{inDMLUserId} ,
+	           #{inDMLIp} ,
+	           SYSDATE ,
+	           #{inDMLUserId} ,
+	           #{inDMLIp} ,
+	           SYSDATE ,
+			   '-'	           	           
+	       ) 
+	</insert>
+	
+	<insert id="insertAttachFiles" parameterType="attachFile">
+		INSERT INTO T_ATTACHFILEFILES (
+			   ATTACHFILEID
+			 , FILEID
+			 , USERFILENAME
+			 , SYSTEMFILENAME
+			 , FILEPATH
+			 , FILEEXTENSION
+			 , FILESIZE
+			 , STATE
+			 , INSUSERID
+			 , INSIP
+			 , INSTIME
+			 , DMLUSERID
+			 , DMLIP
+			 , DMLTIME
+			 , DMLLOG   			 
+		) VALUES (
+			   #{attachFileId}
+			 , (SELECT NVL(MAX(FILEID), 0) + 1 FROM T_ATTACHFILEFILES WHERE ATTACHFILEID = #{attachFileId})
+			 , #{userFileName}
+			 , #{systemFileName}
+			 , #{filePath}
+			 , #{fileExtension}
+			 , #{fileSize}
+			 , 'T'
+			 , #{inDMLUserId}
+			 , #{inDMLIp}
+			 , SYSDATE
+	         , #{inDMLUserId}
+	         , #{inDMLIp}
+	         , SYSDATE
+	         , '-'			 
+		)
+	</insert>
+	
+	<update id="updateAttachFile" parameterType="attachFile">
+		UPDATE T_ATTACHFILE
+		   SET KNAME = #{KName}, 
+               KHTML = #{KHtml}
+	     WHERE ATTACHFILEID = #{attachFileId}
+	</update>
+	
+	<update id="deleteAttachFile" parameterType="attachFile">
+		UPDATE T_ATTACHFILE 
+		   SET STATE  = 'F'
+		 WHERE ATTACHFILEID IN
+		 <foreach collection="attachFileIdsact" item="item" index="index" separator="," open="(" close=")">
+	    	${attachFileIdsact[index]}
+		 </foreach>
+	</update>
+		
+	<delete id="deleteAttachFiles" parameterType="attachFile">
+		DELETE T_ATTACHFILEFILES 
+		WHERE ATTACHFILEID = #{attachFileId}
+		<if test="fileId != '' and fileId != null">
+		AND FILEID = #{fileId}
+		</if>
+	</delete>		
+	
+</mapper>

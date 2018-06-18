@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.plani.ccis.ips.mapper.system.SiteMgrMapper">
+	<!-- 사이트 정보 -->
+	<resultMap id="SITE_OUT" type="site"/>
+	
+	<!-- 사이트 리스트 -->
+	<select id="list" parameterType="site" resultType="java.util.HashMap">
+		SELECT A.RNUM AS NO1, A.RNUM2 AS NO2, A.TOTAL_CNT, A.SITEID, A.KNAME, A.KDESC, 
+               A.URL, A.IP, A.SOURCEPATH, A.SITETYPE, C.KNAME AS SITETYPE_NAME,
+               A.SITELANGUAGE, D.KNAME AS SITELANGUAGE_NAME, A.SITEKEY, A.STARTTIME, A.ENDTIME,
+               A.STATE, A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG
+        FROM (<include refid="common.pageHeader"/>
+				 SELECT *, (SELECT COUNT(*) FROM T_SITE WHERE State = 'T'
+				 			<if test="inSchText != '' and inSchText != null">
+						 	<if test="inSchType == 0">
+						 		AND (KNAME LIKE CONCAT('%',IFNULL(#{inSchText}, ''),'%') OR URL LIKE CONCAT('%',IFNULL(#{inSchText}, ''),'%'))
+						 	</if>
+						 	<if test="inSchType == 1">
+		               	 		AND KNAME LIKE CONCAT('%',IFNULL(#{inSchText}, ''),'%')
+		               	 	</if>
+		             	 	<if test="inSchType == 2">
+		               	 		AND URL LIKE CONCAT('%',IFNULL(#{inSchText}, ''),'%')
+		             	 	</if> 
+		               	 	</if>)AS TOTAL_CNT
+				 FROM T_SITE 
+				 WHERE State = 'T' 
+				 <if test="inSchText != '' and inSchText != null">
+				 	<if test="inSchType == 0">
+				 		AND (KNAME LIKE CONCAT('%',IFNULL(#{inSchText}, ''),'%') OR URL LIKE CONCAT('%',IFNULL(#{inSchText}, ''),'%'))
+				 	</if>
+				 	<if test="inSchType == 1">
+               	 		AND KNAME LIKE CONCAT('%',IFNULL(#{inSchText}, ''),'%')
+               	 	</if>
+             	 	<if test="inSchType == 2">
+               	 		AND URL LIKE CONCAT('%',IFNULL(#{inSchText}, ''),'%')
+             	 	</if> 
+               	 </if> 
+				 ORDER BY SiteID
+			 <include refid="common.pageFooter"/>) A
+			 LEFT JOIN (SELECT * FROM T_CODE WHERE State = 'T' AND HigherCode = 'SiteType') C
+			   ON A.SiteType = C.Code 
+             LEFT JOIN (SELECT * FROM T_CODE WHERE State = 'T' AND HigherCode = 'SiteLanguage') D
+               ON A.SiteLanguage = D.Code
+        ORDER BY A.RNUM2 DESC                     
+	</select>
+	
+	<!-- 사이트 리스트 -->
+	<select id="view" parameterType="site" resultMap="SITE_OUT">
+	    SELECT A.SITEID, A.KNAME, A.KDESC,
+	           A.URL, A.IP, A.SOURCEPATH, A.SITETYPE, C.KNAME AS SITETYPE_NAME,
+	           A.SITELANGUAGE, D.KNAME AS SITELANGUAGE_NAME, A.SITEKEY, A.STARTTIME, A.ENDTIME,
+	           A.STATE,  A.INSUSERID, A.INSIP, A.INSTIME, A.DMLUSERID, A.DMLIP, A.DMLTIME, A.DMLLOG
+	    FROM (SELECT * 
+	          FROM T_SITE WHERE SiteID = #{paramSiteId} AND State = 'T') A
+	    LEFT JOIN (SELECT * FROM T_CODE WHERE State = 'T' AND HigherCode = 'SiteType') C
+	      ON A.SiteType = C.Code
+	    LEFT JOIN (SELECT * FROM T_CODE WHERE State = 'T' AND HigherCode = 'SiteLanguage') D
+	      ON A.SiteLanguage = D.Code
+	</select>
+	
+	<!-- 사이트 추가/수정/삭제 -->	 
+	<insert id="insert" parameterType="site">
+		<if test='inCondition == "입력"'>
+		  	INSERT INTO T_SITE
+		  	(
+			  	SITEID, KNAME, KDESC, URL,
+                IP, SITEKEY, STARTTIME, ENDTIME,
+				STATE, INSUSERID, INSIP, INSTIME, DMLUSERID, DMLIP, DMLTIME, DMLLOG
+			)
+			VALUES
+			(
+          		(SELECT CONCAT('SITE', LPAD(SUBSTRING(MAX(IFNULL(SITEID, 'SITE00000')), 5, 5) + 1, 5, '0')) FROM T_SITE A),
+          		#{KName}, #{KDesc}, #{url},
+          		#{ip}, #{siteKey}, NOW(), DATE_ADD(NOW(), INTERVAL +10 YEAR),
+				#{state}, #{inDMLUserId}, #{inDMLIp}, NOW(), #{inDMLUserId}, #{inDMLIp}, NOW(), '-'
+			)
+		</if>
+		<if test='inCondition == "수정"'>
+			UPDATE T_SITE
+            SET KName=#{KName}, KDesc=#{KDesc}, URL=#{url},
+                IP=#{ip}, SiteKey=#{siteKey},
+                State=#{state}, DMLUserID=#{inDMLUserId}, DMLIP=#{inDMLIp}, DMLTime=NOW()
+            WHERE SITEID = #{paramSiteId}
+		</if>
+		<if test='inCondition == "삭제"'>
+			UPDATE T_SITE 
+			SET STATE = 'F', DMLUSERID = #{inDMLUserId}, DMLIP = #{inDMLIp}, DMLTIME = NOW()
+            WHERE SITEID = #{paramSiteId}
+		</if>
+	</insert>
+
+</mapper>

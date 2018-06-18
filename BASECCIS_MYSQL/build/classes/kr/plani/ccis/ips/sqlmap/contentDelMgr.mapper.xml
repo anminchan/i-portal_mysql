@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.plani.ccis.ips.mapper.site.ContentDelMgrMapper">
+	
+	<!-- 삭제콘텐츠 게시판 리스트 -->
+    <select id="listCnt" parameterType="title" resultType="java.lang.Integer">
+		SELECT COUNT(1)
+			FROM (SELECT A.*,B.BOARDID,B.BOARDKIND FROM T_LINK A LEFT OUTER JOIN T_BOARD B ON(A.MENUID=B.MENUID) WHERE A.Depth = 1 ORDER BY LINKID DESC) A
+			JOIN (SELECT * FROM T_TITLE WHERE State = 'F') B
+			ON A.TITLEID = B.TITLEID
+			LEFT JOIN (SELECT * FROM T_CONTENTS WHERE State = 'F') G
+			ON B.TITLEID = G.TITLEID
+			JOIN T_USER D
+			ON B.USERID = D.USERID
+			LEFT JOIN (SELECT 'guest' AS USERID, A.* FROM T_GUESTINFO A) E
+			ON B.USERID = E.USERID
+			JOIN (SELECT * FROM T_MENU WHERE STATE = 'T' AND MENUTYPE = 'C') J
+			ON A.MENUID = J.MENUID
+			AND B.MENUID = J.MENUID
+			<where>
+				<if test="schText != '' and schText != null">
+					<if test="schType == 1">
+						AND IFNULL(B.KNAME, ' ') LIKE CONCAT('%', #{schText}, '%')
+					</if>
+					<if test="schType == 2">
+						AND IFNULL(G.KHTML, ' ') LIKE CONCAT('%', #{schText}, '%')
+					</if>
+					<if test="schType == 3">
+						AND IFNULL(IF(B.USERID = 'guest', E.GUESTNAME, B.USERNAME), ' ') LIKE
+						CONCAT('%', #{schText}, '%')
+					</if>
+				</if>
+			</where>
+    </select>
+    
+    <!-- 삭제콘텐츠 게시판 리스트 -->
+    <select id="list" parameterType="title" resultType="java.util.HashMap">
+        SELECT A.NUM1, A.LINKID, A.TITLEID, A.KNAME, A.USERID, A.USERNAME,
+               A.DEPTH, A.PARENTINDEX, A.STATE, A.HITCOUNT, A.OPENYN, A.NOTICETITLEYN, A.SECRETTITLEYN, A.KEYWORD1, A.KEYWORD2, A.KEYWORD3, A.KEYWORD4, A.KEYWORD5, A.KEYWORD6, A.KEYWORD7, A.KEYWORD8, A.KEYWORD9, A.KEYWORD10,
+               A.CONTENTS1, A.CONTENTS2, A.CONTENTS3, A.CONTENTS4, A.CONTENTS5, A.CONTENTS6, A.ORIGIN, A.REPORTTIME, A.CONTINENT, A.COUNTRY,
+               A.PROCESS, A.STATEYN, A.INSTIME, A.DMLTIME, A.HIGHERID, A.FILEYN,
+               (SELECT DMLUSERID FROM T_LINK WHERE LINKID = A.PARENTLINKID) AS PARENTUSERID, A.MENUID, A.TMENUID, A.BOARDID, A.LINKURL, A.CATEGORYID,
+               (SELECT CATEGORYNAME FROM T_CATEGORY WHERE BOARDID = A.BOARDID AND CATEGORYID = A.CATEGORYID) AS CATEGORYNAME,
+               A.IMAGEFILENAME, A.IMAGESFILENAME, A.FILEPATH, A.ALTINFO, A.KHTML, A.APPEALUSERID
+        FROM (SELECT A.RNUM2 AS NUM1, A.PARENTINDEX, A.MENUID, A.TMENUID, A.TITLEID, A.LINKID, A.KNAME, A.USERID, A.DEPTH, A.STATE, A.HITCOUNT, A.OPENYN,
+                     A.NOTICETITLEYN, A.SECRETTITLEYN, A.KEYWORD1, A.KEYWORD2, A.KEYWORD3, A.KEYWORD4, A.KEYWORD5, A.KEYWORD6, A.KEYWORD7, A.KEYWORD8, A.KEYWORD9, A.KEYWORD10, A.Origin, A.ReportTime, 
+                     A.CONTENTS1, A.CONTENTS2, A.CONTENTS3, A.CONTENTS4, A.CONTENTS5, A.CONTENTS6, A.PROCESS, A.STATEYN, A.CONTINENT, A.COUNTRY,
+                     A.INSTIME, A.DMLTIME, A.HIGHERID, A.PARENTLINKID, A.REPLYNO, A.RNUM, A.UserName, A.FileYN,
+                     A.BOARDID, A.LINKURL, A.CATEGORYID, A.IMAGEFILENAME, A.IMAGESFILENAME, A.FILEPATH, A.ALTINFO, A.KHTML, A.APPEALUSERID
+              FROM (SELECT (@ROWNUM2 := @ROWNUM2 - 1) AS RNUM2, A.*
+		FROM(SELECT (@ROWNUM := @ROWNUM + 1) AS RNUM, A.*
+                     FROM (SELECT A.*
+	                    FROM 
+	                    (SELECT CONCAT(lpad(CONCAT(A.ParentLinkID),10,'0'), CONCAT(9999-1)) AS PARENTINDEX,
+								CONCAT(lpad(CONCAT(A.ParentLinkID),10,'0'), CONCAT(9999-ReplyNO)) AS CURINDEX,
+								A.MENUID, B.MENUID AS TMENUID, A.TITLEID, A.LINKID, B.KNAME, B.USERID, A.DEPTH, B.STATE, B.HITCOUNT, B.OPENYN,
+								B.NOTICETITLEYN, B.SECRETTITLEYN, B.KEYWORD1, B.KEYWORD2, B.KEYWORD3, B.KEYWORD4, B.KEYWORD5, B.KEYWORD6, B.KEYWORD7, B.KEYWORD8, B.KEYWORD9, B.KEYWORD10, B.ORIGIN, DATE_FORMAT(B.REPORTTIME, '%Y%m%d') AS REPORTTIME,
+								B.CONTENTS1, B.CONTENTS2, B.CONTENTS3, B.CONTENTS4, B.CONTENTS5, B.CONTENTS6, B.CONTINENT, B.COUNTRY,
+								DATE_FORMAT(B.INSTIME, '%Y%m%d') AS INSTIME, DATE_FORMAT(B.DMLTIME, '%Y%m%d') AS DMLTIME, A.HIGHERID, A.PARENTLINKID, A.REPLYNO,
+								IF(B.userid = 'guest', E.GUESTNAME, B.USERNAME) AS UserName,
+								IF(A.Depth = 1, (CASE B.Process WHEN '-' THEN '접수' WHEN 'R' THEN '처리중' WHEN 'C' THEN '답변완료' ELSE '' END), '') AS Process, B.STATEYN,
+								IF(ISNULL(C.Cnt), 'N', 'Y') AS FileYN, B.BOARDID, B.LINKURL, B.CATEGORYID,
+								G.IMAGEFILENAME, G.IMAGESFILENAME, G.FILEPATH, G.ALTINFO, G.KHTML, F.USERID AS APPEALUSERID
+						  FROM (SELECT A.*,B.BOARDID,B.BOARDKIND FROM T_LINK A LEFT OUTER JOIN T_BOARD B ON(A.MENUID=B.MENUID) WHERE A.Depth = 1 ORDER BY LINKID DESC) A
+						   JOIN (SELECT * FROM T_TITLE WHERE State = 'F') B
+						   ON A.TITLEID = B.TITLEID
+						   LEFT JOIN (SELECT * FROM T_CONTENTS WHERE State = 'F') G
+						   ON B.TITLEID = G.TITLEID
+						   LEFT JOIN (SELECT TitleID, COUNT(*) AS CNT FROM T_FILES WHERE State = 'T' GROUP BY TitleID) C
+						   ON B.TITLEID = C.TITLEID
+						   JOIN T_USER D
+						   ON B.USERID = D.USERID
+						   LEFT JOIN (SELECT 'guest' AS USERID, A.* FROM T_GUESTINFO A) E
+						   ON B.TITLEID = E.TITLEID
+						   AND B.USERID = E.USERID
+						   LEFT JOIN T_APPEALUSER F
+						   ON B.TITLEID = F.TITLEID
+						   JOIN (SELECT * FROM T_MENU WHERE STATE = 'T' AND MENUTYPE = 'C') J
+						   ON A.MENUID = J.MENUID
+  						   AND B.MENUID = J.MENUID
+  						   <where>
+						   <if test="schText != '' and schText != null">
+							    <if test="schType == 1">
+							    AND B.KNAME LIKE CONCAT('%', #{schText}, '%')
+							    </if>
+							    <if test="schType == 2">
+							    AND G.KHTML LIKE CONCAT('%', #{schText}, '%')
+							    </if>
+							    <if test="schType == 3">
+							    AND IFNULL(IF(B.USERID = 'guest', E.GUESTNAME, B.USERNAME), ' ') LIKE CONCAT('%', #{schText}, '%')
+							    </if>
+							</if>
+							</where>) A
+                                 ORDER BY A.TITLEID DESC
+                           ) A
+				JOIN (SELECT @ROWNUM := 0) AS R2
+			) A
+			JOIN (SELECT @ROWNUM2 := @ROWNUM + 1) AS R2
+                    ) A
+	WHERE <![CDATA[ RNUM BETWEEN (((#{pageNum}-1) * #{rowCnt}) + 1) AND #{pageNum} * #{rowCnt}]]>
+       	   ) A
+    </select> 
+    
+    <!-- 삭제콘텐츠 게시판 상세조회 -->
+    <select id="view" parameterType="link" resultType="java.util.HashMap">
+        SELECT A.LINKID, B.TITLEID, B.MENUID, C.CONTENTSID, B.KNAME, C.KHTML, B.USERID,
+	            IF(B.USERID = 'guest@mireco.or.kr', (SELECT GUESTNAME FROM T_GUESTINFO WHERE TITLEID = B.TITLEID), B.USERNAME) AS USERNAME,
+	            B.HITCOUNT AS HITCOUNT, B.OPENYN, B.PROCESS, B.NOTICETITLEYN, B.SECRETTITLEYN, DATE_FORMAT(B.DMLTIME, '%Y%m%d') AS DMLTIME, DATE_FORMAT(B.INSTIME, '%Y%m%d') AS INSTIME,
+	            B.STARTTIME, B.ENDTIME, B.KEYWORD1, B.KEYWORD2, B.KEYWORD3, B.KEYWORD4, B.KEYWORD5, B.KEYWORD6, B.KEYWORD7, B.KEYWORD8, B.KEYWORD9, B.KEYWORD10,
+	            B.CONTENTS1, B.CONTENTS2, B.CONTENTS3, B.CONTENTS4, B.CONTENTS5, B.CONTENTS6, B.CATEGORYID, E.CATEGORYNAME,
+	            C.IMAGEFILENAME, C.IMAGESFILENAME, C.FILEPATH, C.ALTINFO
+	    FROM (SELECT * FROM T_LINK WHERE MENUID = #{paramMenuId} AND LINKID = #{linkId}) A
+	    JOIN T_TITLE B
+	      ON A.TITLEID = B.TITLEID
+	    JOIN T_CONTENTS C
+	      ON B.TITLEID = C.TITLEID 
+	    JOIN T_USER D
+	      ON B.USERID = D.USERID
+	    LEFT JOIN T_CATEGORY E
+	      ON B.BOARDID = E.BOARDID
+	     AND B.CATEGORYID = E.CATEGORYID
+    </select>
+    
+    <select id="getAttachFileList" parameterType="link" resultType="java.util.HashMap">
+    	SELECT A.SYSTEMFILENAME, A.FILEPATH
+    	FROM T_FILES A
+    	WHERE A.TITLEID IN (SELECT TITLEID FROM T_LINK WHERE LINKID = #{linkId})
+    </select>
+    
+    <!-- 삭제콘텐츠 게시판 입력/등록 -->
+    <select id="update" parameterType="content" statementType="CALLABLE">
+        { call PKGDMLSERVER.Main
+            (
+                #{ inWorkName,               mode=IN,        jdbcType=VARCHAR },
+                #{ inCondition,              mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLData,                mode=IN,        jdbcType=VARCHAR },
+                #{ inCLOBData1,              mode=IN,        jdbcType=VARCHAR },
+                #{ inCLOBData2,              mode=IN,        jdbcType=VARCHAR },
+                #{ inExecMenuId,             mode=IN,        jdbcType=VARCHAR },
+                #{ inBeforeData,             mode=IN,        jdbcType=VARCHAR },
+                #{ inAfterData,              mode=IN,        jdbcType=VARCHAR },
+                #{ inTerminal,               mode=IN,        jdbcType=VARCHAR },
+                #{ inOsUser,                 mode=IN,        jdbcType=VARCHAR },
+                #{ inModule,                 mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLUserId,              mode=IN,        jdbcType=VARCHAR },
+                #{ inDMLIp,                  mode=IN,        jdbcType=VARCHAR },
+                
+                #{ outObjectName,            mode=OUT,       jdbcType=VARCHAR },
+                #{ outResult,                mode=OUT,       jdbcType=VARCHAR },
+                #{ outRowCount,              mode=OUT,       jdbcType=INTEGER },
+                #{ outNotice,                mode=OUT,       jdbcType=VARCHAR }
+            )
+        }
+    </select>
+    
+    <delete id="deleteLink" parameterType="content">
+    
+    </delete>
+    
+    <update id="deleteLinks" parameterType="content">
+    	<if test='inCondition == "수정"'>
+			UPDATE T_SITE
+            SET KName=#{KName}, KDesc=#{KDesc}, URL=#{url},
+                IP=#{ip}, SiteKey=#{siteKey},
+                State=#{state}, DMLUserID=#{inDMLUserId}, DMLIP=#{inDMLIp}, DMLTime=NOW()
+            WHERE SITEID = #{paramSiteId}
+		</if>
+		<if test='inCondition == "삭제"'>
+			DELETE T_LINK
+			WHERE TITLEID IN (SELECT TITLEID FROM T_LINK#{paramSiteId})
+		</if>
+    </update>
+    
+    <update id="deleteContents" parameterType="content">
+    	<if test='inCondition == "수정"'>
+			UPDATE T_SITE
+            SET KName=#{KName}, KDesc=#{KDesc}, URL=#{url},
+                IP=#{ip}, SiteKey=#{siteKey},
+                State=#{state}, DMLUserID=#{inDMLUserId}, DMLIP=#{inDMLIp}, DMLTime=NOW()
+            WHERE SITEID = #{paramSiteId}
+		</if>
+		<if test='inCondition == "삭제"'>
+			DELTE T_SITE 
+			SET STATE = 'F', DMLUSERID = #{inDMLUserId}, DMLIP = #{inDMLIp}, DMLTIME = NOW()
+            WHERE SITEID = #{paramSiteId}
+		</if>
+    </update>
+    
+    <update id="deleteFiels" parameterType="content">
+    	<if test='inCondition == "수정"'>
+			UPDATE T_SITE
+            SET KName=#{KName}, KDesc=#{KDesc}, URL=#{url},
+                IP=#{ip}, SiteKey=#{siteKey},
+                State=#{state}, DMLUserID=#{inDMLUserId}, DMLIP=#{inDMLIp}, DMLTime=NOW()
+            WHERE SITEID = #{paramSiteId}
+		</if>
+		<if test='inCondition == "삭제"'>
+			UPDATE T_SITE 
+			SET STATE = 'F', DMLUSERID = #{inDMLUserId}, DMLIP = #{inDMLIp}, DMLTIME = NOW()
+            WHERE SITEID = #{paramSiteId}
+		</if>
+    </update>
+    
+    <update id="deleteTitle" parameterType="content">
+    	<if test='inCondition == "수정"'>
+			UPDATE T_SITE
+            SET KName=#{KName}, KDesc=#{KDesc}, URL=#{url},
+                IP=#{ip}, SiteKey=#{siteKey},
+                State=#{state}, DMLUserID=#{inDMLUserId}, DMLIP=#{inDMLIp}, DMLTime=NOW()
+            WHERE SITEID = #{paramSiteId}
+		</if>
+		<if test='inCondition == "삭제"'>
+			UPDATE T_SITE 
+			SET STATE = 'F', DMLUSERID = #{inDMLUserId}, DMLIP = #{inDMLIp}, DMLTIME = NOW()
+            WHERE SITEID = #{paramSiteId}
+		</if>
+    </update>
+    
+    
+</mapper>

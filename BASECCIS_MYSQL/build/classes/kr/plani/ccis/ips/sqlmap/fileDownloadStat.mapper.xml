@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.plani.ccis.ips.mapper.stat.FileDownloadStatMapper">
+	
+	<!-- 콘텐츠이용현황 리스트 -->
+	<select id="list" parameterType="fileDownloadStat" resultType="java.util.HashMap">
+		SELECT *
+		  FROM(
+				SELECT ROW_NUMBER() OVER (ORDER BY A.HITCOUNT DESC) AS RNUM, 
+				       A.USERFILENAME, 
+				       A.SYSTEMFILENAME, 
+				       A.HITCOUNT, 
+				       A.EXECMENUID, 
+				       FUNLOCATION(A.EXECMENUID) AS LOCATION
+				  FROM 
+				       (SELECT USERFILENAME, 
+				              SYSTEMFILENAME, 
+				              SUM(HITCOUNT)AS HITCOUNT, 
+				              EXECMENUID 
+				         FROM T_FILESHITLOG 
+				        WHERE
+				        <if test='statGubun ==  "BOARD"'> 
+				        	TITLEID IS NOT NULL AND TO_DATE(HITDATE, 'yyyy-MM-dd') BETWEEN #{schStartDate} AND #{schEndDate}
+				        </if>
+				        <if test='statGubun ==  "PROGRAM"'> 
+				        	TITLEID IS NULL AND TO_DATE(HITDATE, 'yyyy-MM-dd') BETWEEN #{schStartDate} AND #{schEndDate}
+				        </if>
+				        GROUP BY USERFILENAME, 
+				              SYSTEMFILENAME, 
+				              EXECMENUID
+				       )A
+		       )
+		 WHERE RNUM &lt; 51	    
+	</select>
+
+</mapper>

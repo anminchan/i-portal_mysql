@@ -1,0 +1,85 @@
+<html>
+
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>IsDirty</title>
+<meta name="author" content="Namo Interactive, Inc.">
+<link rel="stylesheet" href="../images/linkstyle.css">
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="purple" alink="red">
+
+<table border="0" width="640">
+    <tr>
+        <td width="10%" bgcolor="#EEEEEE" bordercolor="#999999">
+            <p align="center" class="pme">Param</p>
+        </td>
+        <td width="10%" bgcolor="#5A7FC1" bordercolor="#999999">
+            <p align="center" class="pme"><font color="white">Method</font></p>
+        </td>
+        <td width="10%" bgcolor="#EEEEEE" bordercolor="#999999">
+            <p align="center" class="pme">Event</p>
+        </td>
+        <td width="10%">
+            <p align="center" class="pme">&nbsp;</p>
+        </td>
+        <td width="50%">
+            <p align="center" class="pme">&nbsp;</p>
+        </td>
+    </tr>
+</table>
+<table width="640">
+    <tr>
+        <td>
+            <h2>IsDirty</h2>
+            <p class="dscrpt">편집 중인 문서의 내용이 변경되었는지를 확인합니다.</p>
+            <p class="dscrpt">&nbsp;</p>
+            <h4>Syntax</h4>
+            <ul>
+                <pre>HRESULT <span class="fname">IsDirty</span>();</pre>
+            </ul>
+            <h4>Parameters</h4>
+            <p class="dscrpt">없음</p>
+            <p class="dscrpt">&nbsp;</p>
+            <h4>Return Values</h4>
+            <table class="paradsc2" border="1" cellspacing="0" width="300" bordercolordark="white" bordercolorlight="#999999">
+                <tr>
+                    <td width="75" bgcolor="#EEEEEE">
+                        <p align="center">TRUE</p>
+                    </td>
+                    <td width="215">
+                        <p>문서의 내용이 변경되었음</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="75" bgcolor="#EEEEEE">
+                        <p align="center">FALSE</p>
+                    </td>
+                    <td width="215">
+                        <p>문서의 내용이 변경되지 않았음</p>
+                    </td>
+                </tr>
+            </table>
+            <p class="dscrpt">&nbsp;</p>
+            <H4>Remarks</H4>
+            <P class="dscrpt">메소드는 Main class 호출 후 에디터가 로드된 다음 실행해야 정상적으로 실행됩니다.</P>
+            <p class="dscrpt">&nbsp;</p>
+            <h4>Sample Codes</h4>
+            <p class="scode">VBScript</p>
+            <pre class="scodedsc">var object = new NamoSE(&quot;test&quot;);
+object.editorStart();
+Var info = object.<b>IsDirty</b>();
+if(info)
+{
+    alert(&quot;문서의 내용이 바뀌었습니다.&quot;);
+}
+else
+{
+    alert(&quot;문서의 내용이 바뀌지 않았습니다.&quot;);
+}</pre>
+            <p class="dscrpt">&nbsp;</p>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

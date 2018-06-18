@@ -1,0 +1,160 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<mlsp>
+<languages>
+<language>ko</language>
+<language>en</language>
+</languages>
+<items>
+
+<!-- single file download manager -->
+<item>
+<id>SINGLE_DOWNLOAD_MANAGER_REMOVE_FILES</id>
+<ko>X 삭제</ko>
+<en>Remove X</en>
+</item>
+<item>
+<id>SINGLE_DOWNLOAD_MANAGER_TOTALSTATUS</id>
+<ko>%s개의 파일 : %s</ko>
+<en>Total %s : %s</en>
+</item>
+<item>
+<id>SINGLE_DOWNLOAD_MANAGER_GRID_HEADER_FILENAME</id>
+<ko>파일 이름</ko>
+<en>Name</en>
+</item>
+<item>
+<id>SINGLE_DOWNLOAD_MANAGER_GRID_HEADER_FILESIZE</id>
+<ko>크기</ko>
+<en>Size</en>
+</item>
+<item>
+<id>SINGLE_DOWNLOAD_MANAGER_GRID_HEADER_DOWNLOAD</id>
+<ko>다운로드</ko>
+<en>Download</en>
+</item>
+<item>
+<id>SINGLE_DOWNLOAD_MANAGER_CONTEXTMENU_REMOVE_FILES</id>
+<ko>파일 삭제</ko>
+<en>Remove</en>
+</item>
+<item>
+<id>SINGLE_DOWNLOAD_MANAGER_CONTEXTMENU_INFORMATION</id>
+<ko>Namo CrossUploader 정보</ko>
+<en>About Namo CrossUploader</en>
+</item>
+
+<!-- single file download monitor -->
+<item>
+<id>SINGLE_DOWNLOAD_MONITOR_CANCEL_DOWNLOAD</id>
+<ko>취소</ko>
+<en>Cancel</en>
+</item>
+
+<!-- multiple file download manager -->
+<item>
+<id>MULTIPLE_DOWNLOAD_MANAGER_REMOVE_FILES</id>
+<ko>X 삭제</ko>
+<en>Remove X</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MANAGER_TOTALSTATUS</id>
+<ko>%s개의 파일 : %s</ko>
+<en>Total %s : %s</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MANAGER_SELECT_ALL</id>
+<ko>전체 선택</ko>
+<en>Sel All</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MANAGER_DESELECT_ALL</id>
+<ko>전체 해제</ko>
+<en>Desel All</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MANAGER_EXEC_AIR</id>
+<ko>다운로드</ko>
+<en>Download</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MANAGER_GRID_HEADER_FILENAME</id>
+<ko>파일 이름</ko>
+<en>Name</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MANAGER_GRID_HEADER_FILESIZE</id>
+<ko>크기</ko>
+<en>Size</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MANAGER_CONTEXTMENU_REMOVE_FILES</id>
+<ko>파일 삭제</ko>
+<en>Remove</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MANAGER_CONTEXTMENU_INFORMATION</id>
+<ko>Namo CrossUploader 정보</ko>
+<en>About Namo CrossUploader</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MANAGER_DOWNLOAD_ADOBE_FLASH_ENABLER</id>
+<ko>현재 브라우저에서 Multiple Download 객체를 사용하기 위해서는 'Adobe Flash Enabler'를 다운로드해야 합니다.</ko>
+<en>Please download 'Adobe Flash Enabler' to allow thie Multiple Download object to work correctly in this browser.</en>
+</item>
+
+<!-- multiple file download manager message -->
+<item>
+<id>MULTIPLE_DOWNLOAD_MANAGER_MESSAGE_ALERT_TITLE</id>
+<ko>파일 다운로드</ko>
+<en>File Download</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MANAGER_MESSAGE_CANNOT_PREPARE_LOCALCONNECTION</id>
+<ko>LocalConnection 객체를 준비할 수 없습니다. 다른 SWF 파일에서 사용되고 있는 Connection 이름입니다.</ko>
+<en>Can't Prepares a LocalConnection object. The connection name is already being used by another SWF.</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MANAGER_MESSAGE_NO_FILES_TO_DOWNLOAD</id>
+<ko>다운로드할 파일이 없습니다.</ko>
+<en>There are no files to download.</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MANAGER_MESSAGE_CANNOT_INSTALL_AIR</id>
+<ko>Adobe AIR 런타임을 설치할 수 없는 환경입니다.</ko>
+<en>Can't install the Adobe AIR runtime.</en>
+</item>
+<item>
+<id>MULTIPLE_DOWNLOAD_MANAGER_MESSAGE_INSTALL_NAMOCROSSUPLOADER_AIR</id>
+<ko>여러 개의 파일을 한번에 다운로드 하기 위해서는 Namo CrossUploader AIR 프로그램을 설치해야 합니다. 프로그램을 설치하시겠습니까?</ko>
+<en>For downloading multiple files at a time, you must install the Namo CrossUploader AIR component. Do you want to install this AIR component?</en>
+</item>
+
+<!-- namo crossuploader information -->
+<item>
+<id>NAMO_CROSSUPLOADER_INFORMATION_VERSION</id>
+<ko>나모 크로스업로더 1.0.3</ko>
+<en>Namo CrossUploader 1.0.3</en>
+</item>
+<item>
+<id>NAMO_CROSSUPLOADER_INFORMATION_DESCRIPTION</id>
+<ko>이 제품은(는) 다음 사용자에게 등록되어 있습니다.</ko>
+<en>This product is registered to the following user.</en>
+</item>
+<item>
+<id>NAMO_CROSSUPLOADER_INFORMATION_COMPANY</id>
+<ko>소속/회사 : 한국보건복지인력개발원</ko>
+<en>Company : 한국보건복지인력개발원</en>
+</item>
+<item>
+<id>NAMO_CROSSUPLOADER_INFORMATION_USE</id>
+<ko>용도 : 홈페이지 게시판용</ko>
+<en>Use : INTERNET</en>
+</item>
+<item>
+<id>NAMO_CROSSUPLOADER_INFORMATION_PRODUCT_NUMBER</id>
+<ko>제품번호 : 16001-001203-000002</ko>
+<en>Product Number : 16001-001203-000002</en>
+</item>
+
+</items>
+</mlsp>

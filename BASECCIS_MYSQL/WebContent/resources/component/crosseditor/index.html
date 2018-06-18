@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+<head>
+	<title>Namo CrossEditor</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script type="text/javascript" src="./js/namo_scripteditor.js"></script>
+	<script type="text/javascript" language="javascript">
+		function pe_aR(obj){
+			if (obj.value == "ShowTab(false)"){
+				CrossEditor.ShowTab(false);
+				obj.value = "ShowTab(true)";
+			}else{
+				CrossEditor.ShowTab(true);
+				obj.value = "ShowTab(false)";
+			}
+		}
+
+		function pe_T(obj){
+			if (obj.value == "ShowToolbar(Hide All)"){
+				CrossEditor.ShowToolbar(0, 0);
+				CrossEditor.ShowToolbar(1, 0);
+				obj.value = "ShowToolbar(Show pe_aAd)";
+			}else if (obj.value == "ShowToolbar(Show pe_aAd)"){
+				CrossEditor.ShowToolbar(0, 1);
+				CrossEditor.ShowToolbar(1, 0);
+				obj.value = "ShowToolbar(Show All)";
+			}else{
+				CrossEditor.ShowToolbar(0, 1);
+				CrossEditor.ShowToolbar(1, 1);
+				obj.value = "ShowToolbar(Hide All)";
+			}
+		}
+
+		function pe_aT(obj){
+			if (obj.value == "SetUISize(800,600)"){
+				CrossEditor.SetUISize("800", "600");
+				obj.value = "SetUISize(100%,600)";
+			}else if (obj.value == "SetUISize(100%,600)"){
+				CrossEditor.SetUISize("100%", "600");
+				obj.value = "SetUISize(720,450)";
+			}else if (obj.value == "SetUISize(720,450)"){
+				CrossEditor.SetUISize("720", "450");
+				obj.value = "SetUISize(800,600)";
+			}
+		}
+	</script>
+	<style type="text/css">body,td,textarea,input{font-family:굴림,gulim,Arial,MS UI Gothic,SimSun,MingLiU,AppleGothic,sans-serif;font-size:12px;color:#666666;line-height:16px;}</style> 
+</head>
+
+<body>
+	<table>
+		<tr>
+			<td><h3><span id="pe_DP"></span>&nbsp;Sample Page - <span id="pe_aoP"></span></h3></td>
+		</tr>
+		<tr>
+			<td style="width:730px;">
+				<textarea id="pe_aid" name="pe_aid" alt="initText" title="initText" Style="width:730px;height:450px;font-size:10pt"><p>Welcome to <span style="font-weight:bold;">CrossEditor 3.0</span> sample page</p></textarea>
+				<script type="text/javascript" language="javascript">
+					var CrossEditor = new NamoSE('pe_aid');
+					CrossEditor.params.Width = "100%";
+					CrossEditor.params.UserLang = "auto";
+					CrossEditor.params.FullScreen = false;
+					CrossEditor.EditorStart();
+					function OnInitCompleted(e){
+						e.editorTarget.SetBodyValue(document.getElementById("pe_aid").value);
+						}
+				</script>
+			</td>
+		</tr>
+	</table>
+	<table style="margin-top:20px;">
+		<tr>
+			<td style="text-align:left"><input type="button" id="pe_aGc" name="pe_aGc" value="GetValue()" onclick="alert(CrossEditor.GetValue());"></td>
+			<td style="text-align:left"><input type="button" id="pe_aFU" name="pe_aFU" value="GetValue('XHTML')" onclick="alert(CrossEditor.GetValue('pe_ZA'));"></td>
+			<td style="text-align:left"><input type="button" id="pe_aBn" name="pe_aBn" value="GetBodyValue()" onclick="alert(CrossEditor.GetBodyValue());"></td>
+			<td style="text-align:left"><input type="button" id="pe_aHf" name="pe_aHf" value="GetHeadValue()" onclick="alert(CrossEditor.GetHeadValue());"></td>
+		</tr>
+		<tr>
+			<td style="text-align:left"><input type="button" id="GetTextValue" name="GetTextValue" value="GetTextValue()" onclick="alert(CrossEditor.GetTextValue());"></td>
+			<td style="text-align:left"><input type="button" id="pe_axz" name="pe_axz" value="InsertHyperlink(str, src, target)" onclick="CrossEditor.InsertHyperlink('Namo pe_aJk Inc.','http://www.namo.co.kr',1);"></td>
+			<td style="text-align:left"><input type="button" id="pe_axD" name="pe_axD" value="InsertImage(src)" onclick="CrossEditor.InsertImage('http://www.namo.co.kr/images/common/logo.gif','Image Title');"></td>
+			<td style="text-align:left"><input type="button" id="pe_awc" name="pe_awc" value="InsertValue()" onclick="CrossEditor.InsertValue(1, '<span style=color:red>InsertValue() API Test</span>');"></td>
+		</tr>
+		<tr>
+			<td style="text-align:left"><input type="button" id="pe_aAG" name="pe_aAG" value="SetBodyValue()" onclick="CrossEditor.SetBodyValue('pe_aHM')"></td>
+			<td style="text-align:left"><input type="button" id="pe_aHl" name="pe_aHl" value="ShowTab(false)" onclick="pe_aR(this);"></td>
+			<td style="text-align:left"><input type="button" id="ShowToolbar" name="ShowToolbar" value="ShowToolbar(Hide All)" onclick="pe_T(this);"></td>
+			<td style="text-align:left"><input type="button" id="SetUISize" name="SetUISize" value="SetUISize(800,600)" onclick="pe_aT(this);"></td>
+		</tr>
+	</table>
+</body>
+</html>
